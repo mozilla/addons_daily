@@ -56,3 +56,12 @@ def dataframe_joiner(dfs):
     for right in dfs[1:]:
         left = left.join(right,on="addon_id",how=left)
     return left
+
+
+def take_top_ten(dic):
+    lis = []
+    a1_sorted_keys = sorted(dic, key=dic.get, reverse=True)
+    for r in a1_sorted_keys:
+        if len(lis) < 10:
+            lis.append(r)
+    return lis
