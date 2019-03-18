@@ -1,6 +1,8 @@
 from helper_functions import *
 import pyspark.sql.functions as F
 import pandas as pd
+from pyspark.sql import SQLContext
+
 
 # just so pycharm is not mad at me while I type this code
 # these will be replaced later
@@ -396,3 +398,22 @@ mau = (
 
 )
 
+""" AMO-DB Metrics """
+
+db = 'db-slave-amoprod1.amo.us-west-2.prod.mozaws.net:3306'
+hostname, port = db.split(":")
+port = int(port)
+database = 'addons_mozilla_org'
+
+tempdir = "s3n://mozilla-databricks-telemetry-test/amo-mysql/_temp"
+jdbcurl = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}&ssl=true&sslMode=verify-ca".format(hostname, port, database, dbutils.secrets.get("amo-mysql","amo-mysql-user"), dbutils.secrets.get("amo-mysql","amo-mysql-pass"))
+
+sql_context = SQLContext(sc)
+
+amo_df = sql_context.read \
+         .format("jdbc") \
+         .option("forward_spark_s3_credentials", True) \
+         .option("url", jdbcurl) \
+         .option("tempdir", tempdir) \
+         .option("query", "select guid, averagerating, totalreviews from addons limit 1000") \
+         .load()
