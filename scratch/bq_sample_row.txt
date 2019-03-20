@@ -1,0 +1,200 @@
+{
+u'trafficSource': 
+	{
+	u'campaignCode': None, 
+	u'medium': u'(none)', 
+	u'campaign': u'(not set)', 
+	u'keyword': u'(not set)', 
+	u'isTrueDirect': True, 
+	u'referralPath': u'(not set)', 
+	u'source': u'(direct)', 
+	u'adwordsClickInfo': 
+	 	{
+	 	u'slot': None, 
+	 	u'adGroupId': None, 
+	 	u'isVideoAd': None, 
+	 	u'campaignId': None, 
+	 	u'gclId': None, 
+	 	u'criteriaParameters': None, 
+	 	u'adNetworkType': None, 
+	 	u'targetingCriteria': None, 
+	 	u'criteriaId': None, 
+	 	u'campaignreativeId': None, 
+	 	u'customerId': None, 
+	 	u'page': None
+	 	}, 
+	u'adContent': u'(not set)'
+	}, 
+u'hits': 
+	[{
+	u'refund': None, 
+	u'customDimensions': [], 
+	u'contentGroup': 
+		{
+		u'contentGroup1': u'(not set)', 
+		u'previousContentGroup1': u'(entrance)', 
+		u'contentGroup3': u'(not set)', 
+		u'contentGroup2': u'(not set)', 
+		u'contentGroup5': u'(not set)', 
+		u'contentGroup4': u'(not set)', 
+		u'previousContentGroup2': u'(entrance)', 
+		u'contentGroupUniqueViews5': None, 
+		u'contentGroupUniqueViews4': None, 
+		u'contentGroupUniqueViews3': None, 
+		u'contentGroupUniqueViews2': None, 
+		u'contentGroupUniqueViews1': None, 
+		u'previousContentGroup3': u'(entrance)', 
+		u'previousContentGroup4': u'(entrance)', 
+		u'previousContentGroup5': u'(entrance)'
+		}, 
+	u'publisher_infos': [], 
+	u'isExit': True, 
+	u'appInfo': 
+		{
+		u'installerId': None, 
+		u'name': None, 
+		u'appInstallerId': None, 
+		u'appName': None, 
+		u'exitScreenName': u'addons.mozilla.org/AR/firefox/FIREFOX/ADDON/PROCON-LATTE/EULA/226310?SRC=DP-PTN-PRIMARY', 
+		u'appVersion': None, 
+		u'id': None, 
+		u'version': None, 
+		u'appId': None, 
+		u'screenDepth': u'0', 
+		u'landingScreenName': u'addons.mozilla.org/AR/firefox/FIREFOX/ADDON/PROCON-LATTE/EULA/226310?SRC=DP-PTN-PRIMARY', 
+		u'screenName': u'addons.mozilla.org/AR/firefox/FIREFOX/ADDON/PROCON-LATTE/EULA/226310?SRC=DP-PTN-PRIMARY'
+		}, 
+	u'hitNumber': 1, u'exceptionInfo': {u'exceptions': None, u'isFatal': True, u'description': None, u'fatalExceptions': None}, u'experiment': [], u'promotionActionInfo': None, 
+	u'type': u'PAGE', 
+	u'product': [], 
+	u'eventInfo': None, 
+	u'time': 0, 
+	u'isSecure': None, 
+	u'referer': None, 
+	u'dataSource': u'(not set)', 
+	u'isInteraction': True, 
+	u'minute': 30, 
+	u'publisher': None, 
+	u'transaction': 
+		{
+		u'localTransactionTax': None, 
+		u'localTransactionRevenue': None, 
+		u'localTransactionShipping': None, 
+		u'currencyCode': u'(not set)', 
+		u'affiliation': None, 
+		u'transactionCoupon': None, 
+		u'transactionTax': None, 
+		u'transactionId': None, 
+		u'transactionShipping': None, 
+		u'transactionRevenue': None
+		}, 
+	u'hour': 7, 
+	u'latencyTracking': None, 
+	u'customVariables': [], 
+	u'contentInfo': None, 
+	u'sourcePropertyInfo': None, 
+	u'item': 
+		{
+		u'productSku': None, 
+		u'itemRevenue': None, 
+		u'currencyCode': u'(not set)', 
+		u'productCategory': None, 
+		u'productName': None, 
+		u'itemQuantity': None, 
+		u'transactionId': None, 
+		u'localItemRevenue': None
+		}, 
+	u'eCommerceAction': 
+		{
+		u'step': 1, 
+		u'option': None, 
+		u'action_type': u'0'
+		}, 
+	u'social': 
+		{
+		u'hasSocialSourceReferral': u'No', 
+		u'socialInteractionTarget': None, 
+		u'socialInteractions': None, 
+		u'socialInteractionNetwork': None, 
+		u'socialInteractionAction': None, 
+		u'uniqueSocialInteractions': None, 
+		u'socialNetwork': u'(not set)', 
+		u'socialInteractionNetworkAction': u' : '
+		}, 
+	u'isEntrance': True, 
+	u'customMetrics': [], 
+	u'promotion': [], 
+	u'page': 
+		{
+		u'pageTitle': u'\u0644\u0645 \u064a\u064f\u0639\u062b\u0631 \u0639\u0644\u0649 \u0634\u064a\u0621', 
+		u'searchCategory': None, 
+		u'pagePathLevel4': u'/ADDON/PROCON-LATTE/EULA/226310?SRC=DP-PTN-PRIMARY', 
+		u'hostname': u'addons.mozilla.org', 
+		u'pagePath': u'/AR/firefox/FIREFOX/ADDON/PROCON-LATTE/EULA/226310?SRC=DP-PTN-PRIMARY', 
+		u'pagePathLevel1': u'/AR/', 
+		u'pagePathLevel2': u'/firefox/', 
+		u'pagePathLevel3': u'/FIREFOX/', 
+		u'searchKeyword': None
+		}
+	}], 
+u'visitorId': None, 
+u'visitNumber': 1, 
+u'fullVisitorId': u'6213624347969171577', 
+u'userId': None, 
+u'customDimensions': [], 
+u'totals': 
+	{
+	u'hits': 1, 
+	u'pageviews': 1, 
+	u'totalTransactionRevenue': None, 
+	u'transactions': None, 
+	u'bounces': 1, 
+	u'newVisits': 1, 
+	u'uniqueScreenviews': None, 
+	u'visits': 1, 
+	u'transactionRevenue': None, 
+	u'timeOnSite': None, 
+	u'timeOnScreen': None, 
+	u'sessionQualityDim': 0, 
+	u'screenviews': None
+	}, 
+u'visitStartTime': 1550561400, 
+u'socialEngagementType': u'Not Socially Engaged', 
+u'geoNetwork': 
+	{
+	u'city': u"Sana'a", 
+	u'networkDomain': u'yemennet.ye', 
+	u'metro': u'(not set)', 
+	u'country': u'Yemen', 
+	u'region': u'Capital Municipality', 
+	u'subContinent': u'Western Asia', 
+	u'cityId': u'1028585', 
+	u'longitude': u'44.1910', 
+	u'latitude': u'15.3694', 
+	u'continent': u'Asia', 
+	u'networkLocation': u'yemennet adsl pool'
+	}, 
+u'channelGrouping': u'Direct', 
+u'date': u'20190219', 
+u'device': 
+	{
+	u'javaEnabled': False, 
+	u'mobileDeviceBranding': None, 
+	u'browserVersion': u'33.0', 
+	u'mobileDeviceMarketingName': None, 
+	u'language': u'ar', 
+	u'deviceCategory': u'desktop', 
+	u'mobileInputSelector': None, 
+	u'flashVersion': u'(not set)', 
+	u'mobileDeviceInfo': u'(not set)', 
+	u'browserSize': u'1020x820', 
+	u'mobileDeviceModel': None,
+	u'operatingSystemVersion': u'7', 
+	u'screenColors': u'24-bit', 
+	u'screenResolution': u'1280x1024', 
+	u'operatingSystem': u'Windows', 
+	u'isMobile': False, u'browser': u'Firefox'
+	},
+u'clientId': u'1446722156.1550561401', 
+u'visitId': 1550561400
+}
