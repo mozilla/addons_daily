@@ -1,9 +1,17 @@
 import pyspark.sql.functions as F
 from pyspark.sql.types import *
+from pyspark.sql import SparkSession
 
 
 make_map = F.udf(lambda x, y: dict(zip(x, y)), MapType(StringType(), DoubleType()))
 
+def get_spark():
+    spark = (SparkSession
+             .builder
+             .appName("extension_data")
+             .getOrCreate())
+
+    return spark
 
 def histogram_mean(values):
     """
