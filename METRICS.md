@@ -47,5 +47,5 @@
 
 | Metric Name | Description |
 |-------------|-------------|
-|YAU | Monthly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
-|MAU | Yearly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
+|MAU | Monthly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
+|YAU | Yearly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
