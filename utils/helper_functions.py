@@ -13,6 +13,53 @@ def get_spark():
 
     return spark
 
+def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
+    '''
+    Stiches together an s3 destination.
+    :param output_bucket: s3 output_bucket
+    :param output_prefix: s3 output_prefix (within output_bucket)
+    :param output_version: dataset output_version
+    :retrn str ->
+    s3://output_bucket/output_prefix/output_version/submissin_date_s3=[date]/sample_id=[sid]
+    '''
+    suffix = ''
+    if date is not None:
+        suffix += "/submission_date_s3={}".format(date)
+    if sample_id is not None:
+        suffix += "/sample_id={}".format(sample_id)
+    full_dest = 's3://' + '/'.join([output_bucket, output_prefix, output_version]) + suffix + '/'
+    return full_dest
+
+
+def load_main_summary(spark, input_bucket, input_prefix, input_version):
+    '''
+    Loads main_summary from the bucket constructed from
+    input_bucket, input_prefix, input_version
+    :param spark: SparkSession object
+    :param input_bucket: s3 bucket (telemetry-parquet)
+    :param input_prefix: s3 prefix (main_summary)
+    :param input_version: dataset version (v4)
+    :return SparkDF
+    '''
+    dest = get_dest(input_bucket, input_prefix, input_version)
+    return (spark
+            .read
+            .option("mergeSchema", True)
+            .parquet(dest))
+
+
+def load_raw_pings():
+    """
+    Function to load raw pings data
+    """
+
+
+def load_bq_data():
+    """
+    Function to load relevant data from BigQuery
+    """
+
+
 def histogram_mean(values):
     """
     Returns the mean of values in a histogram.
