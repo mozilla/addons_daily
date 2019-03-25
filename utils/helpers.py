@@ -159,10 +159,19 @@ def take_top_ten(dic):
     return lis
 
 
-def get_spark():
+def get_spark(tz):
     spark = (SparkSession
              .builder
-             .appName("extension_data")
+             .appName("usage_report")
              .getOrCreate())
 
+    spark.conf.set('spark.sql.session.timeZone', tz)
+
     return spark
+
+
+def get_sc():
+    sc = SparkContext.getOrCreate()
+    return sc
+
+
