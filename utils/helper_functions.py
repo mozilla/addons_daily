@@ -120,3 +120,30 @@ def take_top_ten(dic):
         if len(lis) < 10:
             lis.append(r)
     return lis
+
+def active_users_count(main_summary_df, count_column_name):
+    """
+    Computes the number of distinct users with a given addon in main_summary_df.
+    Used for finding DAU, WAU, etc. Creates a data frame with columns 
+    'addon_id' and 'count_column_name'
+    """
+    addons_client_expanded = (
+        main_summary_df
+        .select('active_addons', 'client_id')
+        .withColumn('addon', F.explode('active_addons'))
+        .drop('active_addons')
+    )
+    
+    addon_client = (
+        addons_client_expanded
+        .withColumn('addon_id', addons_client_expanded.addon['addon_id'])
+        .drop('addon')
+    )
+    
+    active_users_count_df = (
+        addon_client
+        .groupBy('addon_id')
+        .agg(F.countDistinct('client_id').alias(count_column_name))
+    )
+    
+    return active_users_count_df

@@ -489,19 +489,65 @@ def get_tab_switch_time(df):
 """ Trend Metrics """
 
 #####
+# DAU
+#####
+
+def get_dau(addons_expanded_df):
+    """
+    :param df: addons expanded from main summary
+    :return:
+    """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 1 DAYS)")
+    )
+
+    dau = (
+        df
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('dau'))
+    )
+    return dau
+
+#####
+# WAU
+#####
+
+def get_wau(addons_expanded_df):
+    """
+    :param df: addons expanded from main summary
+    :return:
+    """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 7 DAYS)")
+    )
+
+    wau = (
+        df
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('wau'))
+    )
+    return wau
+
+#####
 # MAU
 #####
 
-def get_mau(df):
+def get_mau(addons_expanded_df):
     """
-    :param df: addons expanded from main summary just last month
+    :param df: addons expanded from main summary
     :return:
     """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 30 DAYS)")
+    )
+
     mau = (
         df
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
-
     )
     return mau
 
@@ -509,18 +555,17 @@ def get_mau(df):
 # YAU
 #####
 
-
-def get_yau(df):
+def get_yau(addons_expanded_df):
     """
     :param df: main_summary addons expanded from last year
     :return:
     """
-    mau = (
-        df
+    yau = (
+        addons_expanded_df
         .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('mau'))
-
+        .agg(F.countDistinct('client_id').alias('yau'))
     )
+    return yau
 
 """ AMO-DB Metrics """
 
