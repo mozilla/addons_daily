@@ -23,7 +23,8 @@ spark = get_spark()
 def get_os_dist(df):
     """
     :param df: addons_expanded
-    :return:
+    :return: aggregated dataframe by addon_id,
+    getting distribution of users with various OS
     """
 
     client_counts = (
@@ -70,8 +71,9 @@ def get_os_dist(df):
 
 def get_ct_dist(df):
     """
+    same as get_os_dist, but get country distribution instead of os
     :param df: addons_expanded
-    :return:
+    :return: dataframe of distributions of users across countries aggregated by addon_id
     """
 
     client_counts = (
@@ -81,6 +83,8 @@ def get_ct_dist(df):
             .agg(F.countDistinct("client_id"))
             .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
     )
+
+
     country_ = (
             df
             .select("addon_id", "country", "client_id")
@@ -317,44 +321,6 @@ def get_crashes(df):
 
 """ Trend Metrics """
 
-
-#####
-# DAU
-#####
-
-def get_dau(df):
-    """
-    :param df: addons expanded from main summary last year
-    :return:
-    """
-    dau = (
-        df
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAY)")
-        .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('mau'))
-
-    )
-    return dau
-
-
-
-#####
-# WAU
-#####
-
-def get_wau(df):
-    """
-    :param df: addons expanded from main summary just last month
-    :return:
-    """
-    wau = (
-        df
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 7 DAY)")
-        .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('mau'))
-
-    )
-    return wau
 
 
 #####
