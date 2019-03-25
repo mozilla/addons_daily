@@ -405,6 +405,26 @@ def get_yau(addons_expanded_df):
 =======
     return yau
 
+def get_disabled(df):
+    """
+    Gets the number of distinct clients in df with the addon disabled
+    """
+    disabled_addons = (
+        df
+        .where(F.col('disabled_addons_ids').isNotNull())
+        .withColumn('addon', F.explode('disabled_addons_ids'))
+        .select('addon', 'client_id')
+    )
+
+    addons_disabled_count = (
+        disabled_addons
+        .groupBy('addon')
+        .agg(F.countDistinct('client_id').alias('disabled'))
+    )
+
+    return addons_disabled_count
+
+
 """ AMO-DB Metrics """
 
 db = 'db-slave-amoprod1.amo.us-west-2.prod.mozaws.net:3306'
