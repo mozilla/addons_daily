@@ -47,5 +47,7 @@
 
 | Metric Name | Description |
 |-------------|-------------|
+|DAU | Daily Active Users, the number of unqiue clients with a given add-on over a day to day period. |
+|WAU | Weekly Active Users, the number of unique clients with a given add-on over a seven day period. |
 |MAU | Monthly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
-|YAU | Yearly Active Users, the number of unique clients with a given add-on over a 28 day period. We already plan to expose this in the Public Data Report.|
+|YAU | Yearly Active Users, the number of unique clients with a given add-on over a 365 day period. We already plan to expose this in the Public Data Report.|
