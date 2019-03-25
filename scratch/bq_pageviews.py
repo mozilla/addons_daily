@@ -12,7 +12,7 @@ client = bigquery.Client(project=project)
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/sarahmelancon/addons/credentials.json"
 
 query = (
-    "SELECT * FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_20190219` "
+    "SELECT * FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_20190324` "
     "LIMIT 100"
 )
 

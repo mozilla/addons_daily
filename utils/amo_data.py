@@ -23,5 +23,5 @@ def load_amo():
              .option("forward_spark_s3_credentials", True) \
              .option("url", jdbcurl) \
              .option("tempdir", tempdir) \
-             .option("query", "select guid, averagerating, totalreviews from addons limit 1000") \
+             .option("query", "select guid, link, averagerating, totalreviews from addons limit 1000") \
              .load()
