@@ -465,7 +465,7 @@ def get_tab_switch_time(df):
     """
 
     tab_switch_hist = (
-        raw_pings
+        df
         .filter(lambda x: 'environment' in x.keys())
         .filter(lambda x: 'addons' in x['environment'].keys())
         .filter(lambda x: 'activeAddons' in x['environment']['addons'])
@@ -498,7 +498,7 @@ def get_mau(df):
     :return:
     """
     mau = (
-        addons_expanded
+        df
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
 
@@ -516,7 +516,7 @@ def get_yau(df):
     :return:
     """
     mau = (
-        addons_expanded_year
+        df
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
 
