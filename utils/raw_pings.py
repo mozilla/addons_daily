@@ -107,8 +107,7 @@ def get_startup_time():
     startup_time_by_addon = (
       ext_startup_df
       .groupBy('addon_id')
-      .agg(F.mean('avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID'))
-      .withColumnRenamed('avg(avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID)' ,'avg_startup_time')
+      .agg(F.mean('avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID').alias('avg_startup_time'))
     )
     return startup_time_by_addon
 
@@ -152,8 +151,8 @@ def get_pa_popup_load_time():
 
     pa_popup_load_time_by_addon = (
       pa_popup_load_time_df
-      .groupBy("addon_id")
-      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID").alias("avg_ba_popup_load_time"))
+      .groupBy('addon_id')
+      .agg(F.mean('avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID').alias('avg_ba_popup_load_time'))
     )
     return pa_popup_load_time_by_addon
 
