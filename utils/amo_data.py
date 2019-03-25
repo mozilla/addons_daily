@@ -12,16 +12,18 @@ def load_amo():
     tempdir = "s3n://mozilla-databricks-telemetry-test/amo-mysql/_temp"
     jdbcurl = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}&ssl=true&sslMode=verify-ca" \
               .format(hostname, port, database, 
-                      dbutils.secrets.get("amo-mysql","amo-mysql-user"), 
-                      dbutils.secrets.get("amo-mysql","amo-mysql-pass"))
+                      dbutils.secrets.get("amo-mysql", "amo-mysql-user"), 
+                      dbutils.secrets.get("amo-mysql", "amo-mysql-pass"))
 
     print(jdbcurl)
     sql_context = SQLContext(sc)
 
-    amo_df = sql_context.read \
-             .format("jdbc") \
-             .option("forward_spark_s3_credentials", True) \
-             .option("url", jdbcurl) \
-             .option("tempdir", tempdir) \
-             .option("query", "select guid, slug, averagerating, totalreviews from addons limit 1000") \
-             .load()
+    amo_df = (
+        sql_context.read
+        .format("jdbc")
+        .option("forward_spark_s3_credentials", True)
+        .option("url", jdbcurl)
+        .option("tempdir", tempdir)
+        .option("query", "select guid, slug, averagerating, totalreviews from addons limit 1000")
+        .load()
+    )
