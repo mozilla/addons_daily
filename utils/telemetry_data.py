@@ -317,6 +317,46 @@ def get_crashes(df):
 
 """ Trend Metrics """
 
+
+#####
+# DAU
+#####
+
+def get_dau(df):
+    """
+    :param df: addons expanded from main summary last year
+    :return:
+    """
+    dau = (
+        df
+        .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAY)")
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('mau'))
+
+    )
+    return dau
+
+
+
+#####
+# WAU
+#####
+
+def get_wau(df):
+    """
+    :param df: addons expanded from main summary just last month
+    :return:
+    """
+    wau = (
+        df
+        .filter("submission_date_s3 >= (NOW() - INTERVAL 7 DAY)")
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('mau'))
+
+    )
+    return wau
+
+
 #####
 # MAU
 #####
@@ -328,6 +368,7 @@ def get_mau(df):
     """
     mau = (
         df
+        .filter("submission_date_s3 >= (NOW() - INTERVAL 28 DAY)")
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
 
@@ -350,23 +391,3 @@ def get_yau(df):
         .agg(F.countDistinct('client_id').alias('mau'))
 
     )
-
-""" AMO-DB Metrics """
-
-db = 'db-slave-amoprod1.amo.us-west-2.prod.mozaws.net:3306'
-hostname, port = db.split(":")
-port = int(port)
-database = 'addons_mozilla_org'
-
-tempdir = "s3n://mozilla-databricks-telemetry-test/amo-mysql/_temp"
-jdbcurl = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}&ssl=true&sslMode=verify-ca".format(hostname, port, database, dbutils.secrets.get("amo-mysql","amo-mysql-user"), dbutils.secrets.get("amo-mysql","amo-mysql-pass"))
-
-sql_context = SQLContext(sc)
-
-amo_df = sql_context.read \
-         .format("jdbc") \
-         .option("forward_spark_s3_credentials", True) \
-         .option("url", jdbcurl) \
-         .option("tempdir", tempdir) \
-         .option("query", "select guid, averagerating, totalreviews from addons limit 1000") \
-         .load()
