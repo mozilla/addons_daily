@@ -100,15 +100,15 @@ def get_storage_local_set_time():
 
 
 def get_startup_time():
-    hist = "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID"
+    hist = 'WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID'
 
     ext_startup_df = get_hist_avg(hist)
 
     startup_time_by_addon = (
       ext_startup_df
-      .groupBy("addon_id")
-      .agg(F.mean("avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID"))
-      .withColumnRenamed("avg(avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID)","avg_startup_time")
+      .groupBy('addon_id')
+      .agg(F.mean('avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID'))
+      .withColumnRenamed('avg(avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID)' ,'avg_startup_time')
     )
     return startup_time_by_addon
 
@@ -119,7 +119,7 @@ def get_startup_time():
 
 def get_bkgd_load_time():
 
-    hist = "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID"
+    hist = 'WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID'
     return get_hist_avg(hist)
 
 #################################
@@ -128,15 +128,14 @@ def get_bkgd_load_time():
 
 def get_ba_popup_load_time():
 
-    hist = "WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"
+    hist = 'WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID'
 
     ba_popup_load_time_df = get_hist_avg(hist)
 
     ba_popup_load_time_by_addon = (
       ba_popup_load_time_df
-      .groupBy("addon_id")
-      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"))
-      .withColumnRenamed("avg(avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID)","avg_ba_popup_load_time")
+      .groupBy('addon_id')
+      .agg(F.mean('avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID').alias('avg_ba_popup_load_time'))
     )
 
     return ba_popup_load_time_by_addon
@@ -147,15 +146,14 @@ def get_ba_popup_load_time():
 
 
 def get_pa_popup_load_time():
-    hist = "WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID"
+    hist = 'WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID'
 
     pa_popup_load_time_df = get_hist_avg(hist)
 
     pa_popup_load_time_by_addon = (
       pa_popup_load_time_df
       .groupBy("addon_id")
-      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"))
-      .withColumnRenamed("avg(avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID)","avg_ba_popup_load_time")
+      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID").alias("avg_ba_popup_load_time"))
     )
     return pa_popup_load_time_by_addon
 
@@ -170,8 +168,24 @@ def get_cs_injection_time():
 
     content_script_time_by_addon = (
       content_script_time_df
-      .groupBy("addon_id")
-      .agg(F.mean("avg_WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID").alias('avg_content_script_injection_ms'))
+      .groupBy('addon_id')
+      .agg(F.mean('avg_WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID').alias('avg_content_script_injection_ms'))
     )
     return content_script_time_by_addon
 
+
+###############################
+# total memory usage
+###############################
+
+
+def get_memory_total():
+    hist = 'MEMORY_TOTAL'
+    memory_total_df = get_hist_avg(hist)
+
+    memory_total_by_addon = (
+      memory_total_df
+      .groupBy('addon_id')
+      .agg(F.mean("avg_MEMORY_TOTAL").alias('avg_memory_total'))
+    )
+    return content_script_time_by_addon
