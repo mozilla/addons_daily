@@ -358,20 +358,66 @@ def get_wau(df):
 
 
 #####
+# DAU
+#####
+
+def get_dau(addons_expanded_df):
+    """
+    :param df: addons expanded from main summary
+    :return:
+    """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 1 DAYS)")
+    )
+
+    dau = (
+        df
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('dau'))
+    )
+    return dau
+
+#####
+# WAU
+#####
+
+def get_wau(addons_expanded_df):
+    """
+    :param df: addons expanded from main summary
+    :return:
+    """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 7 DAYS)")
+    )
+
+    wau = (
+        df
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('wau'))
+    )
+    return wau
+
+#####
 # MAU
 #####
 
-def get_mau(df):
+def get_mau(addons_expanded_df):
     """
-    :param df: addons expanded from main summary just last month
+    :param df: addons expanded from main summary
     :return:
     """
+    df = (
+        addons_expanded_df
+        .filter("Submission_date >= (NOW() - INTERVAL 30 DAYS)")
+    )
+
     mau = (
         df
         .filter("submission_date_s3 >= (NOW() - INTERVAL 28 DAY)")
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
-
     )
     return mau
 
@@ -379,15 +425,37 @@ def get_mau(df):
 # YAU
 #####
 
-
-def get_yau(df):
+def get_yau(addons_expanded_df):
     """
     :param df: main_summary addons expanded from last year
     :return:
     """
-    mau = (
-        df
+    yau = (
+        addons_expanded_df
         .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('mau'))
-
+        .agg(F.countDistinct('client_id').alias('yau'))
     )
+<<<<<<< HEAD
+=======
+    return yau
+
+""" AMO-DB Metrics """
+
+db = 'db-slave-amoprod1.amo.us-west-2.prod.mozaws.net:3306'
+hostname, port = db.split(":")
+port = int(port)
+database = 'addons_mozilla_org'
+
+tempdir = "s3n://mozilla-databricks-telemetry-test/amo-mysql/_temp"
+jdbcurl = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}&ssl=true&sslMode=verify-ca".format(hostname, port, database, dbutils.secrets.get("amo-mysql","amo-mysql-user"), dbutils.secrets.get("amo-mysql","amo-mysql-pass"))
+
+sql_context = SQLContext(sc)
+
+amo_df = sql_context.read \
+         .format("jdbc") \
+         .option("forward_spark_s3_credentials", True) \
+         .option("url", jdbcurl) \
+         .option("tempdir", tempdir) \
+         .option("query", "select guid, averagerating, totalreviews from addons limit 1000") \
+         .load()
+>>>>>>> a69643630cddab424e5844bde91f035fe38e2d13
