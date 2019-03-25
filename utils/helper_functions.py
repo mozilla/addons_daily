@@ -1,9 +1,15 @@
 import pyspark.sql.functions as F
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
+from pyspark import SparkContext
+from moztelemetry import Dataset
+import datetime
+from google.cloud import bigquery
+import os
 
 
 make_map = F.udf(lambda x, y: dict(zip(x, y)), MapType(StringType(), DoubleType()))
+
 
 def get_spark():
     spark = (SparkSession
@@ -13,15 +19,16 @@ def get_spark():
 
     return spark
 
+
 def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
-    '''
+    """
     Stiches together an s3 destination.
     :param output_bucket: s3 output_bucket
     :param output_prefix: s3 output_prefix (within output_bucket)
     :param output_version: dataset output_version
     :retrn str ->
     s3://output_bucket/output_prefix/output_version/submissin_date_s3=[date]/sample_id=[sid]
-    '''
+    """
     suffix = ''
     if date is not None:
         suffix += "/submission_date_s3={}".format(date)
@@ -32,7 +39,7 @@ def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=
 
 
 def load_main_summary(spark, input_bucket, input_prefix, input_version):
-    '''
+    """
     Loads main_summary from the bucket constructed from
     input_bucket, input_prefix, input_version
     :param spark: SparkSession object
@@ -40,7 +47,7 @@ def load_main_summary(spark, input_bucket, input_prefix, input_version):
     :param input_prefix: s3 prefix (main_summary)
     :param input_version: dataset version (v4)
     :return SparkDF
-    '''
+    """
     dest = get_dest(input_bucket, input_prefix, input_version)
     return (spark
             .read
@@ -48,16 +55,52 @@ def load_main_summary(spark, input_bucket, input_prefix, input_version):
             .parquet(dest))
 
 
-def load_raw_pings():
+def load_raw_pings(sc):
     """
     Function to load raw pings data
+    :param sc: a spark context
+    :return a spark dataframe of raw pings
     """
 
+    yesterday_str = datetime.datetime.strftime(datetime.datetime.today() - datetime.timedelta(1), '%Y%m%d')
 
-def load_bq_data():
+    raw_pings = (
+        Dataset.from_source("telemetry")
+        .where(docType='main')
+        .where(appUpdateChannel='release')
+        .where(submissionDate=lambda x: x.startswith(yesterday_str))
+        .records(sc, sample=.01)
+    )
+    return raw_pings
+
+
+def load_keyed_hist(rp):
     """
-    Function to load relevant data from BigQuery
+    :param rp: dataframe of raw_pings returned from load_raw_pings()
+    :return: just the keyed histograms
     """
+    return rp.map(lambda x: x['payload']['keyedHistograms']).cache()
+
+
+def load_bq_data(spark,credential_path,project='ga-mozilla-org-prod-001'):
+    """
+    Function to load data from big-query
+    :param spark: a SparkSession
+    :param credential_path: path to the JSON file of your credentials for BQ
+    :param project: the string project path, only pass if different than the standard project above
+    :return: the data from bigquery in form of list of dictionary per row
+    """
+    client = bigquery.Client(project=project)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+    query = (
+        "SELECT * FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_20190219` "
+        "LIMIT 100"
+    )
+    query_job = client.query(
+        query,
+        location='US'
+    )
+    return [dict(row.items()) for row in query_job]
 
 
 def histogram_mean(values):
@@ -109,7 +152,7 @@ def dataframe_joiner(dfs):
     """
     left = dfs[0]
     for right in dfs[1:]:
-        left = left.join(right,on="addon_id",how=left)
+        left = left.join(right, on="addon_id", how=left)
     return left
 
 
