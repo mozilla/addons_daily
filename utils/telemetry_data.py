@@ -405,6 +405,10 @@ def get_yau(addons_expanded_df):
 =======
     return yau
 
+###
+# Disabled addons
+###
+
 def get_disabled(df):
     """
     Gets the number of distinct clients in df with the addon disabled
