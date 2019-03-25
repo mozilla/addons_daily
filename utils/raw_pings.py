@@ -5,12 +5,11 @@ from pyspark.sql import SQLContext
 
 spark = get_spark()
 
-
 def get_page_load_times(df):
     """
-
+    Function to aggreagte raw pings by addon_id and get average page load time
     :param df: raw pings dataframe
-    :return:
+    :return: aggregated dataframe
     """
     hist = "FX_PAGE_LOAD_MS_2"
 
@@ -62,3 +61,117 @@ def get_tab_switch_time(df):
         .agg(F.mean('tab_switch_ms').alias('tab_switch_ms')))
 
     return tab_switch_df
+
+##########################
+# storage local 'get' time
+##########################
+
+
+def get_storage_local_get_time():
+
+    storage_local_get_df = get_hist_avg('WEBEXT_STORAGE_LOCAL_GET_MS_BY_ADDONID', just_keyed_hist)
+
+    storage_local_get_by_addon = (
+        storage_local_get_df
+        .groupBy('addon_id')
+        .agg(F.mean('avg_webext_storage_local_get_ms_by_addonid').alias('avg_storage_local_get_ms'))
+    )
+    return storage_local_get_by_addon
+
+##########################
+# storage local 'set' time
+##########################
+
+
+def get_storage_local_set_time():
+    storage_local_set_df = get_hist_avg('WEBEXT_STORAGE_LOCAL_SET_MS_BY_ADDONID', just_keyed_hist)
+
+    storage_local_set_by_addon = (
+        storage_local_set_df
+        .groupBy('addon_id')
+        .agg(F.mean('avg_webext_storage_local_get_ms_by_addonid').alias('avg_storage_local_get_ms'))
+    )
+    return storage_local_set_by_addon
+
+
+##############
+# startup time
+##############
+
+
+def get_startup_time():
+    hist = "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID"
+
+    ext_startup_df = get_hist_avg(hist)
+
+    startup_time_by_addon = (
+      ext_startup_df
+      .groupBy("addon_id")
+      .agg(F.mean("avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID"))
+      .withColumnRenamed("avg(avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID)","avg_startup_time")
+    )
+    return startup_time_by_addon
+
+
+###########################
+# background page load time
+###########################
+
+def get_bkgd_load_time():
+
+    hist = "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID"
+    return get_hist_avg(hist)
+
+#################################
+# browser action pop up load time
+#################################
+
+def get_ba_popup_load_time():
+
+    hist = "WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"
+
+    ba_popup_load_time_df = get_hist_avg(hist)
+
+    ba_popup_load_time_by_addon = (
+      ba_popup_load_time_df
+      .groupBy("addon_id")
+      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"))
+      .withColumnRenamed("avg(avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID)","avg_ba_popup_load_time")
+    )
+
+    return ba_popup_load_time_by_addon
+
+##############################
+# page action pop up load time
+##############################
+
+
+def get_pa_popup_load_time():
+    hist = "WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID"
+
+    pa_popup_load_time_df = get_hist_avg(hist)
+
+    pa_popup_load_time_by_addon = (
+      pa_popup_load_time_df
+      .groupBy("addon_id")
+      .agg(F.mean("avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID"))
+      .withColumnRenamed("avg(avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID)","avg_ba_popup_load_time")
+    )
+    return pa_popup_load_time_by_addon
+
+###############################
+# content script injection time
+###############################
+
+
+def get_cs_injection_time():
+    hist = 'WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID'
+    content_script_time_df = get_hist_avg(hist)
+
+    content_script_time_by_addon = (
+      content_script_time_df
+      .groupBy("addon_id")
+      .agg(F.mean("avg_WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID").alias('avg_content_script_injection_ms'))
+    )
+    return content_script_time_by_addon
+
