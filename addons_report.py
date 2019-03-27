@@ -13,7 +13,54 @@ def agg_addons_report(main_summary_data, raw_pings_data, bq_data, **kwargs):
     """
     This function will create the addons dataset
     """
+    addons_and_users = (
+        main_summary_data
+        .select("Submission_date", "client_id",
+                F.explode("active_addons"),
+                "os", "country", "subsession_length",
+                "places_pages_count", "places_bookmarks_count",
+                "scalar_parent_browser_engagement_total_uri_count",
+                "devtools_toolbox_opened_count", "active_ticks",
+                "histogram_parent_tracking_protection_enabled",
+                "histogram_parent_webext_background_page_load_ms")
+    )
+
+    addons_expanded = (
+            addons_and_users
+            .select("Submission_date", "client_id",
+                    "col.*",
+                    "os", "country", "subsession_length",
+                    "places_pages_count", "places_bookmarks_count",
+                    "scalar_parent_browser_engagement_total_uri_count",
+                    "devtools_toolbox_opened_count", "active_ticks",
+                    "histogram_parent_tracking_protection_enabled",
+                    "histogram_parent_webext_background_page_load_ms")
+            .cache()
+    )
+
     keyed_histograms = load_keyed_hist(raw_pings_data)
+
+    # telemetry metrics
+    os_dist = get_os_dist(addons_expanded)
+    ct_dist = get_ct_dist(addons_expanded)
+    total_hours = get_total_hours(addons_expanded)
+    active_hours = get_active_hours(addons_expanded)
+    top_ten_others = get_top_ten_others(addons_expanded)
+    avg_uri = get_avg_uri(addons_expanded)
+    tabs_and_bookmarks = get_tabs_and_bookmarks(addons_expanded)
+    dt_opened_ct = get_devtools_opened_count(addons_expanded)
+    pct_tracking = get_pct_tracking_enabled(addons_expanded)
+    dau = get_dau(addons_expanded)
+    wau = get_wau(addons_expanded)
+    mau = get_mau(addons_expanded)
+    yau = get_yau(addons_expanded)
+
+    # raw pings metrics
+
+
+
+
+    return data
 
 
 
