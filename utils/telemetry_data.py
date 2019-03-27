@@ -116,7 +116,7 @@ def get_ct_dist(df):
 ##############
 
 
-def get_active_hours(df):
+def get_total_active_hours(df):
     """
     :param df: addons_expanded
     :return:
@@ -140,6 +140,35 @@ def get_active_hours(df):
     )
 
     return agg_avg_time
+
+
+##############
+# active hours
+##############
+
+def get_active_hours(df):
+    """
+    Compute avg time spent active on browser in hours
+    :param df: addons expanded
+    :return: aggregated dataframe by addon_id
+    """
+    average_ticks = (
+        df
+        .select("addon_id", "client_id", "Submission_date", 'active_ticks')
+        .groupBy('addon_id', 'client_id', "Submission_date")
+        .agg(F.sum('active_ticks').alias('total_ticks'))
+    )
+
+    agg_avg_ticks = (
+        average_ticks
+        .groupBy("addon_id")
+        .agg(F.mean("total_ticks"))
+        .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
+        .withColumn('active_hours', F.col("avg_time_active_ms") / (12 * 60))
+        .drop('avg_time_active_ms')
+    )
+    return agg_avg_ticks
+
 
 ############
 # total URIs
