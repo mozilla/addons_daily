@@ -112,6 +112,7 @@ def main():
     agg_data = agg_addons_report(main_summary, raw_pings, bq_d)
     return agg_data
 
+
 if __name__ == '__main__':
     main()
 
