@@ -4,6 +4,7 @@ from utils.helpers import load_main_summary,load_raw_pings, get_spark, get_sc, l
 from utils.telemetry_data import *
 from utils.amo_data import *
 from utils.bq_data import *
+from utils.raw_pings import *
 from pyspark.sql import SparkSession
 
 DEFAULT_TZ = 'UTC'
@@ -56,12 +57,44 @@ def agg_addons_report(main_summary_data, raw_pings_data, bq_data, **kwargs):
     yau = get_yau(addons_expanded)
 
     # raw pings metrics
+    page_load_times = get_page_load_times(raw_pings_data)
+    tab_switch_time = get_tab_switch_time(raw_pings_data)
+    storage_get = get_storage_local_get_time(keyed_histograms)
+    storage_set = get_storage_local_set_time(keyed_histograms)
+    startup_time = get_startup_time(keyed_histograms)
+    bkg_load_time = get_bkgd_load_time(keyed_histograms)
+    ba_popup_lt = get_ba_popup_load_time(keyed_histograms)
+    pa_popup_lt = get_pa_popup_load_time(keyed_histograms)
+    cs_injection_time = get_cs_injection_time(keyed_histograms)
+    mem_total = get_memory_total(keyed_histograms)
 
+    agg_data = (
+        os_dist
+        .join(ct_dist, on='addon_id', how='left')
+        .join(total_hours, on='addon_id', how='left')
+        .join(active_hours, on='addon_id', how='left')
+        .join(top_ten_others, on='addon_id', how='left')
+        .join(avg_uri, on='addon_id', how='left')
+        .join(tabs_and_bookmarks, on='addon_id', how='left')
+        .join(dt_opened_ct, on='addon_id', how='left')
+        .join(pct_tracking, on='addon_id', how='left')
+        .join(dau, on='addon_id', how='left')
+        .join(wau, on='addon_id', how='left')
+        .join(mau, on='addon_id', how='left')
+        .join(yau, on='addon_id', how='left')
+        .join(page_load_times, on='addon_id', how='left')
+        .join(tab_switch_time, on='addon_id', how='left')
+        .join(storage_get, on='addon_id', how='left')
+        .join(storage_set, on='addon_id', how='left')
+        .join(startup_time, on='addon_id', how='left')
+        .join(bkg_load_time, on='addon_id', how='left')
+        .join(ba_popup_lt, on='addon_id', how='left')
+        .join(pa_popup_lt, on='addon_id', how='left')
+        .join(cs_injection_time, on='addon_id', how='left')
+        .join(mem_total, on='addon_id', how='left')
+    )
 
-
-
-    return data
-
+    return agg_data
 
 
 def main():
@@ -77,4 +110,9 @@ def main():
     raw_pings = load_raw_pings(sc)
     bq_d = load_bq_data(path)
     agg_data = agg_addons_report(main_summary, raw_pings, bq_d)
+    return agg_data
+
+if __name__ == '__main__':
+    main()
+
 
