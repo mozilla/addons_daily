@@ -8,9 +8,10 @@ from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import datetime
 
-spark = SparkSession.builder.appName('addons').getOrCreate()
+#spark = SparkSession.builder.appName('addons').getOrCreate()
 
-def load_bq(date):
+
+def load_bq(date,json_credentials_path,spark):
     """
     Creates data frame with the number of page views each slug recieved on the given date
     """
@@ -18,7 +19,7 @@ def load_bq(date):
 
     project = 'ga-mozilla-org-prod-001'
     client = bigquery.Client(project=project)
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/sarahmelancon/addons/credentials.json"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = json_credentials_path
 
     query = (
         "SELECT * FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_" + today + "`"

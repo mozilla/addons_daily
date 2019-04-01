@@ -35,7 +35,6 @@ def get_os_dist(df):
         .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
     )
 
-
     # count distinct clients for each addon:OS pair,
     # join with total client counts on addon_id
     os_ = (
@@ -44,7 +43,7 @@ def get_os_dist(df):
         .groupBy("addon_id")
         .agg(F.countDistinct("client_id"))
         .withColumnRenamed("count(DISTINCT client_id)", "client_count")
-        .join(client_counts,on='addon_id', how='left')
+        .join(client_counts, on='addon_id', how='left')
         .withColumn("os_pct", F.col("client_count")/F.col("total_clients"))
     )
 
@@ -84,7 +83,6 @@ def get_ct_dist(df):
             .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
     )
 
-
     country_ = (
             df
             .select("addon_id", "country", "client_id")
@@ -111,13 +109,14 @@ def get_ct_dist(df):
 
     return ct_dist
 
-##############
-# active hours
-##############
+#############
+# total hours
+#############
 
 
-def get_active_hours(df):
+def get_total_hours(df):
     """
+    Get total time spent on browser on avg, inactive or active
     :param df: addons_expanded
     :return:
     """
@@ -140,6 +139,35 @@ def get_active_hours(df):
     )
 
     return agg_avg_time
+
+
+##############
+# active hours
+##############
+
+def get_active_hours(df):
+    """
+    Compute avg time spent active on browser in hours
+    :param df: addons expanded
+    :return: aggregated dataframe by addon_id
+    """
+    average_ticks = (
+        df
+        .select("addon_id", "client_id", "Submission_date", 'active_ticks')
+        .groupBy('addon_id', 'client_id', "Submission_date")
+        .agg(F.sum('active_ticks').alias('total_ticks'))
+    )
+
+    agg_avg_ticks = (
+        average_ticks
+        .groupBy("addon_id")
+        .agg(F.mean("total_ticks"))
+        .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
+        .withColumn('active_hours', F.col("avg_time_active_ms") / (12 * 60))
+        .drop('avg_time_active_ms')
+    )
+    return agg_avg_ticks
+
 
 ############
 # total URIs
@@ -176,9 +204,9 @@ def get_tabs_and_bookmarks(df):
     tab_counts = (
         df
         .groupby("addon_id")
-        .agg(F.avg("places_pages_count"),F.avg("places_bookmarks_count"))
-        .withColumnRenamed("avg(places_pages_count)","avg_tabs")
-        .withColumnRenamed("avg(places_bookmarks_count)","avg_bookmarks")
+        .agg(F.avg("places_pages_count"), F.avg("places_bookmarks_count"))
+        .withColumnRenamed("avg(places_pages_count)", "avg_tabs")
+        .withColumnRenamed("avg(places_bookmarks_count)", "avg_bookmarks")
     )
 
     return tab_counts
@@ -236,6 +264,7 @@ def get_top_ten_others(df):
         )
 
     return other_addons_df
+
 #######################
 # devtools opened count
 #######################
@@ -258,6 +287,7 @@ def get_devtools_opened_count(df):
 # percentage of users with tracking protection enabled
 ######################################################
 
+
 def get_pct_tracking_enabled(df):
     """
     :param df: addons_expanded
@@ -275,6 +305,7 @@ def get_pct_tracking_enabled(df):
         .drop('sum(1)', 'count(0)', 'total')
     )
     return tracking_enabled
+
 
 """ Performance Metrics """
 
@@ -318,14 +349,13 @@ def get_crashes(df):
     return crashes_df
 
 
-
 """ Trend Metrics """
-
 
 
 #####
 # DAU
 #####
+
 
 def get_dau(addons_expanded_df):
     """
@@ -348,6 +378,7 @@ def get_dau(addons_expanded_df):
 # WAU
 #####
 
+
 def get_wau(addons_expanded_df):
     """
     :param df: addons expanded from main summary
@@ -368,6 +399,7 @@ def get_wau(addons_expanded_df):
 #####
 # MAU
 #####
+
 
 def get_mau(addons_expanded_df):
     """
@@ -391,6 +423,7 @@ def get_mau(addons_expanded_df):
 # YAU
 #####
 
+
 def get_yau(addons_expanded_df):
     """
     :param df: main_summary addons expanded from last year
@@ -401,13 +434,13 @@ def get_yau(addons_expanded_df):
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('yau'))
     )
-<<<<<<< HEAD
-=======
+
     return yau
 
-###
+#################
 # Disabled addons
-###
+#################
+
 
 def get_disabled(df):
     """
@@ -429,23 +462,4 @@ def get_disabled(df):
     return addons_disabled_count
 
 
-""" AMO-DB Metrics """
 
-db = 'db-slave-amoprod1.amo.us-west-2.prod.mozaws.net:3306'
-hostname, port = db.split(":")
-port = int(port)
-database = 'addons_mozilla_org'
-
-tempdir = "s3n://mozilla-databricks-telemetry-test/amo-mysql/_temp"
-jdbcurl = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}&ssl=true&sslMode=verify-ca".format(hostname, port, database, dbutils.secrets.get("amo-mysql","amo-mysql-user"), dbutils.secrets.get("amo-mysql","amo-mysql-pass"))
-
-sql_context = SQLContext(sc)
-
-amo_df = sql_context.read \
-         .format("jdbc") \
-         .option("forward_spark_s3_credentials", True) \
-         .option("url", jdbcurl) \
-         .option("tempdir", tempdir) \
-         .option("query", "select guid, averagerating, totalreviews from addons limit 1000") \
-         .load()
->>>>>>> a69643630cddab424e5844bde91f035fe38e2d13
