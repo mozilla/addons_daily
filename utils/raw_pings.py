@@ -3,7 +3,7 @@ import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext
 
-spark = get_spark()
+#spark = get_spark()
 
 def get_page_load_times(df):
     """
