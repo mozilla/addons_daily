@@ -8,8 +8,6 @@ from pyspark.sql import SQLContext
 # these will be replaced later
 
 
-spark = get_spark()
-
 # this script assumes we have the data from main_summary and the raw_pings
 # already loaded and processed
 
