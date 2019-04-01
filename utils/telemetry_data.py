@@ -38,12 +38,16 @@ def get_os_dist(df):
     os_ = (
         df
         .select("addon_id", "os", "client_id")
-        .groupBy("addon_id")
+        .groupBy("addon_id", "os")
         .agg(F.countDistinct("client_id"))
         .withColumnRenamed("count(DISTINCT client_id)", "client_count")
         .join(client_counts, on='addon_id', how='left')
         .withColumn("os_pct", F.col("client_count")/F.col("total_clients"))
     )
+
+    sample = os_.take(1)
+    os_.printSchema()
+    print(sample)
 
     # group joined dataframe on addon_id and take percentage of users per OS,
     # return as a mapping of OS to percentage of users with given OS by addon
