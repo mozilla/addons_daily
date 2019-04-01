@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 from pyspark import SparkContext
 from moztelemetry import Dataset
 import datetime
-from google.cloud import bigquery
+#from google.cloud import bigquery
 import os
 
 
