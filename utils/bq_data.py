@@ -1,7 +1,7 @@
 # This file contains helper functions to create the BigQuery portion of the dataset
 # TODO
 
-from google.cloud import bigquery
+#from google.cloud import bigquery
 import os
 import pyspark.sql.functions as F
 from pyspark.sql.types import *
