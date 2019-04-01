@@ -92,6 +92,7 @@ def agg_addons_report(main_summary_data, raw_pings_data, bq_data, **kwargs):
         .join(pa_popup_lt, on='addon_id', how='left')
         .join(cs_injection_time, on='addon_id', how='left')
         .join(mem_total, on='addon_id', how='left')
+        .join(bq_data, on='addon_id', how='left')
     )
 
     return agg_data
@@ -102,13 +103,14 @@ def main():
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
-    ms = load_main_summary(spark,input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
+    ms = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
     main_summary = (
         ms
         .filter("submission_date >= (NOW() - INTERVAL 365 DAYS)")
     )
     raw_pings = load_raw_pings(sc)
-    bq_d = load_bq_data(path)
+
+    bq_d = load_bq_data(datetime.date.today(), path, spark)
     agg_data = agg_addons_report(main_summary, raw_pings, bq_d)
     return agg_data
 
