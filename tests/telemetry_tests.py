@@ -113,9 +113,10 @@ def test_pct_tracking_enabled(df):
                        Row(addon_id=u'webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
     assert output == expected_output
 
+
 def test_country_distribution(df):
     """
-    Given a dataframe of fake data, ensure that the get_pct_tracking_enabled outputs the correct dataframe
+    Given a dataframe of fake data, ensure that the get_ct_dist outputs the correct dataframe
     :param df: fake dataframe that is of same structure as actual addons_expanded
     :return: assertion whether the expected output indeed matches the true output
     """
