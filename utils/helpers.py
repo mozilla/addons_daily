@@ -159,7 +159,7 @@ def take_top_ten(dic):
     return lis
 
 
-def get_spark(tz):
+def get_spark(tz='UTC'):
     spark = (SparkSession
              .builder
              .appName("usage_report")
