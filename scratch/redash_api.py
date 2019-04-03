@@ -3,6 +3,11 @@
 import os
 import requests
 import time
+from pyspark import SparkContext
+from pyspark.sql import SQLContext
+
+sc = SparkContext("local", "first app")
+sqlContext = SQLContext(sc)
 
 api_key = 'KFj4lLJnrFDMxdNU0b0yTC2BnuMXNT1U1apLO7y9'
 redash_url = 'https://sql.telemetry.mozilla.org'
@@ -25,4 +30,7 @@ while job['status'] not in (3,4):
 result_id = job['query_result_id']
 response = s.get('{}/api/queries/{}/results/{}.json'.format(redash_url, query_id, result_id))
 
-print(response.json()['query_result']['data']['rows'])
+data_dict = response.json()['query_result']['data']['rows']
+df = sqlContext.createDataFrame(data=data_dict)
+
+df.show(5)
