@@ -68,7 +68,12 @@ addons_expanded_sample = [Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0
 spark = get_spark()
 
 
-def test_pct_tracking_enabled(spark,data):
+def test_pct_tracking_enabled(spark, data):
     df = spark.createDataFrame(data)
     output = get_pct_tracking_enabled(df)
-    return output
+    print(output)
+
+    
+test_pct_tracking_enabled(spark, addons_expanded_sample)
+
+
