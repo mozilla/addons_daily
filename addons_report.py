@@ -106,7 +106,7 @@ def main():
     ms = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
     main_summary = (
         ms
-        .filter("submission_date >= (NOW() - INTERVAL 28 DAYS)")
+        .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
     )
     raw_pings = load_raw_pings(sc)
 
