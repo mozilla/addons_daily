@@ -1,7 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 import datetime
-from utils.telemetry_data import get_pct_tracking_enabled
+from utils.telemetry_data import get_pct_tracking_enabled, get_ct_dist
 from utils.helpers import get_spark
 
 addons_expanded_sample = [Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0),
@@ -92,12 +92,19 @@ addons_schema = StructType([StructField('Submission_date', TimestampType(), True
                                         MapType(IntegerType(), IntegerType(), True), True),
                             StructField('histogram_parent_webext_background_page_load_ms',
                                         MapType(IntegerType(), IntegerType(), True), True)])
+
+
+addons_expanded_sample = [row.asDict() for row in addons_expanded_sample]
 spark = get_spark()
+addons_df = spark.createDataFrame(addons_expanded_sample, addons_schema)
 
 
-def test_pct_tracking_enabled(spark, data, schema):
-    data = [row.asDict() for row in data]
-    df = spark.createDataFrame(data,schema)
+def test_pct_tracking_enabled(df):
+    """
+    Given a dataframe of fake data, ensure that the get_pct_tracking_enabled outputs the correct dataframe
+    :param df: fake dataframe that is of same structure as actual addons_expanded
+    :return: assertion whether the expected output indeed matches the true output
+    """
     output = get_pct_tracking_enabled(df).collect()
     expected_output = [Row(addon_id=u'screenshots@mozilla.org', pct_w_tracking_prot_enabled=0.0),
                        Row(addon_id=u'fxmonitor@mozilla.org', pct_w_tracking_prot_enabled=0.0),
@@ -106,7 +113,24 @@ def test_pct_tracking_enabled(spark, data, schema):
                        Row(addon_id=u'webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
     assert output == expected_output
 
+def test_country_distribution(df):
+    """
+    Given a dataframe of fake data, ensure that the get_pct_tracking_enabled outputs the correct dataframe
+    :param df: fake dataframe that is of same structure as actual addons_expanded
+    :return: assertion whether the expected output indeed matches the true output
+    """
+    output = get_ct_dist(df).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', country_dist={'ES': 1.0}),
+                       Row(addon_id='fxmonitor@mozilla.org', country_dist={'ES': 1.0}),
+                       Row(addon_id='formautofill@mozilla.org', country_dist={'ES': 1.0}),
+                       Row(addon_id='webcompat-reporter@mozilla.org', country_dist={'ES': 1.0}),
+                       Row(addon_id='webcompat@mozilla.org', country_dist={'ES': 1.0})]
 
-test_pct_tracking_enabled(spark, addons_expanded_sample, addons_schema)
+    print(output)
+    assert output == expected_output
+
+
+test_pct_tracking_enabled(addons_df)
+test_country_distribution(addons_df)
 
 
