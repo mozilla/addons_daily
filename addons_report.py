@@ -2,6 +2,7 @@ import click
 import os
 from utils.helpers import load_main_summary,load_raw_pings, get_spark, get_sc, load_keyed_hist, load_bq_data
 from utils.telemetry_data import *
+from utils.search_daily_data import *
 from utils.amo_data import *
 from utils.bq_data import *
 from utils.raw_pings import *
@@ -10,7 +11,7 @@ from pyspark.sql import SparkSession
 DEFAULT_TZ = 'UTC'
 
 
-def agg_addons_report(main_summary_data, raw_pings_data, **kwargs):
+def agg_addons_report(main_summary_data, search_daily_data, raw_pings_data, **kwargs):
     """
     This function will create the addons dataset
     """
@@ -56,6 +57,9 @@ def agg_addons_report(main_summary_data, raw_pings_data, **kwargs):
     mau = get_mau(addons_expanded)
     yau = get_yau(addons_expanded)
 
+    # search metrics
+    # search_daily = get_search_metrics(search_daily_data, addons_expanded)
+
     # raw pings metrics
     page_load_times = get_page_load_times(raw_pings_data)
     tab_switch_time = get_tab_switch_time(raw_pings_data)
@@ -82,6 +86,7 @@ def agg_addons_report(main_summary_data, raw_pings_data, **kwargs):
         .join(wau, on='addon_id', how='left')
         .join(mau, on='addon_id', how='left')
         .join(yau, on='addon_id', how='left')
+        # .join(search_daily, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')
         .join(storage_get, on='addon_id', how='left')
@@ -108,6 +113,9 @@ def main():
         ms
         .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
     )
+
+    # search_daily = load_search_daily()
+    
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
