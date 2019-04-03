@@ -5,6 +5,7 @@ running sdist
 running egg_info
 writing extensions_project.egg-info/PKG-INFO
 writing dependency_links to extensions_project.egg-info/dependency_links.txt
+writing requirements to extensions_project.egg-info/requires.txt
 writing top-level names to extensions_project.egg-info/top_level.txt
 reading manifest file 'extensions_project.egg-info/SOURCES.txt'
 writing manifest file 'extensions_project.egg-info/SOURCES.txt'
@@ -23,9 +24,10 @@ copying setup.py -> extensions_project-1.0
 copying extensions_project.egg-info/PKG-INFO -> extensions_project-1.0/extensions_project.egg-info
 copying extensions_project.egg-info/SOURCES.txt -> extensions_project-1.0/extensions_project.egg-info
 copying extensions_project.egg-info/dependency_links.txt -> extensions_project-1.0/extensions_project.egg-info
+copying extensions_project.egg-info/requires.txt -> extensions_project-1.0/extensions_project.egg-info
 copying extensions_project.egg-info/top_level.txt -> extensions_project-1.0/extensions_project.egg-info
 copying tests/__init__.py -> extensions_project-1.0/tests
-copying tests/telemetry_tests.py -> extensions_project-1.0/tests
+copying tests/tests_telemetry.py -> extensions_project-1.0/tests
 copying utils/__init__.py -> extensions_project-1.0/utils
 copying utils/amo_data.py -> extensions_project-1.0/utils
 copying utils/bq_data.py -> extensions_project-1.0/utils
@@ -40,10 +42,11 @@ adding 'extensions_project-1.0/setup.py'
 adding 'extensions_project-1.0/setup.cfg'
 adding 'extensions_project-1.0/extensions_project.egg-info/PKG-INFO'
 adding 'extensions_project-1.0/extensions_project.egg-info/SOURCES.txt'
+adding 'extensions_project-1.0/extensions_project.egg-info/requires.txt'
 adding 'extensions_project-1.0/extensions_project.egg-info/top_level.txt'
 adding 'extensions_project-1.0/extensions_project.egg-info/dependency_links.txt'
+adding 'extensions_project-1.0/tests/tests_telemetry.py'
 adding 'extensions_project-1.0/tests/__init__.py'
-adding 'extensions_project-1.0/tests/telemetry_tests.py'
 adding 'extensions_project-1.0/utils/raw_pings.py'
 adding 'extensions_project-1.0/utils/bq_data.py'
 adding 'extensions_project-1.0/utils/__init__.py'
