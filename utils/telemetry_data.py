@@ -296,8 +296,8 @@ def get_devtools_opened_count(df):
     dev_count = (
         df
         .groupBy("addon_id")
-        .agg(F.avg("devtools_toolbox_open_count"))
-        .withColumnRenamed("avg(devtools_toolbox_open_count)", "avg_toolbox_opened_count")
+        .agg(F.avg("devtools_toolbox_opened_count"))
+        .withColumnRenamed("avg(devtools_toolbox_opened_count)", "avg_toolbox_opened_count")
     )
     return dev_count
 

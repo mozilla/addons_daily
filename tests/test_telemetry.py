@@ -1,7 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 import datetime
-from utils.telemetry_data import get_pct_tracking_enabled, get_ct_dist, get_tabs_and_bookmarks
+from utils.telemetry_data import *
 from utils.helpers import get_spark
 import pytest
 
@@ -134,21 +134,66 @@ def test_country_distribution(addons_expanded):
     assert output == expected_output
 
 
-def test_bookmarks_and_tabs(addons_expanded):
+def test_tabs(addons_expanded):
     """
     Given a dataframe of actual sampled data, ensure that the get_bookmarks_and_tabs outputs the correct dataframe
     :param addons_expanded: pytest fixture that generates addons_expanded sample
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = get_tabs_and_bookmarks(addons_expanded).collect()
-    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_tabs=None, avg_bookmarks=None),
-                       Row(addon_id='fxmonitor@mozilla.org', avg_tabs=None, avg_bookmarks=None),
-                       Row(addon_id='formautofill@mozilla.org', avg_tabs=10.0, avg_bookmarks=5.0),
-                       Row(addon_id='webcompat-reporter@mozilla.org', avg_tabs=None, avg_bookmarks=None),
-                       Row(addon_id='webcompat@mozilla.org', avg_tabs=None, avg_bookmarks=None)]
+    output = get_tabs(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_tabs=None),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_tabs=None),
+                       Row(addon_id='formautofill@mozilla.org', avg_tabs=10.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_tabs=None),
+                       Row(addon_id='webcompat@mozilla.org', avg_tabs=None)]
     print(output)
     assert output == expected_output
 
 
+def test_bookmarks(addons_expanded):
+    """
+    Given a dataframe of actual sampled data, ensure that the get_bookmarks_and_tabs outputs the correct dataframe
+    :param addons_expanded: pytest fixture that generates addons_expanded sample
+    :return: assertion whether the expected output indeed matches the true output
+    """
+    output = get_bookmarks(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_bookmarks=None),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_bookmarks=None),
+                       Row(addon_id='formautofill@mozilla.org', avg_bookmarks=5.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_bookmarks=None),
+                       Row(addon_id='webcompat@mozilla.org', avg_bookmarks=None)]
+    print(output)
+    assert output == expected_output
+
+
+# def test_active_hours(addons_expanded):
+#    output = get_active_hours(addons_expanded).collect()
+#    expected_output = [Row(addon_id='screenshots@mozilla.org', active_hours=0.5486111111111112),
+#                       Row(addon_id='fxmonitor@mozilla.org', active_hours=0.5486111111111112),
+#                       Row(addon_id='formautofill@mozilla.org', active_hours=0.5486111111111112),
+#                       Row(addon_id='webcompat-reporter@mozilla.org', active_hours=0.5486111111111112),
+#                       Row(addon_id='webcompat@mozilla.org', active_hours=0.5486111111111112)]
+#    assert expected_output == output
+
+
+def test_total_hours(addons_expanded):
+    output = get_total_hours(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_time_active_ms=3392.0),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_time_active_ms=3392.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_time_active_ms=3392.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_time_active_ms=3392.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_time_active_ms=3392.0)]
+    assert expected_output == output
+
+
+def test_devtools(addons_expanded):
+    output = get_devtools_opened_count(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_toolbox_opened_count=None),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_toolbox_opened_count=None),
+                       Row(addon_id='formautofill@mozilla.org', avg_toolbox_opened_count=None),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_toolbox_opened_count=None),
+                       Row(addon_id='webcompat@mozilla.org', avg_toolbox_opened_count=None)]
+    assert output == expected_output
+    
 
 
