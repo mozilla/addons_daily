@@ -193,11 +193,12 @@ def get_avg_uri(df):
 
     return avg_uri
 
-##############################
-# number of tabs and bookmarks
-##############################
+################
+# number of tabs
+################
 
-def get_tabs_and_bookmarks(df):
+
+def get_tabs(df):
     """
     :param df: addons_expanded
     :return:
@@ -206,12 +207,27 @@ def get_tabs_and_bookmarks(df):
     tab_counts = (
         df
         .groupby("addon_id")
-        .agg(F.avg("places_pages_count"), F.avg("places_bookmarks_count"))
+        .agg(F.avg("places_pages_count"))
         .withColumnRenamed("avg(places_pages_count)", "avg_tabs")
-        .withColumnRenamed("avg(places_bookmarks_count)", "avg_bookmarks")
     )
 
     return tab_counts
+
+
+def get_bookmarks(df):
+    """
+    get avg # of bookmarks by addon_id
+    :param df:
+    :return:
+    """
+    bookmark_counts = (
+        df
+        .groupby("addon_id")
+        .agg(F.avg("places_bookmarks_count"))
+        .withColumnRenamed("avg(places_bookmarks_count)", "avg_bookmarks")
+    )
+    return bookmark_counts
+
 
 #######################
 # top ten other add ons

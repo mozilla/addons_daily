@@ -1,7 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 import datetime
-from utils.telemetry_data import get_pct_tracking_enabled, get_ct_dist
+from utils.telemetry_data import get_pct_tracking_enabled, get_ct_dist, get_tabs_and_bookmarks
 from utils.helpers import get_spark
 import pytest
 
@@ -61,8 +61,8 @@ def addons_expanded():
                                   version=u'1.0', scope=1, type=u'extension', foreign_install=False,
                                   has_binary_components=False, install_day=17850, update_day=17876,
                                   signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True,
-                                  os=u'Windows_NT', country=u'ES', subsession_length=3392, places_pages_count=None,
-                                  places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220,
+                                  os=u'Windows_NT', country=u'ES', subsession_length=3392, places_pages_count=10,
+                                  places_bookmarks_count=5, scalar_parent_browser_engagement_total_uri_count=220,
                                   devtools_toolbox_opened_count=None, active_ticks=395,
                                   histogram_parent_tracking_protection_enabled={0: 1, 1: 0},
                                   histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0,
@@ -104,8 +104,9 @@ def addons_expanded():
 
 def test_pct_tracking_enabled(addons_expanded):
     """
-    Given a dataframe of fake data, ensure that the get_pct_tracking_enabled outputs the correct dataframe
-    :param df: fake dataframe that is of same structure as actual addons_expanded
+    Given a dataframe of some actual sampled data, ensure that
+    the get_pct_tracking_enabled outputs the correct dataframe
+    :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
     output = get_pct_tracking_enabled(addons_expanded).collect()
@@ -119,8 +120,8 @@ def test_pct_tracking_enabled(addons_expanded):
 
 def test_country_distribution(addons_expanded):
     """
-    Given a dataframe of fake data, ensure that the get_ct_dist outputs the correct dataframe
-    :param df: fake dataframe that is of same structure as actual addons_expanded
+    Given a dataframe of actual sampled data, ensure that the get_ct_dist outputs the correct dataframe
+    :param addons_expanded: pytest fixture that generates addons_expanded sample
     :return: assertion whether the expected output indeed matches the true output
     """
     output = get_ct_dist(addons_expanded).collect()
@@ -130,9 +131,23 @@ def test_country_distribution(addons_expanded):
                        Row(addon_id='webcompat-reporter@mozilla.org', country_dist={'ES': 1.0}),
                        Row(addon_id='webcompat@mozilla.org', country_dist={'ES': 1.0})]
 
-    print(output)
     assert output == expected_output
 
+
+def test_bookmarks_and_tabs(addons_expanded):
+    """
+    Given a dataframe of actual sampled data, ensure that the get_bookmarks_and_tabs outputs the correct dataframe
+    :param addons_expanded: pytest fixture that generates addons_expanded sample
+    :return: assertion whether the expected output indeed matches the true output
+    """
+    output = get_tabs_and_bookmarks(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_tabs=None, avg_bookmarks=None),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_tabs=None, avg_bookmarks=None),
+                       Row(addon_id='formautofill@mozilla.org', avg_tabs=10.0, avg_bookmarks=5.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_tabs=None, avg_bookmarks=None),
+                       Row(addon_id='webcompat@mozilla.org', avg_tabs=None, avg_bookmarks=None)]
+    print(output)
+    assert output == expected_output
 
 
 
