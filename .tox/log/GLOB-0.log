@@ -1,6 +1,6 @@
 action: GLOB, msg: packaging
 cwd: /Users/bwright/Desktop/mozilla/Addons_Scratch
-cmd: /Users/bwright/anaconda3/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
+cmd: /Users/bwright/Desktop/mozilla/Addons_Scratch/.tox/.tox/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
 running sdist
 running egg_info
 writing extensions_project.egg-info/PKG-INFO
