@@ -2,7 +2,7 @@ import os
 import requests
 import time
 
-def load_amo(api_key, redash_api, query_id, sqlContext):
+def load_amo(api_key, redash_url, query_id, sqlContext):
 
     params = {'p_param': 1234}
 
