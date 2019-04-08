@@ -194,6 +194,29 @@ def test_devtools(addons_expanded):
                        Row(addon_id='webcompat-reporter@mozilla.org', avg_toolbox_opened_count=None),
                        Row(addon_id='webcompat@mozilla.org', avg_toolbox_opened_count=None)]
     assert output == expected_output
-    
+
+
+def test_uri(addons_expanded):
+    output = get_avg_uri(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_uri=220.0),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_uri=220.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_uri=220.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_uri=220.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_uri=220.0)]
+
+    assert output == expected_output
+
+
+def test_tracking(addons_expanded):
+    output = get_pct_tracking_enabled(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+                       Row(addon_id='fxmonitor@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+                       Row(addon_id='formautofill@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+                       Row(addon_id='webcompat-reporter@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+                       Row(addon_id='webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
+
+    assert output == expected_output
+
+
 
 
