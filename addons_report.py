@@ -11,7 +11,7 @@ from pyspark.sql import SparkSession
 DEFAULT_TZ = 'UTC'
 
 
-def agg_addons_report(main_summary_data, search_daily_data, raw_pings_data, **kwargs):
+def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_data, **kwargs):
     """
     This function will create the addons dataset
     """
@@ -62,8 +62,8 @@ def agg_addons_report(main_summary_data, search_daily_data, raw_pings_data, **kw
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
 
     # raw pings metrics
-    page_load_times = get_page_load_times(raw_pings_data)
-    tab_switch_time = get_tab_switch_time(raw_pings_data)
+    page_load_times = get_page_load_times(spark, raw_pings_data)
+    tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
     storage_get = get_storage_local_get_time(keyed_histograms)
     storage_set = get_storage_local_set_time(keyed_histograms)
     startup_time = get_startup_time(keyed_histograms)
@@ -121,7 +121,7 @@ def main():
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
-    agg_data = agg_addons_report(main_summary, raw_pings)
+    agg_data = agg_addons_report(spark, main_summary, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
 
