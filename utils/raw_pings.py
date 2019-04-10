@@ -1,14 +1,14 @@
-from helpers import *
+from utils.helpers import *
 import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext
 
-#spark = get_spark()
 
-def get_page_load_times(df):
+def get_page_load_times(spark, df):
     """
     Function to aggreagte raw pings by addon_id and get average page load time
     :param df: raw pings dataframe
+    :param spark: a spark instance
     :return: aggregated dataframe
     """
     hist = "FX_PAGE_LOAD_MS_2"
@@ -16,7 +16,7 @@ def get_page_load_times(df):
     avg_page_load = (
       df
       .filter(lambda x: hist in x['payload']['histograms'].keys())
-      .flatMap(lambda x: [(item,histogram_mean(x['payload']['histograms'][hist]['values']))
+      .flatMap(lambda x: [(item, histogram_mean(x['payload']['histograms'][hist]['values']))
                           for item in x['environment']['addons']['activeAddons'].keys()])
     )
 
@@ -34,9 +34,10 @@ def get_page_load_times(df):
     return avg_page_load_agg
 
 
-def get_tab_switch_time(df):
+def get_tab_switch_time(spark, df):
     """
     :param df: raw pings
+    :param spark: a spark instance
     :return:
     """
 
@@ -58,7 +59,8 @@ def get_tab_switch_time(df):
     tab_switch_df = (
         spark.createDataFrame(tab_switch, ['addon_id', 'tab_switch_ms'])
         .groupby('addon_id')
-        .agg(F.mean('tab_switch_ms').alias('tab_switch_ms')))
+        .agg(F.mean('tab_switch_ms').alias('tab_switch_ms'))
+    )
 
     return tab_switch_df
 
@@ -102,7 +104,7 @@ def get_storage_local_set_time(df):
 def get_startup_time(df):
     hist = 'WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID'
 
-    ext_startup_df = get_hist_avg(hist,df)
+    ext_startup_df = get_hist_avg(hist, df)
 
     startup_time_by_addon = (
       ext_startup_df
@@ -119,17 +121,18 @@ def get_startup_time(df):
 def get_bkgd_load_time(df):
 
     hist = 'WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID'
-    return get_hist_avg(hist,df)
+    return get_hist_avg(hist, df)
 
 #################################
 # browser action pop up load time
 #################################
 
+
 def get_ba_popup_load_time(df):
 
     hist = 'WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID'
 
-    ba_popup_load_time_df = get_hist_avg(hist,df)
+    ba_popup_load_time_df = get_hist_avg(hist, df)
 
     ba_popup_load_time_by_addon = (
       ba_popup_load_time_df
@@ -147,7 +150,7 @@ def get_ba_popup_load_time(df):
 def get_pa_popup_load_time(df):
     hist = 'WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID'
 
-    pa_popup_load_time_df = get_hist_avg(hist,df)
+    pa_popup_load_time_df = get_hist_avg(hist, df)
 
     pa_popup_load_time_by_addon = (
       pa_popup_load_time_df

@@ -1,6 +1,6 @@
 action: GLOB, msg: packaging
 cwd: /Users/bwright/Desktop/mozilla/Addons_Scratch
-cmd: /Users/bwright/anaconda3/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
+cmd: /Users/bwright/Desktop/mozilla/Addons_Scratch/.tox/.tox/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
 running sdist
 running egg_info
 writing extensions_project.egg-info/PKG-INFO
@@ -32,6 +32,7 @@ copying utils/amo_data.py -> extensions_project-1.0/utils
 copying utils/bq_data.py -> extensions_project-1.0/utils
 copying utils/helpers.py -> extensions_project-1.0/utils
 copying utils/raw_pings.py -> extensions_project-1.0/utils
+copying utils/search_daily_data.py -> extensions_project-1.0/utils
 copying utils/telemetry_data.py -> extensions_project-1.0/utils
 Writing extensions_project-1.0/setup.cfg
 creating '.tox/dist/extensions_project-1.0.zip' and adding 'extensions_project-1.0' to it
@@ -49,6 +50,7 @@ adding 'extensions_project-1.0/utils/raw_pings.py'
 adding 'extensions_project-1.0/utils/bq_data.py'
 adding 'extensions_project-1.0/utils/__init__.py'
 adding 'extensions_project-1.0/utils/amo_data.py'
+adding 'extensions_project-1.0/utils/search_daily_data.py'
 adding 'extensions_project-1.0/utils/telemetry_data.py'
 adding 'extensions_project-1.0/utils/helpers.py'
 removing 'extensions_project-1.0' (and everything under it)
