@@ -55,7 +55,7 @@ def main():
              .appName("usage_report")
              .getOrCreate())
 
-    spark.conf.set('spark.sql.session.timeZone', tz)
+    spark.conf.set('spark.sql.session.timeZone', 'UTC')
     sc = get_sc()
 
     sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='load_search_daily', input_version='v4')
