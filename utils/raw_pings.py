@@ -91,7 +91,7 @@ def get_storage_local_set_time(df):
     storage_local_set_by_addon = (
         storage_local_set_df
         .groupBy('addon_id')
-        .agg(F.mean('avg_webext_storage_local_get_ms_by_addonid').alias('avg_storage_local_get_ms'))
+        .agg(F.mean('avg_webext_storage_local_set_ms_by_addonid').alias('avg_storage_local_set_ms'))
     )
     return storage_local_set_by_addon
 
