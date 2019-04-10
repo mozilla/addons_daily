@@ -155,7 +155,7 @@ def get_pa_popup_load_time(df):
     pa_popup_load_time_by_addon = (
       pa_popup_load_time_df
       .groupBy('addon_id')
-      .agg(F.mean('avg_WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID').alias('avg_ba_popup_load_time'))
+      .agg(F.mean('avg_WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID').alias('avg_pa_popup_load_time'))
     )
     return pa_popup_load_time_by_addon
 

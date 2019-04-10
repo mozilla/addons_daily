@@ -1924,3 +1924,18 @@ def test_storage_get(raw_pings):
     output = get_storage_local_get_time(raw_pings).collect()
 
     assert output == []
+
+
+def test_memory(raw_pings):
+    output = get_memory_total(raw_pings).collect()
+    assert output == []
+
+
+def test_pa_popup(raw_pings):
+    output = get_pa_popup_load_time(raw_pings).collect()
+    assert output == []
+
+
+def test_ba_popup(raw_pings):
+    output = get_ba_popup_load_time(raw_pings).collect()
+    assert output == [Row(addon_id='firefox@ghostery.com', avg_ba_popup_load_time=340.0)]
