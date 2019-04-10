@@ -48,17 +48,6 @@ def load_main_summary(spark, input_bucket, input_prefix, input_version):
             .parquet(dest))
 
 
-# def load_search_daily(spark, input_bucket, input_prefix, input_version):
-#     """
-#     Not sure how to load search_daily from s3
-#     """
-#     dest = get_dest(input_bucket, input_prefix, input_version)
-#     return (spark
-#             .read
-#             .option("mergeSchema", True)
-#             .parquet(dest))
-
-
 def load_raw_pings(sc):
     """
     Function to load raw pings data

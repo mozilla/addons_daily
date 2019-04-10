@@ -116,12 +116,16 @@ def main():
         .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
     )
 
-    # search_daily = load_search_daily()
-    
+    sd = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v4')
+    search_daily = (
+        sd
+        .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
+    )
+
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
-    agg_data = agg_addons_report(spark, main_summary, raw_pings)
+    agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
 
