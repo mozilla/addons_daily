@@ -58,7 +58,7 @@ def main():
     spark.conf.set('spark.sql.session.timeZone', 'UTC')
     sc = SparkContext.getOrCreate()
 
-    sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='search_daily', input_version='v4')
+    sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v4')
     search_daily = (
         sd
         .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
