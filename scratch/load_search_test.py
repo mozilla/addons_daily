@@ -42,7 +42,12 @@ def load_search_daily(spark, input_bucket, input_prefix, input_version):
 
 def main():
     path = '' # need to pass in from command line i think
-    spark = get_spark(DEFAULT_TZ)
+    spark = (SparkSession
+             .builder
+             .appName("usage_report")
+             .getOrCreate())
+
+    spark.conf.set('spark.sql.session.timeZone', tz)
     sc = get_sc()
 
     sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='load_search_daily', input_version='v4')
