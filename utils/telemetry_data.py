@@ -236,7 +236,7 @@ def get_bookmarks(df):
 
 def get_top_ten_others(df):
     """
-    :param df: addons_expanded
+    :param df: this df should actually be main_summary, not addons_expanded
     :return:
     """
 
