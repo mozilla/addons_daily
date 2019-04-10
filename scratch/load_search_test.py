@@ -1,3 +1,13 @@
+import pyspark.sql.functions as F
+from pyspark.sql.types import *
+from pyspark.sql import SparkSession
+from pyspark import SparkContext
+from moztelemetry import Dataset
+import datetime
+#from google.cloud import bigquery
+import os
+
+
 def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
     '''
     Stiches together an s3 destination.
@@ -16,6 +26,17 @@ def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=
     return full_dest
 
 
+def get_spark(tz='UTC'):
+    spark = (SparkSession
+             .builder
+             .appName("usage_report")
+             .getOrCreate())
+
+    spark.conf.set('spark.sql.session.timeZone', tz)
+
+    return spark
+
+
 def load_search_daily(spark, input_bucket, input_prefix, input_version):
     """
     Not sure how to load search_daily from s3
@@ -29,10 +50,15 @@ def load_search_daily(spark, input_bucket, input_prefix, input_version):
 
 def main():
     path = '' # need to pass in from command line i think
-    spark = get_spark(DEFAULT_TZ)
-    sc = get_sc()
+    spark = (SparkSession
+             .builder
+             .appName("usage_report")
+             .getOrCreate())
 
-    sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='load_search_daily', input_version='v4')
+    spark.conf.set('spark.sql.session.timeZone', 'UTC')
+    sc = SparkContext.getOrCreate()
+
+    sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v4')
     search_daily = (
         sd
         .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
