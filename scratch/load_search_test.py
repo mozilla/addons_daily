@@ -56,7 +56,7 @@ def main():
              .getOrCreate())
 
     spark.conf.set('spark.sql.session.timeZone', 'UTC')
-    sc = get_sc()
+    sc = SparkContext.getOrCreate()
 
     sd = load_search_daily(spark, input_bucket='telemetry-parquet', input_prefix='load_search_daily', input_version='v4')
     search_daily = (
