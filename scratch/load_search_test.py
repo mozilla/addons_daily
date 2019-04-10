@@ -29,7 +29,6 @@ def load_search_daily(spark, input_bucket, input_prefix, input_version):
 
 def main():
     path = '' # need to pass in from command line i think
-    path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
