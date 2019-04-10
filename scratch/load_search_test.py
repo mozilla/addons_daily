@@ -1,3 +1,5 @@
+from 
+
 def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
     '''
     Stiches together an s3 destination.
@@ -14,6 +16,17 @@ def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=
         suffix += "/sample_id={}".format(sample_id)
     full_dest = 's3://' + '/'.join([output_bucket, output_prefix, output_version]) + suffix + '/'
     return full_dest
+
+
+def get_spark(tz='UTC'):
+    spark = (SparkSession
+             .builder
+             .appName("usage_report")
+             .getOrCreate())
+
+    spark.conf.set('spark.sql.session.timeZone', tz)
+
+    return spark
 
 
 def load_search_daily(spark, input_bucket, input_prefix, input_version):
