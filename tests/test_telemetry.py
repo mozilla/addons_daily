@@ -166,14 +166,14 @@ def test_bookmarks(addons_expanded):
     assert output == expected_output
 
 
-# def test_active_hours(addons_expanded):
-#    output = get_active_hours(addons_expanded).collect()
-#    expected_output = [Row(addon_id='screenshots@mozilla.org', active_hours=0.5486111111111112),
-#                       Row(addon_id='fxmonitor@mozilla.org', active_hours=0.5486111111111112),
-#                       Row(addon_id='formautofill@mozilla.org', active_hours=0.5486111111111112),
-#                       Row(addon_id='webcompat-reporter@mozilla.org', active_hours=0.5486111111111112),
-#                       Row(addon_id='webcompat@mozilla.org', active_hours=0.5486111111111112)]
-#    assert expected_output == output
+def test_active_hours(addons_expanded):
+    output = get_active_hours(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_active_hours=0.5486111111111112),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_active_hours=0.5486111111111112),
+                       Row(addon_id='formautofill@mozilla.org', avg_active_hours=0.5486111111111112),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_active_hours=0.5486111111111112),
+                       Row(addon_id='webcompat@mozilla.org', avg_active_hours=0.5486111111111112)]
+    assert expected_output == output
 
 
 def test_total_hours(addons_expanded):

@@ -165,7 +165,7 @@ def get_active_hours(df):
         .groupBy("addon_id")
         .agg(F.mean("total_ticks"))
         .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
-        .withColumn('active_hours', F.col("avg_time_active_ms") / (12 * 60))
+        .withColumn('avg_active_hours', F.col("avg_time_active_ms") / (12 * 60))
         .drop('avg_time_active_ms')
     )
     return agg_avg_ticks
