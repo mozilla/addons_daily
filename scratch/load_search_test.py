@@ -1,5 +1,3 @@
-from 
-
 def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
     '''
     Stiches together an s3 destination.
