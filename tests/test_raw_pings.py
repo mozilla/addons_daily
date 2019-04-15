@@ -67,13 +67,17 @@ def test_bkgd_load_time(raw_pings):
 
 def test_storage_set(raw_pings):
     output = get_storage_local_set_time(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
+                          avg_storage_local_set_ms=2.75)]
+
 
 
 def test_storage_get(raw_pings):
     output = get_storage_local_get_time(raw_pings).collect()
 
-    assert output == []
+    assert output == [Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
+                          avg_storage_local_get_ms=2.3333332538604736)]
+
 
 
 def test_memory(raw_pings):
