@@ -67,23 +67,33 @@ def test_bkgd_load_time(raw_pings):
 
 def test_storage_set(raw_pings):
     output = get_storage_local_set_time(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
+                          avg_storage_local_set_ms=2.75)]
 
 
 def test_storage_get(raw_pings):
     output = get_storage_local_get_time(raw_pings).collect()
 
-    assert output == []
+    assert output == [Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
+                          avg_storage_local_get_ms=2.3333332538604736)]
 
 
 def test_memory(raw_pings):
     output = get_memory_total(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='screenshots@mozilla.org', avg_memory_total=194772.0),
+                      Row(addon_id='webcompat@mozilla.org', avg_memory_total=201173.0)]
 
 
 def test_pa_popup(raw_pings):
     output = get_pa_popup_load_time(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='izer@camelcamelcamel.com', avg_pa_popup_load_time=75.75)]
+
+
+def test_cs_injection(raw_pings):
+    output = get_cs_injection_time(raw_pings).collect()
+    expected = [Row(addon_id='{b9db16a4-6edc-47ec-a1f4-b86292ed211d}',
+                    avg_content_script_injection_ms=1.6136363744735718)]
+    assert expected == output
 
 
 def test_ba_popup(raw_pings):
