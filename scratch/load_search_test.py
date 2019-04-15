@@ -62,8 +62,11 @@ def main():
     search_daily = (
         sd
         .filter("submission_date >= (NOW() - INTERVAL 1 DAYS)")
-        .select('client_id')
+        .select('client_id', 'submission_date_s3', 'sap', 'tagged_sap', 'tagged_follow_on', 'organic')
+        .groupBy('client_id', 'submission_date_s3')
+        .agg(F.sum('sap').alias('sap'), F.sum('tagged_sap') + F.sum('tagged_follow_on'), F.sum('organic'))
     )
+
     print(search_daily.show(5))
 
 if __name__ == '__main__':
