@@ -71,7 +71,6 @@ def test_storage_set(raw_pings):
                           avg_storage_local_set_ms=2.75)]
 
 
-
 def test_storage_get(raw_pings):
     output = get_storage_local_get_time(raw_pings).collect()
 
@@ -79,10 +78,11 @@ def test_storage_get(raw_pings):
                           avg_storage_local_get_ms=2.3333332538604736)]
 
 
-
 def test_memory(raw_pings):
     output = get_memory_total(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='screenshots@mozilla.org', avg_memory_total=194772.0),
+                      Row(addon_id='webcompat@mozilla.org', avg_memory_total=201173.0)]
+
 
 
 def test_pa_popup(raw_pings):

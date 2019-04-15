@@ -311,6 +311,16 @@ def make_raw_pings():
      u'88': 5,
      u'92': 2,
      u'96': 1}}},
+     u'MEMORY_TOTAL': {u'webcompat@mozilla.org': {u'bucket_count': 100, u'histogram_type': 0,
+                                                  u'range': [32768, 16777216], u'sum': 410536,
+                                                  u'values': {u'182760': 0, u'194772': 2, u'207574': 0}},
+                       u'webcompat@mozilla.org': {u'bucket_count': 100, u'histogram_type': 0,
+                                                  u'range': [32768, 16777216], u'sum': 410536,
+                                                  u'values': {u'182760': 0, u'194772': 1, u'207574': 1}},
+                       u'screenshots@mozilla.org': {u'bucket_count': 100, u'histogram_type': 0,
+                                                    u'range': [32768, 16777216], u'sum': 410536,
+                                                    u'values': {u'182760': 0, u'194772': 2, u'207574': 0}}
+                       },
   u'WEBEXT_STORAGE_LOCAL_SET_MS_BY_ADDONID': {u'{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}':
                                                    {u'range': [1, 50000],u'histogram_type': 0,
                                                     u'values': {u'1': 0, u'3': 1, u'2': 2, u'4': 1},
