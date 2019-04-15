@@ -330,6 +330,16 @@ def make_raw_pings():
                                                  u'values': {u'1': 0, u'3': 1,u'2': 2, u'4': 0},
                                                  u'bucket_count': 100,
                                                  u'sum': 7}},
+  u'WEBEXT_PAGEACTION_POPUP_OPEN_MS_BY_ADDONID': {
+     u'izer@camelcamelcamel.com': {u'bucket_count': 100, u'histogram_type': 0, u'range': [1, 50000],
+                                   u'sum': 310, u'values': {u'67': 0, u'74': 3, u'81': 1, u'89': 0}}},
+     u'WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID': {
+         u'{b9db16a4-6edc-47ec-a1f4-b86292ed211d}': {u'bucket_count': 100, u'histogram_type': 0,
+                                                     u'range': [1, 50000],
+                                                     u'sum': 71,
+                                                     u'values': {u'0': 22, u'13': 1, u'14': 0, u'2': 7,
+                                                                 u'3': 12,
+                                                                 u'4': 2}}},
   u'UPTAKE_REMOTE_CONTENT_RESULT_1': {u'blocklists/addons': {u'bucket_count': 51,
     u'histogram_type': 5,
     u'range': [1, 50],

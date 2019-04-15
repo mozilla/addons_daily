@@ -84,10 +84,16 @@ def test_memory(raw_pings):
                       Row(addon_id='webcompat@mozilla.org', avg_memory_total=201173.0)]
 
 
-
 def test_pa_popup(raw_pings):
     output = get_pa_popup_load_time(raw_pings).collect()
-    assert output == []
+    assert output == [Row(addon_id='izer@camelcamelcamel.com', avg_pa_popup_load_time=75.75)]
+
+
+def test_cs_injection(raw_pings):
+    output = get_cs_injection_time(raw_pings).collect()
+    expected = [Row(addon_id='{b9db16a4-6edc-47ec-a1f4-b86292ed211d}',
+                    avg_content_script_injection_ms=1.6136363744735718)]
+    assert expected == output
 
 
 def test_ba_popup(raw_pings):
