@@ -15,7 +15,7 @@ def get_page_load_times(spark, df):
 
     avg_page_load = (
       df
-      .filter(lambda x: hist in x['payload']['histograms'].keys())
+      .filter(lambda x: hist in x['payload']['histograms'])
       .flatMap(lambda x: [(item, histogram_mean(x['payload']['histograms'][hist]['values']))
                           for item in x['environment']['addons']['activeAddons'].keys()])
     )
@@ -43,12 +43,12 @@ def get_tab_switch_time(spark, df):
 
     tab_switch_hist = (
         df
-        .filter(lambda x: 'environment' in x.keys())
-        .filter(lambda x: 'addons' in x['environment'].keys())
+        .filter(lambda x: 'environment' in x)  #
+        .filter(lambda x: 'addons' in x['environment'])  #
         .filter(lambda x: 'activeAddons' in x['environment']['addons'])
-        .filter(lambda x: 'payload' in x.keys())
-        .filter(lambda x: 'histograms' in x['payload'].keys())
-        .filter(lambda x: 'FX_TAB_SWITCH_TOTAL_E10S_MS' in x['payload']['histograms'].keys())
+        .filter(lambda x: 'payload' in x)  #
+        .filter(lambda x: 'histograms' in x['payload'])  #
+        .filter(lambda x: 'FX_TAB_SWITCH_TOTAL_E10S_MS' in x['payload']['histograms'])  #
         .map(lambda x: (x['environment']['addons']['activeAddons'].keys(),
                         x['payload']['histograms']['FX_TAB_SWITCH_TOTAL_E10S_MS']))
         .map(lambda x: [(i, x[1]) for i in x[0]])
