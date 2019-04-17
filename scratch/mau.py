@@ -7,15 +7,9 @@ def mau(summary_last_month):
 	  .withColumn('active_addons', F.explode('active_addons'))
 	)
 
-	addon_client_date = (
-	  addon_client_date_expanded
-	  .withColumn('addon_id', addon_client_date_expanded.active_addons['addon_id'])
-	  .drop('active_addons')
-	)
-
 	mau = (
-	  addon_client_date
-	  .groupby('addon_id')
+	  addon_client_date_expanded
+	  .groupby('active_addons.addon_id')
 	  .agg(F.countDistinct('client_id').alias('mau'))
 	)
 
