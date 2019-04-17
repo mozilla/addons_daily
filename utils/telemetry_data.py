@@ -111,66 +111,29 @@ def get_ct_dist(df):
 
     return ct_dist
 
-#############
-# total hours
-#############
+###################################################
+# engagement metrics - total hours and active hours
+###################################################
 
 
-def get_total_hours(df):
+def get_engagement_metrics(df):
     """
     Get total time spent on browser on avg, inactive or active
     :param df: addons_expanded
-    :return:
+    :return: dataframe aggregated by addon_id
     """
-
-    average_time = (
-        df
-        .select("addon_id", "client_id", "subsession_length", "Submission_date")
-        .groupBy('addon_id', 'client_id', "Submission_date")
-        .agg(F.sum('subsession_length').alias('daily_total'))
-    )
-
-    # group this aggregated dataframe by addon_id and take average
-    # of all users daily_total time spent active in milliseconds
-
-    agg_avg_time = (
-        average_time
-        .groupBy("addon_id")
-        .agg(F.mean("daily_total"))
-        .withColumnRenamed("avg(daily_total)", "avg_time_active_ms")
-    )
-
-    return agg_avg_time
-
-
-##############
-# active hours
-##############
-
-def get_active_hours(df):
-    """
-    Compute avg time spent active on browser in hours
-    :param df: addons expanded
-    :return: aggregated dataframe by addon_id
-    """
-    average_ticks = (
-        df
-        .select("addon_id", "client_id", "Submission_date", 'active_ticks')
-        .groupBy('addon_id', 'client_id', "Submission_date")
-        .agg(F.sum('active_ticks').alias('total_ticks'))
-    )
-
-    agg_avg_ticks = (
-        average_ticks
-        .groupBy("addon_id")
-        .agg(F.mean("total_ticks"))
-        #.alias("avg_time_active_ms")
-        .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
-        .withColumn('avg_active_hours', F.col("avg_time_active_ms") / (12 * 60))
+    engagement_metrics = (
+        addons_expanded
+        .select('addon_id', 'client_id', 'Submission_date', 'subsession_length', 'active_ticks')
+        .groupBy('addon_id','client_id','Submission_date')
+        .agg(F.sum('active_ticks').alias('total_ticks'), F.sum('subsession_length').alias('daily_total'))
+        .groupBy('addon_id')
+        .agg(F.mean('total_ticks').alias('avg_time_active_ms'), F.mean('daily_total').alias('avg_time_total'))
+        .withColumn('active_hours', F.col('avg_time_active_ms')/(12*60))
         .drop('avg_time_active_ms')
     )
-    return agg_avg_ticks
 
+    return engagement_metrics
 
 ############
 # total URIs
@@ -194,41 +157,25 @@ def get_avg_uri(df):
 
     return avg_uri
 
-################
-# number of tabs
-################
+##########################################################
+# browser metrics - tabs, bookmarks, devtools opened count
+##########################################################
 
 
-def get_tabs(df):
+def get_browser_metrics(df):
     """
     :param df: addons_expanded
     :return:
     """
-
     tab_counts = (
-        df
-        .groupby("addon_id")
-        .agg(F.avg("places_pages_count"))
-        .withColumnRenamed("avg(places_pages_count)", "avg_tabs")
+        addons_expanded
+        .groupby('addon_id')
+        .agg(F.avg('places_pages_count').alias('avg_tabs'), 
+             F.avg('places_bookmarks_count').alias('avg_bookmarks'),
+             F.avg('devtools_toolbox_opened_count').alias('avg_toolbox_opened_count'))
     )
 
     return tab_counts
-
-
-def get_bookmarks(df):
-    """
-    get avg # of bookmarks by addon_id
-    :param df:
-    :return:
-    """
-    bookmark_counts = (
-        df
-        .groupby("addon_id")
-        .agg(F.avg("places_bookmarks_count"))
-        .withColumnRenamed("avg(places_bookmarks_count)", "avg_bookmarks")
-    )
-    return bookmark_counts
-
 
 #######################
 # top ten other add ons
@@ -283,24 +230,6 @@ def get_top_ten_others(df):
         )
 
     return other_addons_df
-
-#######################
-# devtools opened count
-#######################
-
-
-def get_devtools_opened_count(df):
-    """
-    :param df: addons_expanded
-    :return:
-    """
-    dev_count = (
-        df
-        .groupBy("addon_id")
-        .agg(F.avg("devtools_toolbox_opened_count"))#.alias("avg_toolbox_opened_count")
-        .withColumnRenamed("avg(devtools_toolbox_opened_count)", "avg_toolbox_opened_count")
-    )
-    return dev_count
 
 ######################################################
 # percentage of users with tracking protection enabled
