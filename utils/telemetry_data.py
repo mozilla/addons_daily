@@ -164,6 +164,7 @@ def get_active_hours(df):
         average_ticks
         .groupBy("addon_id")
         .agg(F.mean("total_ticks"))
+        #.alias("avg_time_active_ms")
         .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
         .withColumn('avg_active_hours', F.col("avg_time_active_ms") / (12 * 60))
         .drop('avg_time_active_ms')
@@ -296,7 +297,7 @@ def get_devtools_opened_count(df):
     dev_count = (
         df
         .groupBy("addon_id")
-        .agg(F.avg("devtools_toolbox_opened_count"))
+        .agg(F.avg("devtools_toolbox_opened_count"))#.alias("avg_toolbox_opened_count")
         .withColumnRenamed("avg(devtools_toolbox_opened_count)", "avg_toolbox_opened_count")
     )
     return dev_count
@@ -339,8 +340,8 @@ def get_crashes(df):
     """
     addon_time = (
         df
-        .filter(lambda x: 'environment' in x.keys())
-        .filter(lambda x: 'addons' in x['environment'].keys())
+        .filter(lambda x: 'environment' in x)
+        .filter(lambda x: 'addons' in x['environment'])
         .filter(lambda x: 'activeAddons' in x['environment']['addons'])
         .map(lambda x: (x['environment']['addons']['activeAddons'].keys(), x['creationDate']))
         .map(lambda x: [(i, x[1]) for i in x[0]])

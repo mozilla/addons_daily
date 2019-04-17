@@ -2139,7 +2139,7 @@ def make_raw_pings():
     u'values': {u'605': 0, u'666': 1, u'733': 0}}}}]
 
 
-def make_search_daily_sample():
+def make_search_daily_data():
     search_daily_sample = [Row(client_id=u'9bcc2356-f241-4a57-bd51-78bab300312f',
                                Submission_date=datetime.datetime(2019, 4, 14, 0, 0),
                                sap=3, tagged_sap=None, organic=6),
