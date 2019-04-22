@@ -208,8 +208,8 @@ def get_tabs(df):
     tab_counts = (
         df
         .groupby("addon_id")
-        .agg(F.avg("places_pages_count"))
-        .withColumnRenamed("avg(places_pages_count)", "avg_tabs")
+        .agg(F.avg("scalar_parent_browser_engagement_tab_open_event_count"))
+        .withColumnRenamed("avg(scalar_parent_browser_engagement_tab_open_event_count)", "avg_tabs")
     )
 
     return tab_counts
