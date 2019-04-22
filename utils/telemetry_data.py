@@ -45,7 +45,10 @@ def get_user_demo_metrics(addons_expanded):
             F.collect_list('os').alias('os'),
             F.collect_list('os_pct').alias('os_pct')
         )
-        .withColumn('os_dist', make_map(F.col('os'), F.col('os_pct').cast(ArrayType(DoubleType()))))
+        .withColumn(
+            'os_dist', 
+            make_map(F.col('os'), F.col('os_pct').cast(ArrayType(DoubleType())))
+        )
         .drop('os', 'os_pct')
     )
   
@@ -55,14 +58,20 @@ def get_user_demo_metrics(addons_expanded):
         .groupBy('addon_id', 'country')
         .agg(F.countDistinct('client_id').alias('country_client_count'))
         .join(client_counts, on='addon_id', how='left')
-        .withColumn('country_pct', F.col('country_client_count') / F.col('total_clients'))
+        .withColumn(
+            'country_pct', 
+            F.col('country_client_count') / F.col('total_clients')
+        )
         .select('addon_id', 'country', 'country_pct')
         .groupBy('addon_id')
         .agg(
             F.collect_list('country').alias('country'),
             F.collect_list('country_pct').alias('country_pct')
         )
-        .withColumn('country_dist', make_map(F.col('country'), F.col('country_pct')))
+        .withColumn(
+            'country_dist', 
+            make_map(F.col('country'), F.col('country_pct'))
+        )
         .drop('country', 'country_pct')
     )
   
@@ -133,14 +142,17 @@ def get_browser_metrics(addons_expanded):
     browser_metrics = (
         addons_expanded
         .groupby('addon_id')
-        .agg(F.avg('places_pages_count').alias('avg_tabs'), 
-             F.avg('places_bookmarks_count').alias('avg_bookmarks'),
-             F.avg('devtools_toolbox_opened_count').alias('avg_toolbox_opened_count'))
+        .agg(
+            F.avg('places_pages_count').alias('avg_tabs'), 
+            F.avg('places_bookmarks_count').alias('avg_bookmarks'),
+            F.avg('devtools_toolbox_opened_count').alias('avg_toolbox_opened_count')
+        )
     )
 
     avg_uri = (
         addons_expanded
-        .select('addon_id', 'client_id', 'scalar_parent_browser_engagement_total_uri_count')
+        .select('addon_id', 'client_id', 
+                'scalar_parent_browser_engagement_total_uri_count')
         .groupBy('addon_id', 'client_id')
         .agg(F.mean('scalar_parent_browser_engagement_total_uri_count').alias('avg_uri'))
         .groupBy('addon_id')
@@ -155,7 +167,10 @@ def get_browser_metrics(addons_expanded):
         .groupBy('addon_id')
         .agg(F.sum('1'), F.count('0'))
         .withColumn('total', F.col('sum(1)') + F.col('count(0)'))
-        .withColumn('pct_w_tracking_prot_enabled', F.col('sum(1)') / F.col('total'))
+        .withColumn(
+            'pct_w_tracking_prot_enabled',
+            F.col('sum(1)') / F.col('total')
+        )
         .drop('sum(1)', 'count(0)', 'total')
     )
     
