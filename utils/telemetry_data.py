@@ -438,24 +438,6 @@ def get_mau(addons_expanded_df):
     )
     return mau
 
-#####
-# YAU
-#####
-
-
-def get_yau(addons_expanded_df):
-    """
-    :param df: main_summary addons expanded from last year
-    :return:
-    """
-    yau = (
-        addons_expanded_df
-        .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('yau'))
-    )
-
-    return yau
-
 #################
 # Disabled addons
 #################
