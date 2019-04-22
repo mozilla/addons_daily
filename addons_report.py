@@ -56,7 +56,6 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     dau = get_dau(addons_expanded)
     wau = get_wau(addons_expanded)
     mau = get_mau(addons_expanded)
-    yau = get_yau(addons_expanded)
 
     # search metrics
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
@@ -87,7 +86,6 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
         .join(dau, on='addon_id', how='left')
         .join(wau, on='addon_id', how='left')
         .join(mau, on='addon_id', how='left')
-        .join(yau, on='addon_id', how='left')
         # .join(search_daily, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')
