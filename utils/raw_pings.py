@@ -14,10 +14,10 @@ def get_page_load_times(spark, df):
     hist = "FX_PAGE_LOAD_MS_2"
 
     avg_page_load = (
-      df
-      .filter(lambda x: hist in x['payload']['histograms'])
-      .flatMap(lambda x: [(item, histogram_mean(x['payload']['histograms'][hist]['values']))
-                          for item in x['environment']['addons']['activeAddons'].keys()])
+        df
+        .filter(lambda x: hist in x['payload']['histograms'])
+        .flatMap(lambda x: [(item, histogram_mean(x['payload']['histograms'][hist]['values']))
+                            for item in x['environment']['addons']['activeAddons'].keys()])
     )
 
     schema = StructType([StructField('addon_id', StringType(), True),
@@ -26,10 +26,10 @@ def get_page_load_times(spark, df):
     avg_page_load_df = spark.createDataFrame(data=avg_page_load, schema=schema)
 
     avg_page_load_agg = (
-      avg_page_load_df
-      .groupBy("addon_id")
-      .agg(F.mean("avg_page_loadtime"))
-      .withColumnRenamed("avg(avg_page_loadtime)", "avg_page_load_time")
+        avg_page_load_df
+        .groupBy("addon_id")
+        .agg(F.mean("avg_page_loadtime"))
+        .withColumnRenamed("avg(avg_page_loadtime)", "avg_page_load_time")
     )
     return avg_page_load_agg
 
@@ -107,9 +107,9 @@ def get_startup_time(df):
     ext_startup_df = get_hist_avg(hist, df)
 
     startup_time_by_addon = (
-      ext_startup_df
-      .groupBy('addon_id')
-      .agg(F.mean('avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID').alias('avg_startup_time'))
+        ext_startup_df
+        .groupBy('addon_id')
+        .agg(F.mean('avg_WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID').alias('avg_startup_time'))
     )
     return startup_time_by_addon
 
