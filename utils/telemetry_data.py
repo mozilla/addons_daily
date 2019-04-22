@@ -13,103 +13,63 @@ from pyspark.sql import SQLContext
 
 """ User Demographics & Usage Metrics """
 
-#########
-# os dist
-#########
+##################################################################
+# Get user demographics - country distribution and os distribution
+##################################################################
 
 
-def get_os_dist(df):
+def get_user_demo(df):
     """
     :param df: addons_expanded
     :return: aggregated dataframe by addon_id,
     getting distribution of users with various OS
+    and distribution of users in various countries
     """
-
     client_counts = (
         df
-        .select("addon_id", "client_id")
-        .groupBy("addon_id")
-        .agg(F.countDistinct("client_id"))
-        .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
-    )
-
-    # count distinct clients for each addon:OS pair,
-    # join with total client counts on addon_id
-    os_ = (
-        df
-        .select("addon_id", "os", "client_id")
-        .groupBy("addon_id", "os")
-        .agg(F.countDistinct("client_id"))
-        .withColumnRenamed("count(DISTINCT client_id)", "client_count")
-        .join(client_counts, on='addon_id', how='left')
-        .withColumn("os_pct", F.col("client_count")/F.col("total_clients"))
-    )
-
-    sample = os_.take(1)
-    os_.printSchema()
-    print(sample)
-
-    # group joined dataframe on addon_id and take percentage of users per OS,
-    # return as a mapping of OS to percentage of users with given OS by addon
-    os_distribution = (
-        os_
-        .select("addon_id", "os", "os_pct")
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("os").alias("os"),
-            F.collect_list("os_pct").alias("os_pct")
+            .select('addon_id','client_id')
+            .groupBy('addon_id')
+            .agg(F.countDistinct('client_id').alias('total_clients'))
         )
-        .withColumn("os_dist", make_map(F.col("os"), F.col("os_pct").cast(ArrayType(DoubleType()))))
-        .drop("os", "os_pct")
-    )
-
-    return os_distribution
-
-##############
-# country dist
-##############
-
-
-def get_ct_dist(df):
-    """
-    same as get_os_dist, but get country distribution instead of os
-    :param df: addons_expanded
-    :return: dataframe of distributions of users across countries aggregated by addon_id
-    """
-
-    client_counts = (
+      
+        os_dist = (
             df
-            .select("addon_id", "client_id")
-            .groupBy("addon_id")
-            .agg(F.countDistinct("client_id"))
-            .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
-    )
-
-    country_ = (
-            df
-            .select("addon_id", "country", "client_id")
-            .groupBy("addon_id", "country")
-            .agg(F.countDistinct("client_id"))
-            .withColumnRenamed("count(DISTINCT client_id)", "client_count")
-            .join(client_counts, on="addon_id", how='left')
-            .withColumn("country_pct", F.col("client_count") / F.col("total_clients"))
-    )
-
-    # group joined dataframe on addon_id and take percentage of users per country,
-    # return as a mapping of country to percentage of users from that country by addon
-    ct_dist = (
-        country_
-        .select("addon_id", "country", "country_pct")
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("country").alias("country"),
-            F.collect_list("country_pct").alias("country_pct")
+            .select('addon_id', 'os', 'client_id')
+            .groupBy('addon_id', 'os')
+            .agg(F.countDistinct('client_id'))
+            .withColumnRenamed('count(DISTINCT client_id)', 'os_client_count')
+            .join(client_counts, on='addon_id', how='left')
+            .withColumn('os_pct', F.col('os_client_count')/F.col('total_clients'))
+            .select('addon_id', 'os', 'os_pct')
+            .groupBy('addon_id')
+            .agg(
+                F.collect_list('os').alias('os'),
+                F.collect_list('os_pct').alias('os_pct')
+            )
+            .withColumn('os_dist', make_map(F.col('os'), F.col('os_pct').cast(ArrayType(DoubleType()))))
+            .drop('os', 'os_pct')
         )
-        .withColumn("country_dist", make_map(F.col("country"), F.col("country_pct")))
-        .drop("country", "country_pct")
-    )
-
-    return ct_dist
+      
+        ct_dist = (
+            df
+            .select('addon_id', 'country', 'client_id')
+            .groupBy('addon_id', 'country')
+            .agg(F.countDistinct('client_id').alias('country_client_count'))
+            .join(client_counts, on='addon_id', how='left')
+            .withColumn('country_pct', F.col('country_client_count') / F.col('total_clients'))
+            .select('addon_id', 'country', 'country_pct')
+            .groupBy('addon_id')
+            .agg(
+                F.collect_list('country').alias('country'),
+                F.collect_list('country_pct').alias('country_pct')
+            )
+            .withColumn('country_dist', make_map(F.col('country'), F.col('country_pct')))
+            .drop('country', 'country_pct')
+        )
+      
+        combined_dist = os_dist.join(ct_dist, on='addon_id', how='outer')
+      
+        return combined_dist
 
 ###################################################
 # engagement metrics - total hours and active hours
