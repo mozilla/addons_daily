@@ -93,6 +93,7 @@ def main():
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
+
     ms = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
     main_summary = (
         ms
@@ -108,6 +109,7 @@ def main():
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
+    
     agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
