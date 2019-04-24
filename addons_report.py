@@ -29,7 +29,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
 
     addons_expanded = (
         addons_and_users
-        .select("Submission_date", "client_id",
+        .select("submission_date_s3", "client_id",
                 "col.*",
                 "os", "country", "subsession_length",
                 "places_pages_count", "places_bookmarks_count",
