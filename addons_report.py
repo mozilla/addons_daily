@@ -28,16 +28,16 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     )
 
     addons_expanded = (
-            addons_and_users
-            .select("submission_date_s3", "client_id",
-                    "col.*",
-                    "os", "country", "subsession_length",
-                    "places_pages_count", "places_bookmarks_count",
-                    "scalar_parent_browser_engagement_total_uri_count",
-                    "devtools_toolbox_opened_count", "active_ticks",
-                    "histogram_parent_tracking_protection_enabled",
-                    "histogram_parent_webext_background_page_load_ms")
-            .cache()
+        addons_and_users
+        .select("Submission_date", "client_id",
+                "col.*",
+                "os", "country", "subsession_length",
+                "places_pages_count", "places_bookmarks_count",
+                "scalar_parent_browser_engagement_total_uri_count",
+                "devtools_toolbox_opened_count", "active_ticks",
+                "histogram_parent_tracking_protection_enabled",
+                "histogram_parent_webext_background_page_load_ms")
+        .cache()
     )
 
     keyed_histograms = load_keyed_hist(raw_pings_data)
@@ -47,9 +47,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     engagement_metrics = get_engagement_metrics(addons_expanded)
     browser_metrics = get_browser_metrics(addons_expanded)
     top_ten_others = get_top_ten_others(addons_expanded)
-    dau = get_dau(addons_expanded)
-    wau = get_wau(addons_expanded)
-    mau = get_mau(addons_expanded)
+    trend_metrics = get_trend_metrics(addons_expanded)
 
     # search metrics
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
@@ -68,18 +66,11 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
 
     agg_data = (
         os_dist
-        .join(ct_dist, on='addon_id', how='left')
-        .join(total_hours, on='addon_id', how='left')
-        .join(active_hours, on='addon_id', how='left')
+        .join(user_demo_metrics, on='addon_id', how='left')
+        .join(engagement_metrics, on='addon_id', how='left')
+        .join(browser_metrics, on='addon_id', how='left')
         .join(top_ten_others, on='addon_id', how='left')
-        .join(avg_uri, on='addon_id', how='left')
-        .join(tabs, on='addon_id', how='left')
-        .join(bookmarks, on='addon_id', how='left')
-        .join(dt_opened_ct, on='addon_id', how='left')
-        .join(pct_tracking, on='addon_id', how='left')
-        .join(dau, on='addon_id', how='left')
-        .join(wau, on='addon_id', how='left')
-        .join(mau, on='addon_id', how='left')
+        .join(trend_metrics, on='addon_id', how='left')
         # .join(search_daily, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')
