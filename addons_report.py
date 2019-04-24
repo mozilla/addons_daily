@@ -80,7 +80,6 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
         .join(dau, on='addon_id', how='left')
         .join(wau, on='addon_id', how='left')
         .join(mau, on='addon_id', how='left')
-        .join(yau, on='addon_id', how='left')
         # .join(search_daily, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')

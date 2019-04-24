@@ -55,11 +55,10 @@ def test_tabs(addons_expanded):
     """
     output = get_tabs(addons_expanded).collect()
     expected_output = [Row(addon_id='screenshots@mozilla.org', avg_tabs=None),
-                       Row(addon_id='fxmonitor@mozilla.org', avg_tabs=None),
-                       Row(addon_id='formautofill@mozilla.org', avg_tabs=10.0),
-                       Row(addon_id='webcompat-reporter@mozilla.org', avg_tabs=None),
-                       Row(addon_id='webcompat@mozilla.org', avg_tabs=None)]
-    print(output)
+                       Row(addon_id='fxmonitor@mozilla.org', avg_tabs=15.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_tabs=None),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_tabs=12.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_tabs=5.0)]
     assert output == expected_output
 
 
@@ -75,7 +74,6 @@ def test_bookmarks(addons_expanded):
                        Row(addon_id='formautofill@mozilla.org', avg_bookmarks=5.0),
                        Row(addon_id='webcompat-reporter@mozilla.org', avg_bookmarks=None),
                        Row(addon_id='webcompat@mozilla.org', avg_bookmarks=None)]
-    print(output)
     assert output == expected_output
 
 

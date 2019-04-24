@@ -10,7 +10,8 @@ def make_telemetry_data():
                                   version=u'2.8', scope=1, type=u'extension', foreign_install=False,
                                   has_binary_components=False, install_day=17877, update_day=17877, signed_state=3,
                                   is_system=True, is_web_extension=True, multiprocess_compatible=True, os=u'Windows_NT',
-                                  country=u'ES', subsession_length=3392, places_pages_count=None,
+                                  country=u'ES', subsession_length=3392,
+                                  scalar_parent_browser_engagement_tab_open_event_count=15,
                                   places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220,
                                   devtools_toolbox_opened_count=None, active_ticks=395,
                                   histogram_parent_tracking_protection_enabled={0: 1, 1: 0},
@@ -22,7 +23,8 @@ def make_telemetry_data():
                                   user_disabled=False, app_disabled=False, version=u'1.1.0', scope=1, type=u'extension',
                                   foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876,
                                   signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True,
-                                  os=u'Windows_NT', country=u'ES', subsession_length=3392, places_pages_count=None,
+                                  os=u'Windows_NT', country=u'ES', subsession_length=3392,
+                                  scalar_parent_browser_engagement_tab_open_event_count=12,
                                   places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220,
                                   devtools_toolbox_opened_count=None, active_ticks=395,
                                   histogram_parent_tracking_protection_enabled={0: 1, 1: 0},
@@ -34,7 +36,8 @@ def make_telemetry_data():
                                   user_disabled=False, app_disabled=False, version=u'3.0.0', scope=1, type=u'extension',
                                   foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876,
                                   signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True,
-                                  os=u'Windows_NT', country=u'ES', subsession_length=3392, places_pages_count=None,
+                                  os=u'Windows_NT', country=u'ES', subsession_length=3392,
+                                  scalar_parent_browser_engagement_tab_open_event_count=5,
                                   places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220,
                                   devtools_toolbox_opened_count=None, active_ticks=395,
                                   histogram_parent_tracking_protection_enabled={0: 1, 1: 0},
@@ -47,6 +50,7 @@ def make_telemetry_data():
                                   has_binary_components=False, install_day=17850, update_day=17876, signed_state=None,
                                   is_system=True, is_web_extension=True, multiprocess_compatible=True, os=u'Windows_NT',
                                   country=u'ES', subsession_length=3392, places_pages_count=None,
+                                  scalar_parent_browser_engagement_tab_open_event_count=None,
                                   places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220,
                                   devtools_toolbox_opened_count=None, active_ticks=395,
                                   histogram_parent_tracking_protection_enabled={0: 1, 1: 0},
@@ -57,6 +61,7 @@ def make_telemetry_data():
                                   blocklisted=False, name=u'Form Autofill', user_disabled=False, app_disabled=False,
                                   version=u'1.0', scope=1, type=u'extension', foreign_install=False,
                                   has_binary_components=False, install_day=17850, update_day=17876,
+                                  scalar_parent_browser_engagement_tab_open_event_count=None,
                                   signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True,
                                   os=u'Windows_NT', country=u'ES', subsession_length=3392, places_pages_count=10,
                                   places_bookmarks_count=5, scalar_parent_browser_engagement_total_uri_count=220,
@@ -72,6 +77,7 @@ def make_telemetry_data():
                                 StructField('app_disabled', BooleanType(), True),
                                 StructField('version', StringType(), True), StructField('scope', IntegerType(), True),
                                 StructField('type', StringType(), True),
+                                StructField('scalar_parent_browser_engagement_tab_open_event_count',IntegerType(),True),
                                 StructField('foreign_install', BooleanType(), True),
                                 StructField('has_binary_components', BooleanType(), True),
                                 StructField('install_day', IntegerType(), True),
@@ -94,7 +100,6 @@ def make_telemetry_data():
                                             MapType(IntegerType(), IntegerType(), True), True)])
 
     return addons_expanded_sample, addons_schema
-
 
 def make_fake_telemetry_data():
     addons_expanded_sample = [Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0),

@@ -29,7 +29,7 @@ def get_user_demo_metrics(addons_expanded):
             .select('addon_id','client_id')
             .groupBy('addon_id')
             .agg(F.countDistinct('client_id').alias('total_clients'))
-        )
+    )
       
     os_dist = (
         addons_expanded
