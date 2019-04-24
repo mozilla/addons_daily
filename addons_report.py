@@ -47,7 +47,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     engagement_metrics = get_engagement_metrics(addons_expanded)
     browser_metrics = get_browser_metrics(addons_expanded)
     top_ten_others = get_top_ten_others(addons_expanded)
-    trend_metrics = get_trend_metrics(addons_expanded)
+    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
 
     # search metrics
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
@@ -109,7 +109,7 @@ def main():
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
-    
+
     agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
