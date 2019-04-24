@@ -17,7 +17,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     """
     addons_and_users = (
         main_summary_data
-        .select("Submission_date", "client_id",
+        .select("submission_date_s3", "client_id",
                 F.explode("active_addons"),
                 "os", "country", "subsession_length",
                 "places_pages_count", "places_bookmarks_count",
@@ -29,7 +29,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
 
     addons_expanded = (
         addons_and_users
-        .select("Submission_date", "client_id",
+        .select("submission_date_s3", "client_id",
                 "col.*",
                 "os", "country", "subsession_length",
                 "places_pages_count", "places_bookmarks_count",
@@ -47,7 +47,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, raw_pings_dat
     engagement_metrics = get_engagement_metrics(addons_expanded, main_summary)
     browser_metrics = get_browser_metrics(addons_expanded)
     top_ten_others = get_top_ten_others(addons_expanded)
-    trend_metrics = get_trend_metrics(addons_expanded)
+    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
 
     # search metrics
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
@@ -93,6 +93,7 @@ def main():
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
+
     ms = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
     main_summary = (
         ms
@@ -108,6 +109,7 @@ def main():
     raw_pings = load_raw_pings(sc)
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
+
     agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
