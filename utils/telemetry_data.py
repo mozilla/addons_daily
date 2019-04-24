@@ -11,224 +11,176 @@ from pyspark.sql import SQLContext
 # this script assumes we have the data from main_summary and the raw_pings
 # already loaded and processed
 
-""" User Demographics & Usage Metrics """
-
-#########
-# os dist
-#########
+###########################################################
+# User Demographics - country distribution, os distribution
+###########################################################
 
 
-def get_os_dist(df):
+def get_user_demo_metrics(addons_expanded):
     """
-    :param df: addons_expanded
-    :return: aggregated dataframe by addon_id,
-    getting distribution of users with various OS
-    """
-
-    client_counts = (
-        df
-        .select("addon_id", "client_id")
-        .groupBy("addon_id")
-        .agg(F.countDistinct("client_id"))
-        .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
-    )
-
-    # count distinct clients for each addon:OS pair,
-    # join with total client counts on addon_id
-    os_ = (
-        df
-        .select("addon_id", "os", "client_id")
-        .groupBy("addon_id", "os")
-        .agg(F.countDistinct("client_id"))
-        .withColumnRenamed("count(DISTINCT client_id)", "client_count")
-        .join(client_counts, on='addon_id', how='left')
-        .withColumn("os_pct", F.col("client_count")/F.col("total_clients"))
-    )
-
-    sample = os_.take(1)
-    os_.printSchema()
-    print(sample)
-
-    # group joined dataframe on addon_id and take percentage of users per OS,
-    # return as a mapping of OS to percentage of users with given OS by addon
-    os_distribution = (
-        os_
-        .select("addon_id", "os", "os_pct")
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("os").alias("os"),
-            F.collect_list("os_pct").alias("os_pct")
-        )
-        .withColumn("os_dist", make_map(F.col("os"), F.col("os_pct").cast(ArrayType(DoubleType()))))
-        .drop("os", "os_pct")
-    )
-
-    return os_distribution
-
-##############
-# country dist
-##############
-
-
-def get_ct_dist(df):
-    """
-    same as get_os_dist, but get country distribution instead of os
-    :param df: addons_expanded
-    :return: dataframe of distributions of users across countries aggregated by addon_id
-    """
-
-    client_counts = (
-            df
-            .select("addon_id", "client_id")
-            .groupBy("addon_id")
-            .agg(F.countDistinct("client_id"))
-            .withColumnRenamed("count(DISTINCT client_id)", "total_clients")
-    )
-
-    country_ = (
-            df
-            .select("addon_id", "country", "client_id")
-            .groupBy("addon_id", "country")
-            .agg(F.countDistinct("client_id"))
-            .withColumnRenamed("count(DISTINCT client_id)", "client_count")
-            .join(client_counts, on="addon_id", how='left')
-            .withColumn("country_pct", F.col("client_count") / F.col("total_clients"))
-    )
-
-    # group joined dataframe on addon_id and take percentage of users per country,
-    # return as a mapping of country to percentage of users from that country by addon
-    ct_dist = (
-        country_
-        .select("addon_id", "country", "country_pct")
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("country").alias("country"),
-            F.collect_list("country_pct").alias("country_pct")
-        )
-        .withColumn("country_dist", make_map(F.col("country"), F.col("country_pct")))
-        .drop("country", "country_pct")
-    )
-
-    return ct_dist
-
-#############
-# total hours
-#############
-
-
-def get_total_hours(df):
-    """
-    Get total time spent on browser on avg, inactive or active
-    :param df: addons_expanded
-    :return:
-    """
-
-    average_time = (
-        df
-        .select("addon_id", "client_id", "subsession_length", "Submission_date")
-        .groupBy('addon_id', 'client_id', "Submission_date")
-        .agg(F.sum('subsession_length').alias('daily_total'))
-    )
-
-    # group this aggregated dataframe by addon_id and take average
-    # of all users daily_total time spent active in milliseconds
-
-    agg_avg_time = (
-        average_time
-        .groupBy("addon_id")
-        .agg(F.mean("daily_total"))
-        .withColumnRenamed("avg(daily_total)", "avg_time_active_ms")
-    )
-
-    return agg_avg_time
-
-
-##############
-# active hours
-##############
-
-def get_active_hours(df):
-    """
-    Compute avg time spent active on browser in hours
-    :param df: addons expanded
+    :param addons_expanded: addons_expanded dataframe
     :return: aggregated dataframe by addon_id
+        with user demographic information including
+        - distribution of users by operating system
+        - distribution of users by country
     """
-    average_ticks = (
-        df
-        .select("addon_id", "client_id", "Submission_date", 'active_ticks')
-        .groupBy('addon_id', 'client_id', "Submission_date")
-        .agg(F.sum('active_ticks').alias('total_ticks'))
+    client_counts = (
+        addons_expanded
+            .select('addon_id','client_id')
+            .groupBy('addon_id')
+            .agg(F.countDistinct('client_id').alias('total_clients'))
     )
+      
+    os_dist = (
+        addons_expanded
+        .select('addon_id', 'os', 'client_id')
+        .groupBy('addon_id', 'os')
+        .agg(F.countDistinct('client_id'))
+        .withColumnRenamed('count(DISTINCT client_id)', 'os_client_count')
+        .join(client_counts, on='addon_id', how='left')
+        .withColumn('os_pct', F.col('os_client_count')/F.col('total_clients'))
+        .select('addon_id', 'os', 'os_pct')
+        .groupBy('addon_id')
+        .agg(
+            F.collect_list('os').alias('os'),
+            F.collect_list('os_pct').alias('os_pct')
+        )
+        .withColumn(
+            'os_dist', 
+            make_map(F.col('os'), F.col('os_pct').cast(ArrayType(DoubleType())))
+        )
+        .drop('os', 'os_pct')
+    )
+  
+    ct_dist = (
+        addons_expanded
+        .select('addon_id', 'country', 'client_id')
+        .groupBy('addon_id', 'country')
+        .agg(F.countDistinct('client_id').alias('country_client_count'))
+        .join(client_counts, on='addon_id', how='left')
+        .withColumn(
+            'country_pct', 
+            F.col('country_client_count') / F.col('total_clients')
+        )
+        .select('addon_id', 'country', 'country_pct')
+        .groupBy('addon_id')
+        .agg(
+            F.collect_list('country').alias('country'),
+            F.collect_list('country_pct').alias('country_pct')
+        )
+        .withColumn(
+            'country_dist', 
+            make_map(F.col('country'), F.col('country_pct'))
+        )
+        .drop('country', 'country_pct')
+    )
+  
+    combined_dist = os_dist.join(ct_dist, on='addon_id', how='outer')
+  
+    return combined_dist
 
-    agg_avg_ticks = (
-        average_ticks
-        .groupBy("addon_id")
-        .agg(F.mean("total_ticks"))
-        #.alias("avg_time_active_ms")
-        .withColumnRenamed("avg(total_ticks)", "avg_time_active_ms")
-        .withColumn('avg_active_hours', F.col("avg_time_active_ms") / (12 * 60))
+#####################################################################
+# User Engagement Metrics - total hours, active hours, addon disabled
+#####################################################################
+
+
+def get_engagement_metrics(addons_expanded, main_summary):
+    """
+    :param addons_expanded: addons_expanded
+    :param main_summary: main_summary
+    :return: dataframe aggregated by addon_id
+        with engagement metrics including 
+        - average total hours spent per user
+        - average total active ticks per user
+        - number of clients with the addon disabled
+    """
+    engagement_metrics = (
+        addons_expanded
+        .select('addon_id', 'client_id', 'Submission_date', 'subsession_length', 'active_ticks')
+        .groupBy('addon_id','client_id','Submission_date')
+        .agg(
+            F.sum('active_ticks').alias('total_ticks'),
+            F.sum('subsession_length').alias('daily_total'))
+        .groupBy('addon_id')
+        .agg(
+            F.mean('total_ticks').alias('avg_time_active_ms'),
+            F.mean('daily_total').alias('avg_time_total'))
+        .withColumn('active_hours', F.col('avg_time_active_ms')/(12*60))
         .drop('avg_time_active_ms')
     )
-    return agg_avg_ticks
+    
+    disabled_addons = (
+        main_summary
+        .where(F.col('disabled_addons_ids').isNotNull())
+        .withColumn('addon_id', F.explode('disabled_addons_ids'))
+        .select('addon_id', 'client_id')
+        .groupBy('addon_id')
+        .agg(F.countDistinct('client_id').alias('disabled'))
+    )
+    
+    engagement_metrics = engagement_metrics.join(disabled_addons, on='addon_id', how='outer')
+
+    return engagement_metrics
+
+####################################################################################
+# Browser Metrics - avg tabs, avg bookmarks, avg devtools opened count, avg URI, and 
+#   percent with tracking protection enabled
+####################################################################################
 
 
-############
-# total URIs
-############
-
-
-def get_avg_uri(df):
+def get_browser_metrics(addons_expanded):
     """
-    :param df: addons_expanded
-    :return:
+    :param addons_expanded: addons_expanded
+    :return: dataframe aggregated by addon_id
+        with browser-related metrics including
+            - average number of tabs open
+            - average number of bookmarks
+            - average devtools opened
+            - average URI
+            - percent of users with tracking enabled
     """
+    browser_metrics = (
+        addons_expanded
+        .groupby('addon_id')
+        .agg(
+            F.avg('places_pages_count').alias('avg_tabs'), 
+            F.avg('places_bookmarks_count').alias('avg_bookmarks'),
+            F.avg('devtools_toolbox_opened_count').alias('avg_toolbox_opened_count')
+        )
+    )
+
     avg_uri = (
-        df
-        .select('addon_id', 'client_id', 'scalar_parent_browser_engagement_total_uri_count')
+        addons_expanded
+        .select('addon_id', 'client_id', 
+                'scalar_parent_browser_engagement_total_uri_count')
         .groupBy('addon_id', 'client_id')
         .agg(F.mean('scalar_parent_browser_engagement_total_uri_count').alias('avg_uri'))
-        .groupBy("addon_id")
-        .agg(F.mean("avg_uri"))
-        .withColumnRenamed("avg(avg_uri)", "avg_uri")
+        .groupBy('addon_id')
+        .agg(F.mean('avg_uri').alias('avg_uri'))
     )
-
-    return avg_uri
-
-################
-# number of tabs
-################
-
-
-def get_tabs(df):
-    """
-    :param df: addons_expanded
-    :return:
-    """
-
-    tab_counts = (
-        df
-        .groupby("addon_id")
-        .agg(F.avg("scalar_parent_browser_engagement_tab_open_event_count"))
-        .withColumnRenamed("avg(scalar_parent_browser_engagement_tab_open_event_count)", "avg_tabs")
+    
+    tracking_enabled = (
+        addons_expanded
+        .where('histogram_parent_tracking_protection_enabled is not null')
+        .select('addon_id', 'histogram_parent_tracking_protection_enabled.1',
+                'histogram_parent_tracking_protection_enabled.0')
+        .groupBy('addon_id')
+        .agg(F.sum('1'), F.count('0'))
+        .withColumn('total', F.col('sum(1)') + F.col('count(0)'))
+        .withColumn(
+            'pct_w_tracking_prot_enabled',
+            F.col('sum(1)') / F.col('total')
+        )
+        .drop('sum(1)', 'count(0)', 'total')
     )
-
-    return tab_counts
-
-
-def get_bookmarks(df):
-    """
-    get avg # of bookmarks by addon_id
-    :param df:
-    :return:
-    """
-    bookmark_counts = (
-        df
-        .groupby("addon_id")
-        .agg(F.avg("places_bookmarks_count"))
-        .withColumnRenamed("avg(places_bookmarks_count)", "avg_bookmarks")
+    
+    browser_metrics = (
+        browser_metrics
+        .join(avg_uri, on='addon_id', how='outer')
+        .join(tracking_enabled, on='addon_id', how='outer')
     )
-    return bookmark_counts
-
+    
+    return browser_metrics
 
 #######################
 # top ten other add ons
@@ -284,62 +236,18 @@ def get_top_ten_others(df):
 
     return other_addons_df
 
-#######################
-# devtools opened count
-#######################
 
+###############################
+# Performance Metrics - crashes
+###############################
 
-def get_devtools_opened_count(df):
+def get_crashes(crash_pings):
     """
-    :param df: addons_expanded
-    :return:
-    """
-    dev_count = (
-        df
-        .groupBy("addon_id")
-        .agg(F.avg("devtools_toolbox_opened_count"))#.alias("avg_toolbox_opened_count")
-        .withColumnRenamed("avg(devtools_toolbox_opened_count)", "avg_toolbox_opened_count")
-    )
-    return dev_count
-
-######################################################
-# percentage of users with tracking protection enabled
-######################################################
-
-
-def get_pct_tracking_enabled(df):
-    """
-    :param df: addons_expanded
-    :return:
-    """
-    tracking_enabled = (
-        df
-        .where('histogram_parent_tracking_protection_enabled is not null')
-        .select('addon_id', 'histogram_parent_tracking_protection_enabled.1',
-                'histogram_parent_tracking_protection_enabled.0')
-        .groupBy('addon_id')
-        .agg(F.sum('1'), F.count('0'))
-        .withColumn('total', F.col('sum(1)') + F.col('count(0)'))
-        .withColumn('pct_w_tracking_prot_enabled', F.col('sum(1)') / F.col('total'))
-        .drop('sum(1)', 'count(0)', 'total')
-    )
-    return tracking_enabled
-
-
-""" Performance Metrics """
-
-
-#########
-# crashes
-#########
-
-def get_crashes(df):
-    """
-    :param df: raw crash pings dataframe
-    :return: aggregtaed crash by addon df
+    :param crash_pings: raw crash pings dataframe
+    :return: aggregated crash by addon df
     """
     addon_time = (
-        df
+        crash_pings
         .filter(lambda x: 'environment' in x)
         .filter(lambda x: 'addons' in x['environment'])
         .filter(lambda x: 'activeAddons' in x['environment']['addons'])
@@ -368,99 +276,47 @@ def get_crashes(df):
     return crashes_df
 
 
-""" Trend Metrics """
+###############################
+# Trend Metrics - DAU, WAU, MAU
+###############################
 
-
-#####
-# DAU
-#####
-
-
-def get_dau(addons_expanded_df):
+def get_trend_metrics(addons_expanded):
     """
-    :param df: addons expanded from main summary
-    :return:
+    :param df: addons_expanded
+    :return: aggregated dataframe by addon_id
+        with trend metrics including
+        - daily active users
+        - weekly active users
+        - monthly active users
     """
-    df = (
-        addons_expanded_df
-        .filter("Submission_date >= (NOW() - INTERVAL 1 DAYS)")
-    )
-
-    dau = (
-        df
-        .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('dau'))
-    )
-    return dau
-
-#####
-# WAU
-#####
-
-
-def get_wau(addons_expanded_df):
-    """
-    :param df: addons expanded from main summary
-    :return:
-    """
-    df = (
-        addons_expanded_df
-        .filter("Submission_date >= (NOW() - INTERVAL 7 DAYS)")
-    )
-
-    wau = (
-        df
-        .groupby('addon_id')
-        .agg(F.countDistinct('client_id').alias('wau'))
-    )
-    return wau
-
-#####
-# MAU
-#####
-
-
-def get_mau(addons_expanded_df):
-    """
-    :param df: addons expanded from main summary
-    :return:
-    """
-    df = (
-        addons_expanded_df
-        .filter("Submission_date >= (NOW() - INTERVAL 30 DAYS)")
-    )
-
+    # limit to last 30 days to calculate mau
+    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 30 DAYS)')
     mau = (
-        df
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 28 DAY)")
+        addons_expanded
         .groupby('addon_id')
         .agg(F.countDistinct('client_id').alias('mau'))
     )
-    return mau
 
-#################
-# Disabled addons
-#################
-
-
-def get_disabled(df):
-    """
-    Gets the number of distinct clients in df with the addon disabled
-    """
-    disabled_addons = (
-        df
-        .where(F.col('disabled_addons_ids').isNotNull())
-        .withColumn('addon', F.explode('disabled_addons_ids'))
-        .select('addon', 'client_id')
+    # limit to last 7 days to calculate wau
+    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 7 DAYS)')
+    wau = (
+        addons_expanded
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('wau'))
     )
 
-    addons_disabled_count = (
-        disabled_addons
-        .groupBy('addon')
-        .agg(F.countDistinct('client_id').alias('disabled'))
+    # limit to last 1 day to calculate dau
+    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 1 DAYS)')
+    dau = (
+        addons_expanded
+        .groupby('addon_id')
+        .agg(F.countDistinct('client_id').alias('dau'))
     )
 
-    return addons_disabled_count
+    trend_metrics = (
+        mau
+        .join(wau, on='addon_id', how='outer')
+        .join(dau, on='addon_id', how='outer')
+    )
 
-
-
+    return trend_metrics
