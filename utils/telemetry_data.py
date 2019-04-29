@@ -192,47 +192,31 @@ def get_top_ten_others(df):
     :param df: this df should actually be main_summary, not addons_expanded
     :return:
     """
-
     ttt = F.udf(take_top_ten, ArrayType(StringType()))
-
-    client_to_addon = (
-        df
-        .rdd
-        .filter(lambda x: x['active_addons'] is not None)
-        .map(lambda x: (x['client_id'], [y['addon_id'] for y in x['active_addons']]))
-        .filter(lambda x: len(x[1]) > 1)
-        .map(lambda x: (x[0], [(x[1][i], [y for y in x[1] if y != x[1][i]])
-                        for i in range(len(x[1])) if len(x[1]) > 1]))
-        .filter(lambda x: len(x[1]) > 2)
-        .flatMap(lambda x: [(str(x[0]), element[0], element[1]) for element in x[1]])
-        .flatMap(lambda x: [(x[1], j, x[0]) for j in x[2]])
-    )
-
-    schema = StructType([StructField("addon_id", StringType(), True),
-                         StructField("other_addons", StringType(), True),
-                         StructField("client_id", StringType(), True)])
-
-    other_addons = client_to_addon.toDF(schema=schema)
-
-    map_df = (
-        other_addons
-        .groupBy("addon_id", "other_addons")
-        .agg(F.countDistinct("client_id"))
-        .rdd
-        .map(lambda x: (x[0], (x[1], x[2])))
-        .groupByKey()
-        .map(lambda x: (x[0], {y[0]: float(y[1]) for y in x[1]}))
-    )
-
-    other_addons_schema = StructType([StructField("addon_id", StringType(), True),
-                                      StructField("other_addons", MapType(StringType(), FloatType()), True)])
+    str_to_list_udf = F.udf(str_to_list, ArrayType(StringType()))
+    list_expander_udf = F.udf(list_expander, ArrayType(ArrayType(StringType())))
 
     other_addons_df = (
-        map_df
-        .toDF(schema=other_addons_schema)
-        .withColumn("top_ten_other_addons", ttt("other_addons"))
-        .drop("other_addons")
-        )
+        df
+        .filter('active_addons is not null')
+        .select('client_id', F.explode('active_addons'))
+        .select('client_id', 'col.addon_id')
+        .groupBy('client_id')
+        .agg(F.collect_set('addon_id').alias('addons_list'))
+        .withColumn('test', F.explode(list_expander_udf(F.col('addons_list'))))
+        .withColumn('addon_id', F.col('test').getItem(0))
+        .withColumn('others', str_to_list_udf(F.col('test').getItem(1)))
+        .withColumn('other_addon', F.explode('others'))
+        .drop('others', 'addons_list', 'test')
+        .groupBy('addon_id', 'other_addon')
+        .agg(F.countDistinct('client_id').alias('seen_together'))
+        .withColumn('others_counts', F.create_map(F.col('other_addon'), F.col('seen_together')))
+        .drop('other_addon', 'seen_together')
+        .groupBy('addon_id')
+        .agg(F.collect_list('others_counts').alias('others_w_counts'))
+        .withColumn('top_ten_others', ttt(F.col('others_w_counts')))
+        .drop('others_w_counts')
+    )
 
     return other_addons_df
 

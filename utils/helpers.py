@@ -150,13 +150,11 @@ def dataframe_joiner(dfs):
     return left
 
 
-def take_top_ten(dic):
-    lis = []
-    a1_sorted_keys = sorted(dic, key=dic.get, reverse=True)
-    for r in a1_sorted_keys:
-        if len(lis) < 10:
-            lis.append(r)
-    return lis
+def take_top_ten(l):
+    if len(l) < 10:
+        return sorted(l, key=lambda i: -i.values()[0])
+    else:
+        return sorted(l, key=lambda i: -i.values()[0])[0:10]
 
 
 def get_spark(tz='UTC'):
@@ -175,3 +173,16 @@ def get_sc():
     return sc
 
 
+def list_expander(lis):
+    list_of_lists = []
+    for item in lis:
+        list_of_lists.append([item,[i for i in lis if i != item]])
+    return list_of_lists
+
+
+def str_to_list(str):
+    if str[0]=='[':
+        str = str[1:]
+    if str[-1]==']':
+        str = str[:-1]
+    return [x.strip() for x in str.split(',')]
