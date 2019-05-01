@@ -112,8 +112,6 @@ def main():
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
 
-    # read in events data s3://telemetry-parquet/events/v1
-
     events = load_main_summary(spark, input_bucket='telemtry-parquet', input_prefix='events', input_version='v1')
     events = (
         events
@@ -124,7 +122,7 @@ def main():
 
     #bq_d = load_bq_data(datetime.date.today(), path, spark)
 
-    agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
+    agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
     print(agg_data.collect()[0:10])
     #return agg_data
 
