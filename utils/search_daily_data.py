@@ -1,3 +1,5 @@
+import pyspark.sql.functions as F
+
 def get_search_metrics(search_daily_df, addons_expanded):
     """
     """
