@@ -14,20 +14,30 @@ def addons_expanded():
     addons_df = spark.createDataFrame(addons_expanded_sample, addons_schema)
     return addons_df
 
+def dumb_test(addons_expanded):
+    assert addons_expanded.collect() ==[Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0), client_id='9ad5490a-6fd8-47e8-9a1e-68e759d7f073', addon_id='fxmonitor@mozilla.org', blocklisted=False, name='Firefox Monitor', user_disabled=False, app_disabled=False, version='2.8', scope=1, type='extension', scalar_parent_browser_engagement_tab_open_event_count=15, foreign_install=False, has_binary_components=False, install_day=17877, update_day=17877, signed_state=3, is_system=True, is_web_extension=True, multiprocess_compatible=True, os='Windows_NT', country='ES', subsession_length=3392, places_pages_count=10, places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220, devtools_toolbox_opened_count=None, active_ticks=395, histogram_parent_tracking_protection_enabled={0: 1, 1: 0}, histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0, 964: 0, 1429: 1, 1174: 1}), Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0), client_id='9ad5490a-6fd8-47e8-9a1e-68e759d7f073', addon_id='webcompat-reporter@mozilla.org', blocklisted=False, name='WebCompat Reporter', user_disabled=False, app_disabled=False, version='1.1.0', scope=1, type='extension', scalar_parent_browser_engagement_tab_open_event_count=12, foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876, signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True, os='Windows_NT', country='ES', subsession_length=3392, places_pages_count=100, places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220, devtools_toolbox_opened_count=None, active_ticks=395, histogram_parent_tracking_protection_enabled={0: 1, 1: 0}, histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0, 964: 0, 1429: 1, 1174: 1}), Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0), client_id='9ad5490a-6fd8-47e8-9a1e-68e759d7f073', addon_id='webcompat@mozilla.org', blocklisted=False, name='Web Compat', user_disabled=False, app_disabled=False, version='3.0.0', scope=1, type='extension', scalar_parent_browser_engagement_tab_open_event_count=5, foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876, signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True, os='Windows_NT', country='ES', subsession_length=3392, places_pages_count=120, places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220, devtools_toolbox_opened_count=None, active_ticks=395, histogram_parent_tracking_protection_enabled={0: 1, 1: 0}, histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0, 964: 0, 1429: 1, 1174: 1}), Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0), client_id='9ad5490a-6fd8-47e8-9a1e-68e759d7f073', addon_id='screenshots@mozilla.org', blocklisted=False, name='Firefox Screenshots', user_disabled=False, app_disabled=False, version='35.0.0', scope=1, type='extension', scalar_parent_browser_engagement_tab_open_event_count=None, foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876, signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True, os='Windows_NT', country='ES', subsession_length=3392, places_pages_count=None, places_bookmarks_count=None, scalar_parent_browser_engagement_total_uri_count=220, devtools_toolbox_opened_count=None, active_ticks=395, histogram_parent_tracking_protection_enabled={0: 1, 1: 0}, histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0, 964: 0, 1429: 1, 1174: 1}), Row(Submission_date=datetime.datetime(2019, 1, 1, 0, 0), client_id='9ad5490a-6fd8-47e8-9a1e-68e759d7f073', addon_id='formautofill@mozilla.org', blocklisted=False, name='Form Autofill', user_disabled=False, app_disabled=False, version='1.0', scope=1, type='extension', scalar_parent_browser_engagement_tab_open_event_count=None, foreign_install=False, has_binary_components=False, install_day=17850, update_day=17876, signed_state=None, is_system=True, is_web_extension=True, multiprocess_compatible=True, os='Windows_NT', country='ES', subsession_length=3392, places_pages_count=10, places_bookmarks_count=5, scalar_parent_browser_engagement_total_uri_count=220, devtools_toolbox_opened_count=None, active_ticks=395, histogram_parent_tracking_protection_enabled={0: 1, 1: 0}, histogram_parent_webext_background_page_load_ms={1064: 3, 1577: 0, 964: 0, 1429: 1, 1174: 1})]
 
-def test_pct_tracking_enabled(addons_expanded):
+
+def test_browser_metrics(addons_expanded):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
     :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = get_pct_tracking_enabled(addons_expanded).collect()
-    expected_output = [Row(addon_id=u'screenshots@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-                       Row(addon_id=u'fxmonitor@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-                       Row(addon_id=u'formautofill@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-                       Row(addon_id=u'webcompat-reporter@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-                       Row(addon_id=u'webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
+    output = get_browser_metrics(addons_expanded).collect()
+    expected_output = [Row(addon_id='screenshots@mozilla.org', avg_bookmarks=None, avg_tabs=1.0,
+                           avg_toolbox_opened_count=None, avg_uri=3392.0, pct_w_tracking_prot_enabled=None),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_bookmarks=3.0, avg_tabs=1.0,
+                           avg_toolbox_opened_count=None, avg_uri=3392.0, pct_w_tracking_prot_enabled=None),
+                       Row(addon_id='formautofill@mozilla.org', avg_bookmarks=None, avg_tabs=1.0,
+                           avg_toolbox_opened_count=None, avg_uri=3392.0,
+                           pct_w_tracking_prot_enabled=None),
+                       Row(addon_id='webcompat-reporter@mozilla.org', avg_bookmarks=None, avg_tabs=1.0,
+                           avg_toolbox_opened_count=None, avg_uri=3392.0,
+                           pct_w_tracking_prot_enabled=None),
+                       Row(addon_id='webcompat@mozilla.org', avg_bookmarks=None, avg_tabs=1.0,
+                           avg_toolbox_opened_count=None, avg_uri=3392.0, pct_w_tracking_prot_enabled=None)]
     assert output == expected_output
 
 
