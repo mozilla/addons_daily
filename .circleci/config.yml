@@ -14,12 +14,6 @@ jobs:
     - run:
         name: run tests
         command: tox -e $CIRCLE_JOB
-    - run:
-        name: submit coverage report
-        command: |
-          # convert `.coverage` to `coverage.xml`
-          coverage xml -i
-          bash <(curl -s https://codecov.io/bash)
   py3:
     <<: *py27
     docker:
