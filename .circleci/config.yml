@@ -15,6 +15,7 @@ jobs:
     - run: pip install tox
     - run: tox -e py3
 workflows:
+  version: 2
   build:
     jobs:
     - py27
