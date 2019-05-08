@@ -2,7 +2,7 @@ from pyspark.sql.types import *
 from pyspark.sql import Row
 import datetime
 from utils.raw_pings import *
-from helpers.data_generators import make_raw_pings
+from .helpers.data_generators import make_raw_pings
 import pytest
 
 
