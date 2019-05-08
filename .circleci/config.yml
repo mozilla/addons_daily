@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  py27: &py27
+    docker:
+    - image: python:2.7
+    steps:
+    - checkout
+    - run: tox -e py27
+  py3:
+    docker:
+    - image: python:3
+    steps:
+    - checkout
+    - run: tox -e py3
+workflows:
+  build:
+    jobs:
+    - py27
+    - py3
