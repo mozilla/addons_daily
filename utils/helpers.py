@@ -186,3 +186,20 @@ def str_to_list(str):
     if str[-1]==']':
         str = str[:-1]
     return [x.strip() for x in str.split(',')]
+
+
+def bucket_engine(df):
+    eng = F.lower(F.col("engine"))
+    return (
+      df.withColumn("engine",
+                    F.when(eng.like("google%"),
+                          "google")
+                    .when(eng.like("ddg%"),
+                         "duckduckgo")
+                    .when(eng.like("duckduckgo%"),
+                         "duckduckgo")
+                    .when(eng.like("bing%"),
+                         "bing")
+                    .otherwise("other"))
+    )
+
