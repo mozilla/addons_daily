@@ -2,7 +2,7 @@ from pyspark.sql.types import *
 from pyspark.sql import Row
 from utils.search_daily_data import *
 from utils.telemetry_data import *
-from helpers.data_generators import make_search_daily_data, make_telemetry_data
+from .helpers.data_generators import make_search_daily_data, make_telemetry_data
 from utils.helpers import get_spark
 import pytest
 
