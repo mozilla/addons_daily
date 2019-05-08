@@ -1,6 +1,6 @@
 import pyspark.sql.functions as F
 
-def get_search_metrics(search_daily_df, addons_expanded):
+def get_search_metrics(search_daily, addons_expanded):
     """
     """
     user_addon = addons_expanded.select('client_id', 'addon_id')
