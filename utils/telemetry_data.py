@@ -235,7 +235,7 @@ def get_trend_metrics(addons_expanded):
         - monthly active users
     """
     # limit to last 30 days to calculate mau
-    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 30 DAYS)')
+    addons_expanded = addons_expanded.filter('submission_date_s3 >= (NOW() - INTERVAL 30 DAYS)')
     mau = (
         addons_expanded
         .groupby('addon_id')
@@ -243,7 +243,7 @@ def get_trend_metrics(addons_expanded):
     )
 
     # limit to last 7 days to calculate wau
-    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 7 DAYS)')
+    addons_expanded = addons_expanded.filter('submission_date_s3 >= (NOW() - INTERVAL 7 DAYS)')
     wau = (
         addons_expanded
         .groupby('addon_id')
@@ -251,7 +251,7 @@ def get_trend_metrics(addons_expanded):
     )
 
     # limit to last 1 day to calculate dau
-    addons_expanded = addons_expanded.filter('Submission_date >= (NOW() - INTERVAL 1 DAYS)')
+    addons_expanded = addons_expanded.filter('submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)')
     dau = (
         addons_expanded
         .groupby('addon_id')
@@ -265,48 +265,3 @@ def get_trend_metrics(addons_expanded):
     )
 
     return trend_metrics
-
-
-####################################################
-# Search Metrics - search with ads, search ad clicks
-####################################################
-
-def get_search_metrics(addons_expanded_df):
-    swa = (
-        addons_expanded_df
-        .select("addon_id",
-                F.explode_outer("scalar_parent_browser_search_with_ads").alias("engine", "search_with_ads"))
-    )
-    sac = (
-        addons_expanded_df
-        .select("addon_id",
-                F.explode_outer("scalar_parent_browser_search_ad_clicks").alias("engine", "search_ad_clicks"))
-    )
-
-    search_metrics = (
-        bucket_engine(swa)
-        .join(bucket_engine(sac), on=["addon_id", "engine"])
-        .na.fill(0) # replace null counts with 0
-        .groupby("addon_id", "engine")
-        .agg(
-          F.sum("search_with_ads").alias("search_with_ads"),
-          F.sum("search_ad_clicks").alias("search_ad_clicks")
-        )
-        .groupBy('addon_id')
-        .agg(
-            F.collect_list('engine').alias('engine'),
-            F.collect_list('search_with_ads').alias('search_with_ads'),
-            F.collect_list('search_ad_clicks').alias('search_ad_clicks')
-        )
-        .withColumn(
-            'search_with_ads',
-            make_map(F.col('engine'), F.col('search_with_ads').cast(ArrayType(DoubleType())))
-        )
-        .withColumn(
-            'search_ad_clicks',
-            make_map(F.col('engine'), F.col('search_ad_clicks').cast(ArrayType(DoubleType())))
-        )
-        .drop('engine')
-      )
-
-    return search_metrics

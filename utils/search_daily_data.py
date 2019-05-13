@@ -10,6 +10,8 @@ def get_search_metrics(search_daily_df, addons_expanded):
         - average sap searches by search engine
         - average tagged sap searches by search engine
         - average organic searches by search engine
+        - total number of searches with ads by search engine
+        - total number of ad clicks by search engine
     """
     search_daily_df = bucket_engine(search_daily_df)
     
@@ -21,13 +23,18 @@ def get_search_metrics(search_daily_df, addons_expanded):
         .agg(
             F.avg('sap').alias('avg_sap_searches'),
             F.avg('tagged_sap').alias('avg_tagged_sap_searches'),
-            F.avg('organic').alias('avg_organic_searches'))
+            F.avg('organic').alias('avg_organic_searches'),
+            F.sum('search_with_ads').alias('search_with_ads'),
+            F.sum('ad_click').alias('ad_click')
+        )
         .groupBy('addon_id')
         .agg(
             F.collect_list('engine').alias('engine'),
             F.collect_list('avg_sap_searches').alias('avg_sap_searches'),
             F.collect_list('avg_tagged_sap_searches').alias('avg_tagged_sap_searches'),
-            F.collect_list('avg_organic_searches').alias('avg_organic_searches')
+            F.collect_list('avg_organic_searches').alias('avg_organic_searches'),
+            F.collect_list('search_with_ads').alias('search_with_ads'),
+            F.collect_list('ad_click').alias('ad_click')
         )
         .withColumn(
             'avg_sap_searches', 
@@ -40,6 +47,14 @@ def get_search_metrics(search_daily_df, addons_expanded):
         .withColumn(
             'avg_organic_searches', 
             make_map(F.col('engine'), F.col('avg_organic_searches').cast(ArrayType(DoubleType())))
+        )
+        .withColumn(
+            'search_with_ads', 
+            make_map(F.col('engine'), F.col('search_with_ads').cast(ArrayType(DoubleType())))
+        )
+        .withColumn(
+            'ad_click', 
+            make_map(F.col('ad_click'), F.col('ad_click').cast(ArrayType(DoubleType())))
         )
         .drop('engine')
     )
