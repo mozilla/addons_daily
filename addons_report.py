@@ -1,6 +1,6 @@
 import click
 import os
-from utils.helpers import load_main_summary,load_raw_pings, get_spark, get_sc, load_keyed_hist, load_bq_data
+from utils.helpers import load_data_s3,load_raw_pings, get_spark, get_sc, load_keyed_hist, load_bq_data
 from utils.telemetry_data import *
 from utils.search_daily_data import *
 from utils.events_data import *
