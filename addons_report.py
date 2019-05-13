@@ -100,25 +100,23 @@ def main():
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    ms = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
+    ms = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
     main_summary = (
         ms
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
 
-    sd = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v5')
+    sd = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v5')
     search_daily = (
         sd
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
 
-    events = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='events', input_version='v1')
+    events = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='events', input_version='v1')
     events = (
         events
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
-
-    print(sd.show(5))
 
     raw_pings = load_raw_pings(sc)
 
