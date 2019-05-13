@@ -31,7 +31,7 @@ def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=
 
 
 # taken from Fx_Usage_Report
-def load_main_summary(spark, input_bucket, input_prefix, input_version):
+def load_data_s3(spark, input_bucket, input_prefix, input_version):
     """
     Loads main_summary from the bucket constructed from
     input_bucket, input_prefix, input_version
