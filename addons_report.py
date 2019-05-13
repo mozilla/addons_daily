@@ -112,11 +112,13 @@ def main():
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
 
-    events = load_main_summary(spark, input_bucket='telemtry-parquet', input_prefix='events', input_version='v1')
+    events = load_main_summary(spark, input_bucket='telemetry-parquet', input_prefix='events', input_version='v1')
     events = (
         events
         .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
     )
+
+    print(events.show(5))
 
     raw_pings = load_raw_pings(sc)
 
