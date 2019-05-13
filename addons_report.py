@@ -46,13 +46,13 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, events_data, 
 
     # telemetry metrics
     user_demo_metrics = get_user_demo_metrics(addons_expanded)
-    engagement_metrics = get_engagement_metrics(addons_expanded, main_summary)
+    engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
     browser_metrics = get_browser_metrics(addons_expanded)
     top_ten_others = get_top_ten_others(addons_expanded)
     trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
 
     # search metrics
-    search_daily = get_search_metrics(search_daily_data, addons_expanded)
+    search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
     # install flow events metrics
     install_flow_metrics = install_flow_events(events_data)
@@ -76,7 +76,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, events_data, 
         .join(browser_metrics, on='addon_id', how='left')
         .join(top_ten_others, on='addon_id', how='left')
         .join(trend_metrics, on='addon_id', how='left')
-        .join(search_daily, on='addon_id', how='left')
+        .join(search_metrics, on='addon_id', how='left')
         .join(install_flow_metrics, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')
