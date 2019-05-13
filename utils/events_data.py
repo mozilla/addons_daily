@@ -5,7 +5,7 @@ def install_flow_events(events_df):
     
     """
     install_flow_events = (
-        events
+        events_df
         .select(["client_id",
                  "submission_date_s3",
                  'event_map_values.method',
