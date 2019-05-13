@@ -48,7 +48,7 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, events_data, 
     user_demo_metrics = get_user_demo_metrics(addons_expanded)
     engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
     browser_metrics = get_browser_metrics(addons_expanded)
-    top_ten_others = get_top_ten_others(addons_expanded)
+    top_ten_others = get_top_ten_others(main_summary_data)
     trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
 
     # search metrics
