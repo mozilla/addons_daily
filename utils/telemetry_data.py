@@ -96,8 +96,8 @@ def get_engagement_metrics(addons_expanded, main_summary):
     """
     engagement_metrics = (
         addons_expanded
-        .select('addon_id', 'client_id', 'Submission_date', 'subsession_length', 'active_ticks')
-        .groupBy('addon_id','client_id','Submission_date')
+        .select('addon_id', 'client_id', 'submission_date_s3', 'subsession_length', 'active_ticks')
+        .groupBy('addon_id','client_id','submission_date_s3')
         .agg(
             F.sum('active_ticks').alias('total_ticks'),
             F.sum('subsession_length').alias('daily_total'))
