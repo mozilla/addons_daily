@@ -1,7 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 import datetime
-from utils.raw_pings import *
+from addons_daily.utils.raw_pings import *
 from .helpers.data_generators import make_raw_pings
 import pytest
 
@@ -32,35 +32,35 @@ def test_startup_time(raw_pings):
 
 
 def test_bkgd_load_time(raw_pings):
-    output = get_bkgd_load_time(raw_pings).collect()
-    expected_output = [Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1295.0),
+    output = get_bkgd_load_time(raw_pings).orderBy("addon_id", "avg_webext_background_page_load_ms_by_addonid").collect()
+    expected_output = [
+                       Row(addon_id='@hoxx-vpn', avg_webext_background_page_load_ms_by_addonid=964.0),
+                       Row(addon_id='browser-mon@xdman.sourceforge.net', avg_webext_background_page_load_ms_by_addonid=964.0),
+                       Row(addon_id='firefox@ghostery.com', avg_webext_background_page_load_ms_by_addonid=7609.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=440.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1295.0),
+                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5134.0),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=485.0),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
                        Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1295.0),
+                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5134.0),
                        Row(addon_id='jid1-NIfFY2CA8fy1tg@jetpack',
                            avg_webext_background_page_load_ms_by_addonid=1577.0),
                        Row(addon_id='mozilla_cc3@internetdownloadmanager.com',
                            avg_webext_background_page_load_ms_by_addonid=1577.0),
                        Row(addon_id='plg@frhadiadsk', avg_webext_background_page_load_ms_by_addonid=1295.0),
-                       Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1577.0),
-                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1295.0),
-                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=440.0),
-                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=485.0),
                        Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=485.0),
-                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=485.0),
-                       Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
-                           avg_webext_background_page_load_ms_by_addonid=535.0),
-                       Row(addon_id='firefox@ghostery.com', avg_webext_background_page_load_ms_by_addonid=7609.0),
-                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5134.0),
-                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5134.0),
-                       Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5665.0),
-                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=4653.0),
-                       Row(addon_id='@hoxx-vpn', avg_webext_background_page_load_ms_by_addonid=964.0),
-                       Row(addon_id='browser-mon@xdman.sourceforge.net',
-                           avg_webext_background_page_load_ms_by_addonid=964.0),
-                       Row(addon_id='formautofill@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
-                       Row(addon_id='fxmonitor@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
                        Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
+                       Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1577.0),
+                       Row(addon_id='screenshots@mozilla.org', avg_webext_background_page_load_ms_by_addonid=5665.0),
                        Row(addon_id='uBlock0@raymondhill.net', avg_webext_background_page_load_ms_by_addonid=964.0),
-                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0)]
+                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=485.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=964.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=1295.0),
+                       Row(addon_id='webcompat@mozilla.org', avg_webext_background_page_load_ms_by_addonid=4653.0),
+                       Row(addon_id='{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}',
+                           avg_webext_background_page_load_ms_by_addonid=535.0)]
 
     assert output == expected_output
 

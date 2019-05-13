@@ -2,7 +2,7 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import *
 from helpers import make_map, bucket_engine
 
-def get_search_metrics(search_daily_df, addons_expanded):
+def get_search_metrics(search_daily, addons_expanded):
     """
     :param search_daily_df: search clients daily dataframe
     :param addons_expanded: addons_expanded dataframe
