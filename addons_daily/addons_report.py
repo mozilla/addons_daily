@@ -1,46 +1,62 @@
 import click
 import os
-from utils.helpers import load_data_s3,load_raw_pings, get_spark, get_sc, load_keyed_hist, load_bq_data
-from utils.telemetry_data import *
-from utils.search_daily_data import *
-from utils.events_data import *
-# from utils.amo_data import *
-from utils.bq_data import *
-from utils.raw_pings import *
-from utils.events_data import *
+from .utils.helpers import (
+    load_main_summary,
+    load_raw_pings,
+    get_spark,
+    get_sc,
+    load_keyed_hist,
+    load_bq_data,
+)
+from .utils.telemetry_data import *
+from .utils.search_daily_data import *
+from .utils.events_data import *
+# from .utils.amo_data import *
+from .utils.bq_data import *
+from .utils.raw_pings import *
+from .utils.events_data import *
 from pyspark.sql import SparkSession
 
-DEFAULT_TZ = 'UTC'
+DEFAULT_TZ = "UTC"
 
 
-def agg_addons_report(spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs):
+def agg_addons_report(
+    spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
+):
     """
     This function will create the addons dataset
     """
-    addons_and_users = (
-        main_summary_data
-        .select("submission_date_s3", "client_id",
-                F.explode("active_addons"),
-                "os", "country", "subsession_length",
-                "places_pages_count", "places_bookmarks_count",
-                "scalar_parent_browser_engagement_total_uri_count",
-                "devtools_toolbox_opened_count", "active_ticks",
-                "histogram_parent_tracking_protection_enabled",
-                "histogram_parent_webext_background_page_load_ms")
+    addons_and_users = main_summary_data.select(
+        "submission_date_s3",
+        "client_id",
+        F.explode("active_addons"),
+        "os",
+        "country",
+        "subsession_length",
+        "places_pages_count",
+        "places_bookmarks_count",
+        "scalar_parent_browser_engagement_total_uri_count",
+        "devtools_toolbox_opened_count",
+        "active_ticks",
+        "histogram_parent_tracking_protection_enabled",
+        "histogram_parent_webext_background_page_load_ms",
     )
 
-    addons_expanded = (
-        addons_and_users
-        .select("submission_date_s3", "client_id",
-                "col.*",
-                "os", "country", "subsession_length",
-                "places_pages_count", "places_bookmarks_count",
-                "scalar_parent_browser_engagement_total_uri_count",
-                "devtools_toolbox_opened_count", "active_ticks",
-                "histogram_parent_tracking_protection_enabled",
-                "histogram_parent_webext_background_page_load_ms")
-        .cache()
-    )
+    addons_expanded = addons_and_users.select(
+        "submission_date_s3",
+        "client_id",
+        "col.*",
+        "os",
+        "country",
+        "subsession_length",
+        "places_pages_count",
+        "places_bookmarks_count",
+        "scalar_parent_browser_engagement_total_uri_count",
+        "devtools_toolbox_opened_count",
+        "active_ticks",
+        "histogram_parent_tracking_protection_enabled",
+        "histogram_parent_webext_background_page_load_ms",
+    ).cache()
 
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
@@ -95,39 +111,43 @@ def agg_addons_report(spark, main_summary_data, search_daily_data, events_data, 
 
 
 def main():
-    #path = '' # need to pass in from command line i think
+    # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    ms = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='main_summary', input_version='v4')
-    main_summary = (
-        ms
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
+    ms = load_main_summary(
+        spark,
+        input_bucket="telemetry-parquet",
+        input_prefix="main_summary",
+        input_version="v4",
     )
+    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    sd = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='search_clients_daily', input_version='v5')
-    search_daily = (
-        sd
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
+    sd = load_main_summary(
+        spark,
+        input_bucket="telemetry-parquet",
+        input_prefix="search_clients_daily",
+        input_version="v4",
     )
+    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    events = load_data_s3(spark, input_bucket='telemetry-parquet', input_prefix='events', input_version='v1')
-    events = (
-        events
-        .filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
+    events = load_main_summary(
+        spark,
+        input_bucket="telemtry-parquet",
+        input_prefix="events",
+        input_version="v1",
     )
+    events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     raw_pings = load_raw_pings(sc)
 
-    #bq_d = load_bq_data(datetime.date.today(), path, spark)
+    # bq_d = load_bq_data(datetime.date.today(), path, spark)
 
     agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
     print(agg_data.collect()[0:10])
-    #return agg_data
+    # return agg_data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-
