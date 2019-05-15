@@ -1,7 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
-from ..utils.search_daily_data import *
-from ..utils.telemetry_data import *
+from addons_daily.utils.search_daily_data import *
+from addons_daily.utils.telemetry_data import *
 from .helpers.data_generators import make_search_daily_data, make_telemetry_data
 from addons_daily.utils.helpers import get_spark
 import pytest
@@ -31,7 +31,6 @@ def addons_expanded(spark):
  #   """
   #  """
    # output = get_search_metrics(search_daily, addons_expanded)
-
 
     # TODO figure out expected output
 

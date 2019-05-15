@@ -3,67 +3,72 @@ cwd: /Users/bwright/Desktop/mozilla/addons_daily
 cmd: /Users/bwright/Desktop/mozilla/addons_daily/.tox/.tox/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
 running sdist
 running egg_info
-writing extensions_project.egg-info/PKG-INFO
-writing dependency_links to extensions_project.egg-info/dependency_links.txt
-writing requirements to extensions_project.egg-info/requires.txt
-writing top-level names to extensions_project.egg-info/top_level.txt
-reading manifest file 'extensions_project.egg-info/SOURCES.txt'
-writing manifest file 'extensions_project.egg-info/SOURCES.txt'
+writing addons_daily.egg-info/PKG-INFO
+writing dependency_links to addons_daily.egg-info/dependency_links.txt
+writing requirements to addons_daily.egg-info/requires.txt
+writing top-level names to addons_daily.egg-info/top_level.txt
+reading manifest file 'addons_daily.egg-info/SOURCES.txt'
+writing manifest file 'addons_daily.egg-info/SOURCES.txt'
 running check
 warning: check: missing required meta-data: url
 
 warning: check: missing meta-data: either (author and author_email) or (maintainer and maintainer_email) must be supplied
 
-creating extensions_project-1.0
-creating extensions_project-1.0/extensions_project.egg-info
-creating extensions_project-1.0/tests
-creating extensions_project-1.0/tests/helpers
-creating extensions_project-1.0/utils
-copying files to extensions_project-1.0...
-copying README.md -> extensions_project-1.0
-copying setup.py -> extensions_project-1.0
-copying extensions_project.egg-info/PKG-INFO -> extensions_project-1.0/extensions_project.egg-info
-copying extensions_project.egg-info/SOURCES.txt -> extensions_project-1.0/extensions_project.egg-info
-copying extensions_project.egg-info/dependency_links.txt -> extensions_project-1.0/extensions_project.egg-info
-copying extensions_project.egg-info/requires.txt -> extensions_project-1.0/extensions_project.egg-info
-copying extensions_project.egg-info/top_level.txt -> extensions_project-1.0/extensions_project.egg-info
-copying tests/__init__.py -> extensions_project-1.0/tests
-copying tests/test_raw_pings.py -> extensions_project-1.0/tests
-copying tests/test_search_daily.py -> extensions_project-1.0/tests
-copying tests/test_telemetry.py -> extensions_project-1.0/tests
-copying tests/helpers/__init__.py -> extensions_project-1.0/tests/helpers
-copying tests/helpers/data_generators.py -> extensions_project-1.0/tests/helpers
-copying utils/__init__.py -> extensions_project-1.0/utils
-copying utils/amo_data.py -> extensions_project-1.0/utils
-copying utils/bq_data.py -> extensions_project-1.0/utils
-copying utils/events_data.py -> extensions_project-1.0/utils
-copying utils/helpers.py -> extensions_project-1.0/utils
-copying utils/raw_pings.py -> extensions_project-1.0/utils
-copying utils/search_daily_data.py -> extensions_project-1.0/utils
-copying utils/telemetry_data.py -> extensions_project-1.0/utils
-Writing extensions_project-1.0/setup.cfg
-creating '.tox/dist/extensions_project-1.0.zip' and adding 'extensions_project-1.0' to it
-adding 'extensions_project-1.0/PKG-INFO'
-adding 'extensions_project-1.0/README.md'
-adding 'extensions_project-1.0/setup.py'
-adding 'extensions_project-1.0/setup.cfg'
-adding 'extensions_project-1.0/extensions_project.egg-info/PKG-INFO'
-adding 'extensions_project-1.0/extensions_project.egg-info/SOURCES.txt'
-adding 'extensions_project-1.0/extensions_project.egg-info/requires.txt'
-adding 'extensions_project-1.0/extensions_project.egg-info/top_level.txt'
-adding 'extensions_project-1.0/extensions_project.egg-info/dependency_links.txt'
-adding 'extensions_project-1.0/tests/__init__.py'
-adding 'extensions_project-1.0/tests/test_search_daily.py'
-adding 'extensions_project-1.0/tests/test_raw_pings.py'
-adding 'extensions_project-1.0/tests/test_telemetry.py'
-adding 'extensions_project-1.0/tests/helpers/__init__.py'
-adding 'extensions_project-1.0/tests/helpers/data_generators.py'
-adding 'extensions_project-1.0/utils/raw_pings.py'
-adding 'extensions_project-1.0/utils/bq_data.py'
-adding 'extensions_project-1.0/utils/__init__.py'
-adding 'extensions_project-1.0/utils/amo_data.py'
-adding 'extensions_project-1.0/utils/events_data.py'
-adding 'extensions_project-1.0/utils/search_daily_data.py'
-adding 'extensions_project-1.0/utils/telemetry_data.py'
-adding 'extensions_project-1.0/utils/helpers.py'
-removing 'extensions_project-1.0' (and everything under it)
+creating addons_daily-1.0
+creating addons_daily-1.0/addons_daily
+creating addons_daily-1.0/addons_daily.egg-info
+creating addons_daily-1.0/addons_daily/utils
+creating addons_daily-1.0/tests
+creating addons_daily-1.0/tests/helpers
+copying files to addons_daily-1.0...
+copying README.md -> addons_daily-1.0
+copying setup.py -> addons_daily-1.0
+copying addons_daily/__init__.py -> addons_daily-1.0/addons_daily
+copying addons_daily/addons_report.py -> addons_daily-1.0/addons_daily
+copying addons_daily.egg-info/PKG-INFO -> addons_daily-1.0/addons_daily.egg-info
+copying addons_daily.egg-info/SOURCES.txt -> addons_daily-1.0/addons_daily.egg-info
+copying addons_daily.egg-info/dependency_links.txt -> addons_daily-1.0/addons_daily.egg-info
+copying addons_daily.egg-info/requires.txt -> addons_daily-1.0/addons_daily.egg-info
+copying addons_daily.egg-info/top_level.txt -> addons_daily-1.0/addons_daily.egg-info
+copying addons_daily/utils/__init__.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/amo_data.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/bq_data.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/events_data.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/helpers.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/raw_pings.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/search_daily_data.py -> addons_daily-1.0/addons_daily/utils
+copying addons_daily/utils/telemetry_data.py -> addons_daily-1.0/addons_daily/utils
+copying tests/__init__.py -> addons_daily-1.0/tests
+copying tests/test_raw_pings.py -> addons_daily-1.0/tests
+copying tests/test_search_daily.py -> addons_daily-1.0/tests
+copying tests/test_telemetry.py -> addons_daily-1.0/tests
+copying tests/helpers/__init__.py -> addons_daily-1.0/tests/helpers
+copying tests/helpers/data_generators.py -> addons_daily-1.0/tests/helpers
+Writing addons_daily-1.0/setup.cfg
+creating '.tox/dist/addons_daily-1.0.zip' and adding 'addons_daily-1.0' to it
+adding 'addons_daily-1.0/PKG-INFO'
+adding 'addons_daily-1.0/README.md'
+adding 'addons_daily-1.0/setup.py'
+adding 'addons_daily-1.0/setup.cfg'
+adding 'addons_daily-1.0/addons_daily/__init__.py'
+adding 'addons_daily-1.0/addons_daily/addons_report.py'
+adding 'addons_daily-1.0/addons_daily/utils/raw_pings.py'
+adding 'addons_daily-1.0/addons_daily/utils/bq_data.py'
+adding 'addons_daily-1.0/addons_daily/utils/__init__.py'
+adding 'addons_daily-1.0/addons_daily/utils/amo_data.py'
+adding 'addons_daily-1.0/addons_daily/utils/events_data.py'
+adding 'addons_daily-1.0/addons_daily/utils/search_daily_data.py'
+adding 'addons_daily-1.0/addons_daily/utils/telemetry_data.py'
+adding 'addons_daily-1.0/addons_daily/utils/helpers.py'
+adding 'addons_daily-1.0/tests/__init__.py'
+adding 'addons_daily-1.0/tests/test_search_daily.py'
+adding 'addons_daily-1.0/tests/test_raw_pings.py'
+adding 'addons_daily-1.0/tests/test_telemetry.py'
+adding 'addons_daily-1.0/tests/helpers/__init__.py'
+adding 'addons_daily-1.0/tests/helpers/data_generators.py'
+adding 'addons_daily-1.0/addons_daily.egg-info/PKG-INFO'
+adding 'addons_daily-1.0/addons_daily.egg-info/SOURCES.txt'
+adding 'addons_daily-1.0/addons_daily.egg-info/requires.txt'
+adding 'addons_daily-1.0/addons_daily.egg-info/top_level.txt'
+adding 'addons_daily-1.0/addons_daily.egg-info/dependency_links.txt'
+removing 'addons_daily-1.0' (and everything under it)

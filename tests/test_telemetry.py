@@ -1,8 +1,9 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
-from utils.telemetry_data import *
 from .helpers.data_generators import make_telemetry_data, main_summary_for_user_engagement, make_main_summary_data_for_tto
-from utils.helpers import is_same
+from addons_daily.utils.telemetry_data import *
+from .helpers.data_generators import make_telemetry_data
+from addons_daily.utils.helpers import is_same
 import pytest
 
 
@@ -17,8 +18,7 @@ def addons_expanded():
     addons_expanded_sample = [row.asDict() for row in addons_expanded_sample]
     sc = SparkContext.getOrCreate()
     spark = SQLContext.getOrCreate(sc)
-    addons_df = spark.createDataFrame(addons_expanded_sample, addons_schema)
-    return addons_df
+    return spark.createDataFrame(addons_expanded_sample, addons_schema)
 
 
 @pytest.fixture()
@@ -70,16 +70,10 @@ def test_browser_metrics(addons_expanded, ss):
 
     expected_output = ss.createDataFrame(rows, schema)
 
-    is_same(output, expected_output)
+    is_same(output, expected_output, True)
 
 
 def _test_user_demo_metrics(addons_expanded, ss):
-    """
-    Given a dataframe of some actual sampled data, ensure that
-    the get_pct_tracking_enabled outputs the correct dataframe
-    :param addons_expanded: pytest fixture defined above
-    :return: assertion whether the expected output indeed matches the true output
-    """
     output = get_user_demo_metrics(addons_expanded)
 
     schema = StructType([StructField('addon_id', StringType(), False),
@@ -98,12 +92,7 @@ def _test_user_demo_metrics(addons_expanded, ss):
 
 
 def test_trend_metrics(addons_expanded, ss):
-    """
-    Given a dataframe of some actual sampled data, ensure that
-    the get_pct_tracking_enabled outputs the correct dataframe
-    :param addons_expanded: pytest fixture defined above
-    :return: assertion whether the expected output indeed matches the true output
-    """
+
     output = get_trend_metrics(addons_expanded)
 
     schema = StructType([StructField('addon_id', StringType(), True),
@@ -264,4 +253,3 @@ def test_engagement_metrics(addons_expanded, main_summary_uem, ss):
     expected_output = ss.createDataFrame(rows, schema)
 
     is_same(output, expected_output, True)
-
