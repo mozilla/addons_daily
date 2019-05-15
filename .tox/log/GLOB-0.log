@@ -1,6 +1,6 @@
 action: GLOB, msg: packaging
-cwd: /Users/bwright/Desktop/mozilla/Addons_Scratch
-cmd: /Users/bwright/Desktop/mozilla/Addons_Scratch/.tox/.tox/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
+cwd: /Users/bwright/Desktop/mozilla/addons_daily
+cmd: /Users/bwright/Desktop/mozilla/addons_daily/.tox/.tox/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
 running sdist
 running egg_info
 writing extensions_project.egg-info/PKG-INFO
@@ -17,6 +17,7 @@ warning: check: missing meta-data: either (author and author_email) or (maintain
 creating extensions_project-1.0
 creating extensions_project-1.0/extensions_project.egg-info
 creating extensions_project-1.0/tests
+creating extensions_project-1.0/tests/helpers
 creating extensions_project-1.0/utils
 copying files to extensions_project-1.0...
 copying README.md -> extensions_project-1.0
@@ -26,10 +27,16 @@ copying extensions_project.egg-info/SOURCES.txt -> extensions_project-1.0/extens
 copying extensions_project.egg-info/dependency_links.txt -> extensions_project-1.0/extensions_project.egg-info
 copying extensions_project.egg-info/requires.txt -> extensions_project-1.0/extensions_project.egg-info
 copying extensions_project.egg-info/top_level.txt -> extensions_project-1.0/extensions_project.egg-info
+copying tests/__init__.py -> extensions_project-1.0/tests
+copying tests/test_raw_pings.py -> extensions_project-1.0/tests
+copying tests/test_search_daily.py -> extensions_project-1.0/tests
 copying tests/test_telemetry.py -> extensions_project-1.0/tests
+copying tests/helpers/__init__.py -> extensions_project-1.0/tests/helpers
+copying tests/helpers/data_generators.py -> extensions_project-1.0/tests/helpers
 copying utils/__init__.py -> extensions_project-1.0/utils
 copying utils/amo_data.py -> extensions_project-1.0/utils
 copying utils/bq_data.py -> extensions_project-1.0/utils
+copying utils/events_data.py -> extensions_project-1.0/utils
 copying utils/helpers.py -> extensions_project-1.0/utils
 copying utils/raw_pings.py -> extensions_project-1.0/utils
 copying utils/search_daily_data.py -> extensions_project-1.0/utils
@@ -45,11 +52,17 @@ adding 'extensions_project-1.0/extensions_project.egg-info/SOURCES.txt'
 adding 'extensions_project-1.0/extensions_project.egg-info/requires.txt'
 adding 'extensions_project-1.0/extensions_project.egg-info/top_level.txt'
 adding 'extensions_project-1.0/extensions_project.egg-info/dependency_links.txt'
+adding 'extensions_project-1.0/tests/__init__.py'
+adding 'extensions_project-1.0/tests/test_search_daily.py'
+adding 'extensions_project-1.0/tests/test_raw_pings.py'
 adding 'extensions_project-1.0/tests/test_telemetry.py'
+adding 'extensions_project-1.0/tests/helpers/__init__.py'
+adding 'extensions_project-1.0/tests/helpers/data_generators.py'
 adding 'extensions_project-1.0/utils/raw_pings.py'
 adding 'extensions_project-1.0/utils/bq_data.py'
 adding 'extensions_project-1.0/utils/__init__.py'
 adding 'extensions_project-1.0/utils/amo_data.py'
+adding 'extensions_project-1.0/utils/events_data.py'
 adding 'extensions_project-1.0/utils/search_daily_data.py'
 adding 'extensions_project-1.0/utils/telemetry_data.py'
 adding 'extensions_project-1.0/utils/helpers.py'

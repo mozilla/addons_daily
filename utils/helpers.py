@@ -4,7 +4,6 @@ from pyspark.sql import SparkSession
 from pyspark import SparkContext
 from moztelemetry import Dataset
 import datetime
-#from google.cloud import bigquery
 import os
 
 
@@ -75,7 +74,7 @@ def load_keyed_hist(rp):
     return rp.map(lambda x: x['payload']['keyedHistograms']).cache()
 
 
-def load_bq_data(credential_path,project='ga-mozilla-org-prod-001'):
+def load_bq_data(credential_path, project='ga-mozilla-org-prod-001'):
     """
     Function to load data from big-query
     :param spark: a SparkSession
@@ -94,7 +93,6 @@ def load_bq_data(credential_path,project='ga-mozilla-org-prod-001'):
         location='US'
     )
     return [dict(row.items()) for row in query_job]
-
 
 
 def histogram_mean(values):
@@ -152,9 +150,9 @@ def dataframe_joiner(dfs):
 
 def take_top_ten(l):
     if len(l) < 10:
-        return sorted(l, key=lambda i: -i.values()[0])
+        return sorted(l, key=lambda i: -list(i.values())[0])
     else:
-        return sorted(l, key=lambda i: -i.values()[0])[0:10]
+        return sorted(l, key=lambda i: -list(i.values())[0])[0:10]
 
 
 def get_spark(tz='UTC'):
@@ -186,3 +184,20 @@ def str_to_list(str):
     if str[-1]==']':
         str = str[:-1]
     return [x.strip() for x in str.split(',')]
+
+
+def is_same(df, expected_df, verbose=False):
+
+    cols = sorted(df.columns)
+    intersection = df.select(*cols).intersect(expected_df)
+    df_len, expected_len, actual_len = df.count(), expected_df.count(), intersection.count()
+
+    if verbose:
+        print("\nInput Dataframe\n")
+        print(df.select(*cols).collect())
+        print("\nExpected Dataframe\n")
+        print(expected_df.collect())
+
+    assert df_len == expected_len
+    assert actual_len == expected_len, "Missing {} Rows".format(expected_len - actual_len)
+

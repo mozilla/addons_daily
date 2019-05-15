@@ -1,10 +1,11 @@
 import pyspark.sql.functions as F
 
+
 def get_search_metrics(search_daily_df, addons_expanded):
     """
     """
     user_addon = addons_expanded.select('client_id', 'addon_id')
-    user_addon_search = user_addon.join(search_daily, 'client_id')
+    user_addon_search = user_addon.join(search_daily_df, 'client_id','left')
 
     df = (
         user_addon_search.groupBy('addon_id')
