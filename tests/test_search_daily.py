@@ -27,10 +27,17 @@ def addons_expanded(spark):
     return spark.createDataFrame(addons_expanded_sample, addons_expanded_schema)
 
 
+<<<<<<< HEAD
 #def test_search_metrics(search_daily, addons_expanded):
  #   """
   #  """
    # output = get_search_metrics(search_daily, addons_expanded)
+=======
+def test_pct_tracking_enabled(search_daily, addons_expanded):
+    """
+    """
+    output = get_search_metrics(search_daily, addons_expanded).collect()
+>>>>>>> 188f7431f348408a78f2926f7c3b8cfa52a0291e
 
     # TODO figure out expected output
 
