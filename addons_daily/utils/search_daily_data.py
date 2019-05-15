@@ -3,7 +3,7 @@ from pyspark.sql.types import *
 from helpers import make_map, bucket_engine
 
 
-def get_search_metrics(search_daily, addons_expanded):
+def get_search_metrics(search_daily_df, addons_expanded):
     """
     :param search_daily_df: search clients daily dataframe
     :param addons_expanded: addons_expanded dataframe
@@ -23,32 +23,32 @@ def get_search_metrics(search_daily, addons_expanded):
     df = (
         user_addon_search.groupBy('addon_id', 'engine')
         .agg(
-            F.avg('sap').alias('avg_sap_searches'),
-            F.avg('tagged_sap').alias('avg_tagged_sap_searches'),
-            F.avg('organic').alias('avg_organic_searches'),
+            F.sum('sap').alias('sap_searches'),
+            F.sum('tagged_sap').alias('tagged_sap_searches'),
+            F.sum('organic').alias('organic_searches'),
             F.sum('search_with_ads').alias('search_with_ads'),
             F.sum('ad_click').alias('ad_click')
         )
         .groupBy('addon_id')
         .agg(
             F.collect_list('engine').alias('engine'),
-            F.collect_list('avg_sap_searches').alias('avg_sap_searches'),
-            F.collect_list('avg_tagged_sap_searches').alias('avg_tagged_sap_searches'),
-            F.collect_list('avg_organic_searches').alias('avg_organic_searches'),
+            F.collect_list('sap_searches').alias('sap_searches'),
+            F.collect_list('tagged_sap_searches').alias('tagged_sap_searches'),
+            F.collect_list('organic_searches').alias('organic_searches'),
             F.collect_list('search_with_ads').alias('search_with_ads'),
             F.collect_list('ad_click').alias('ad_click')
         )
         .withColumn(
-            'avg_sap_searches', 
-            make_map(F.col('engine'), F.col('avg_sap_searches').cast(ArrayType(DoubleType())))
+            'sap_searches', 
+            make_map(F.col('engine'), F.col('sap_searches').cast(ArrayType(DoubleType())))
         )
         .withColumn(
-            'avg_tagged_sap_searches', 
-            make_map(F.col('engine'), F.col('avg_tagged_sap_searches').cast(ArrayType(DoubleType())))
+            'tagged_sap_searches', 
+            make_map(F.col('engine'), F.col('tagged_sap_searches').cast(ArrayType(DoubleType())))
         )
         .withColumn(
-            'avg_organic_searches', 
-            make_map(F.col('engine'), F.col('avg_organic_searches').cast(ArrayType(DoubleType())))
+            'organic_searches', 
+            make_map(F.col('engine'), F.col('organic_searches').cast(ArrayType(DoubleType())))
         )
         .withColumn(
             'search_with_ads', 
