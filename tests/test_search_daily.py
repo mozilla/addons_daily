@@ -27,17 +27,17 @@ def addons_expanded(spark):
     return spark.createDataFrame(addons_expanded_sample, addons_expanded_schema)
 
 
-#def test_search_metrics(search_daily, addons_expanded):
- #   """
-  #  """
-   # output = get_search_metrics(search_daily, addons_expanded)
+# def test_search_metrics(search_daily, addons_expanded):
+#   """
+#  """
+# output = get_search_metrics(search_daily, addons_expanded)
 
-    # TODO figure out expected output
+# TODO figure out expected output
 
-    # expected_output = [Row(addon_id=u'screenshots@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-    #                    Row(addon_id=u'fxmonitor@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-    #                    Row(addon_id=u'formautofill@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-    #                    Row(addon_id=u'webcompat-reporter@mozilla.org', pct_w_tracking_prot_enabled=0.0),
-    #                    Row(addon_id=u'webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
+# expected_output = [Row(addon_id=u'screenshots@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+#                    Row(addon_id=u'fxmonitor@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+#                    Row(addon_id=u'formautofill@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+#                    Row(addon_id=u'webcompat-reporter@mozilla.org', pct_w_tracking_prot_enabled=0.0),
+#                    Row(addon_id=u'webcompat@mozilla.org', pct_w_tracking_prot_enabled=0.0)]
 
-    # assert output == expected_output
+# assert output == expected_output

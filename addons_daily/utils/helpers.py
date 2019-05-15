@@ -183,14 +183,18 @@ def str_to_list(word):
         word = word[1:]
     if word[-1] == "]":
         word = word[:-1]
-    return [x.strip() for x in word.split(',')]
+    return [x.strip() for x in word.split(",")]
 
 
 def is_same(df, expected_df, verbose=False):
 
     cols = sorted(df.columns)
     intersection = df.select(*cols).intersect(expected_df)
-    df_len, expected_len, actual_len = df.count(), expected_df.count(), intersection.count()
+    df_len, expected_len, actual_len = (
+        df.count(),
+        expected_df.count(),
+        intersection.count(),
+    )
 
     if verbose:
         print("\nInput Dataframe\n")
@@ -199,5 +203,6 @@ def is_same(df, expected_df, verbose=False):
         print(expected_df.collect())
 
     assert df_len == expected_len
-    assert actual_len == expected_len, "Missing {} Rows".format(expected_len - actual_len)
-
+    assert actual_len == expected_len, "Missing {} Rows".format(
+        expected_len - actual_len
+    )
