@@ -89,11 +89,11 @@ def get_engagement_metrics(addons_expanded, main_summary):
         addons_expanded.select(
             "addon_id",
             "client_id",
-            "Submission_date",
+            "submission_date_s3",
             "subsession_length",
             "active_ticks",
         )
-        .groupBy("addon_id", "client_id", "Submission_date")
+        .groupBy("addon_id", "client_id", "submission_date_s3")
         .agg(
             F.sum("active_ticks").alias("total_ticks"),
             F.sum("subsession_length").alias("daily_total"),
@@ -236,7 +236,7 @@ def get_trend_metrics(addons_expanded):
     """
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 30 DAYS)"
+        "submission_date_s3 >= (NOW() - INTERVAL 30 DAYS)"
     )
     mau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("mau")
@@ -244,7 +244,7 @@ def get_trend_metrics(addons_expanded):
 
     # limit to last 7 days to calculate wau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 7 DAYS)"
+        "submission_date_s3 >= (NOW() - INTERVAL 7 DAYS)"
     )
     wau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("wau")
@@ -252,7 +252,7 @@ def get_trend_metrics(addons_expanded):
 
     # limit to last 1 day to calculate dau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 1 DAYS)"
+        "submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)"
     )
     dau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("dau")
