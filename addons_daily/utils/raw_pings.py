@@ -43,7 +43,6 @@ def get_tab_switch_time(spark, df):
     :param spark: a spark instance
     :return:
     """
-
     tab_switch_hist = (
         df.filter(lambda x: "environment" in x)  #
         .filter(lambda x: "addons" in x["environment"])  #
