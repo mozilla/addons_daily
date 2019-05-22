@@ -21,7 +21,8 @@ DEFAULT_TZ = "UTC"
 
 
 def agg_addons_report(
-    spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
+    # spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
+    spark, main_summary_data, search_daily_data, raw_pings_data, **kwargs
 ):
     """
     This function will create the addons dataset
@@ -71,8 +72,8 @@ def agg_addons_report(
     search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
     # install flow events metrics
-    install_flow_metrics = install_flow_events(events_data)
-
+   
+ # install_flow_metrics = install_flow_events(events_data)
     # raw pings metrics
     page_load_times = get_page_load_times(spark, raw_pings_data)
     tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
@@ -93,7 +94,7 @@ def agg_addons_report(
         .join(top_ten_others, on='addon_id', how='left')
         .join(trend_metrics, on='addon_id', how='left')
         .join(search_metrics, on='addon_id', how='left')
-        .join(install_flow_metrics, on='addon_id', how='left')
+        # .join(install_flow_metrics, on='addon_id', how='left')
         .join(page_load_times, on='addon_id', how='left')
         .join(tab_switch_time, on='addon_id', how='left')
         .join(storage_get, on='addon_id', how='left')
@@ -132,19 +133,20 @@ def main():
     )
     search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    events = load_data_s3(
-        spark,
-        input_bucket="telemtry-parquet",
-        input_prefix="events",
-        input_version="v1",
-    )
-    events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
+    # events = load_data_s3(
+    #     spark,
+    #     input_bucket="telemtry-parquet",
+    #     input_prefix="events",
+    #     input_version="v1",
+    # )
+    # events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     raw_pings = load_raw_pings(sc)
 
     # bq_d = load_bq_data(datetime.date.today(), path, spark)
 
-    agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
+    # agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
+    agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
     print(agg_data.collect()[0:10])
     # return agg_data
 
