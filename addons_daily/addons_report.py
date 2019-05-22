@@ -1,7 +1,7 @@
 import click
 import os
 from .utils.helpers import (
-    load_main_summary,
+    load_data_s3,
     load_raw_pings,
     get_spark,
     get_sc,
@@ -116,7 +116,7 @@ def main():
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    ms = load_main_summary(
+    ms = load_data_s3(
         spark,
         input_bucket="telemetry-parquet",
         input_prefix="main_summary",
@@ -124,7 +124,7 @@ def main():
     )
     main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    sd = load_main_summary(
+    sd = load_data_s3(
         spark,
         input_bucket="telemetry-parquet",
         input_prefix="search_clients_daily",
@@ -132,7 +132,7 @@ def main():
     )
     search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    events = load_main_summary(
+    events = load_data_s3(
         spark,
         input_bucket="telemtry-parquet",
         input_prefix="events",
