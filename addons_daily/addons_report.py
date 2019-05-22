@@ -62,14 +62,14 @@ def agg_addons_report(
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
     # telemetry metrics
-    user_demo_metrics = get_user_demo_metrics(addons_expanded)
-    engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
-    browser_metrics = get_browser_metrics(addons_expanded)
-    top_ten_others = get_top_ten_others(main_summary_data)
-    trend_metrics = get_trend_metrics(addons_expanded)
+    # user_demo_metrics = get_user_demo_metrics(addons_expanded)
+    # engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
+    # browser_metrics = get_browser_metrics(addons_expanded)
+    # top_ten_others = get_top_ten_others(main_summary_data)
+    # trend_metrics = get_trend_metrics(addons_expanded)
 
-    # search metrics
-    search_metrics = get_search_metrics(search_daily_data, addons_expanded)
+    # # search metrics
+    # search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
     # install flow events metrics
    
