@@ -13,11 +13,9 @@ import pytest
 
 @pytest.fixture()
 def spark():
-    spark = (SparkSession
-             .builder
-             .appName("addons_daily")
-             .getOrCreate())
-    return spark
+    spark_session = SparkSession.builder.appName("addons_daily").getOrCreate()
+    spark_session.conf.set("spark.executor.memory", "0.5g")
+    return spark_session
 
 
 @pytest.fixture()
