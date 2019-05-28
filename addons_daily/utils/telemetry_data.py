@@ -234,9 +234,10 @@ def get_trend_metrics(addons_expanded):
         - weekly active users
         - monthly active users
     """
+    base_date = "to_date('2019-05-15')"
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 30 DAYS)"
+        "submission_date >= ({} - INTERVAL 30 DAYS)".format(base_date)
     )
     mau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("mau")
@@ -244,7 +245,7 @@ def get_trend_metrics(addons_expanded):
 
     # limit to last 7 days to calculate wau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 7 DAYS)"
+        "submission_date >= ({} - INTERVAL 7 DAYS)".format(base_date)
     )
     wau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("wau")
@@ -252,7 +253,7 @@ def get_trend_metrics(addons_expanded):
 
     # limit to last 1 day to calculate dau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 1 DAYS)"
+        "submission_date >= ({} - INTERVAL 1 DAYS)".format(base_date)
     )
     dau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("dau")
