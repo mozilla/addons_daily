@@ -12,40 +12,38 @@ import pytest
 
 
 @pytest.fixture()
-def ss():
-    return SparkSession.builder.getOrCreate()
+def spark():
+    spark = (SparkSession
+             .builder
+             .appName("addons_daily")
+             .getOrCreate())
+    return spark
 
 
 @pytest.fixture()
-def addons_expanded():
+def addons_expanded(spark):
     addons_expanded_sample, addons_schema = make_telemetry_data()
     addons_expanded_sample = [row.asDict() for row in addons_expanded_sample]
-    sc = SparkContext.getOrCreate()
-    spark = SQLContext.getOrCreate(sc)
     return spark.createDataFrame(addons_expanded_sample, addons_schema)
 
 
 @pytest.fixture()
-def main_summary_tto():
+def main_summary_tto(spark):
     main_rows, main_schema = make_main_summary_data_for_tto()
     main_rows = [row.asDict() for row in main_rows]
-    sc = SparkContext.getOrCreate()
-    spark = SQLContext.getOrCreate(sc)
     tto_df = spark.createDataFrame(main_rows, main_schema)
     return tto_df
 
 
 @pytest.fixture()
-def main_summary_uem():
+def main_summary_uem(spark):
     rows, schema = main_summary_for_user_engagement()
     main_rows = [row.asDict() for row in rows]
-    sc = SparkContext.getOrCreate()
-    spark = SQLContext.getOrCreate(sc)
     uem_df = spark.createDataFrame(main_rows, schema)
     return uem_df
 
 
-def test_browser_metrics(addons_expanded, ss):
+def test_browser_metrics(addons_expanded, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
@@ -108,12 +106,12 @@ def test_browser_metrics(addons_expanded, ss):
         ),
     ]
 
-    expected_output = ss.createDataFrame(rows, schema)
+    expected_output = spark.createDataFrame(rows, schema)
 
     is_same(output, expected_output, True)
 
 
-def _test_user_demo_metrics(addons_expanded, ss):
+def _test_user_demo_metrics(addons_expanded, spark):
     output = get_user_demo_metrics(addons_expanded)
 
     schema = StructType(
@@ -152,11 +150,11 @@ def _test_user_demo_metrics(addons_expanded, ss):
         ),
     ]
 
-    expected_output = ss.createDataFrame(rows, schema)
+    expected_output = spark.createDataFrame(rows, schema)
     is_same(output, expected_output, True)
 
 
-def test_trend_metrics(addons_expanded, ss):
+def test_trend_metrics(addons_expanded, spark):
 
     output = get_trend_metrics(addons_expanded)
 
@@ -175,12 +173,12 @@ def test_trend_metrics(addons_expanded, ss):
         Row(addon_id="webcompat-reporter@mozilla.org", mau=1, wau=None, dau=None),
     ]
 
-    expected_output = ss.createDataFrame(rows, schema)
+    expected_output = spark.createDataFrame(rows, schema)
 
     is_same(output, expected_output, True)
 
 
-def test_top_ten_others(main_summary_tto, ss):
+def test_top_ten_others(main_summary_tto, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
@@ -418,12 +416,12 @@ def test_top_ten_others(main_summary_tto, ss):
         ),
     ]
 
-    expected_output = ss.createDataFrame(rows, schema)
+    expected_output = spark.createDataFrame(rows, schema)
 
     is_same(output, expected_output, True)
 
 
-def test_engagement_metrics(addons_expanded, main_summary_uem, ss):
+def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
@@ -516,6 +514,6 @@ def test_engagement_metrics(addons_expanded, main_summary_uem, ss):
         ),
     ]
 
-    expected_output = ss.createDataFrame(rows, schema)
+    expected_output = spark.createDataFrame(rows, schema)
 
     is_same(output, expected_output, True)
