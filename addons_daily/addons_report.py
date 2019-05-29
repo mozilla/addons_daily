@@ -112,7 +112,7 @@ def agg_addons_report(
 @click.command()
 @click.option("--date", required=True)
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
-def main(date,):
+def main(date, sample):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
