@@ -111,7 +111,10 @@ def agg_addons_report(
     return agg_data
 
 
-def main():
+@click.command()
+@click.option("--date", required=True)
+@click.option("--sample", default=1, help="percent sample as int [1, 100]")
+def main(date,):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
@@ -123,7 +126,6 @@ def main():
         input_prefix="main_summary",
         input_version="v4",
     )
-    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     sd = load_data_s3(
         spark,
@@ -131,7 +133,6 @@ def main():
         input_prefix="search_clients_daily",
         input_version="v4",
     )
-    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     # events = load_data_s3(
     #     spark,

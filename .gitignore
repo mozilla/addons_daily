@@ -4,9 +4,10 @@ derby.log
 .idea/
 
 .tox/
-.coverage
+.coverage*
 .cache/
 metastore_db/
+*__pycache__/
 
 *.egg-info/
 
