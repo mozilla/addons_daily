@@ -189,7 +189,7 @@ def str_to_list(word):
 def is_same(df, expected_df, verbose=False):
 
     cols = sorted(df.columns)
-    intersection = df.select(*cols).intersect(expected_df)
+    intersection = df.select(*cols).intersect(expected_df.select(*cols))
     df_len, expected_len, actual_len = (
         df.count(),
         expected_df.count(),

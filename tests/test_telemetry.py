@@ -1,11 +1,18 @@
-from pyspark.sql.types import *
-from pyspark.sql import Row
-from .data_generators import main_summary_for_user_engagement, load_expected_data
 from addons_daily.utils.telemetry_data import *
 from addons_daily.utils.helpers import is_same
+from pyspark.sql.types import *
+from pyspark.sql import Row
 import pytest
 import json
 import os
+
+
+def load_expected_data(filename, spark):
+    root = os.path.dirname(__file__)
+    path = os.path.join(root, "resources", filename)
+    with open(path) as f:
+        d = json.load(f)
+    return d
 
 
 @pytest.fixture()
@@ -16,7 +23,7 @@ def spark():
 
 @pytest.fixture()
 def addons_expanded(spark):
-    d = load_expected_data("telemetry", spark)
+    d = load_expected_data("telemetry.json", spark)
     addons_schema = StructType(
         [
             StructField("submission_date", StringType(), True),
@@ -69,15 +76,20 @@ def addons_expanded(spark):
 
 @pytest.fixture()
 def main_summary_uem(spark):
-    rows, schema = main_summary_for_user_engagement()
-    main_rows = [row.asDict() for row in rows]
-    uem_df = spark.createDataFrame(main_rows, schema)
+    schema = StructType(
+        [
+            StructField("disabled_addons_ids", ArrayType(StringType(), True), True),
+            StructField("client_id", StringType(), True),
+        ]
+    )
+    d = load_expected_data("uem.json", spark)
+    uem_df = spark.createDataFrame(d, schema)
     return uem_df
 
 
 @pytest.fixture()
 def main_summary_tto(spark):
-    d = load_expected_data("mstto", spark)
+    d = load_expected_data("mstto.json", spark)
     schema = StructType(
         [
             StructField("client_id", StringType(), True),
@@ -133,14 +145,18 @@ def test_browser_metrics(addons_expanded, spark):
         ]
     )
 
-    d = load_expected_data("browser", spark)
+    d = load_expected_data("browser.json", spark)
     expected_output = spark.createDataFrame(d, schema)
 
     is_same(output, expected_output, True)
 
 
-def _test_user_demo_metrics(addons_expanded, spark):
-    output = get_user_demo_metrics(addons_expanded)
+def test_user_demo_metrics(addons_expanded, spark):
+    # aggregate nested maps before calling intersect
+    def agg_map(df):
+        return df.select("addon_id", "os_dist.Windows_NT", "country_dist.ES")
+
+    output = agg_map(get_user_demo_metrics(addons_expanded))
 
     schema = StructType(
         [
@@ -150,35 +166,8 @@ def _test_user_demo_metrics(addons_expanded, spark):
         ]
     )
 
-    rows = [
-        Row(
-            addon_id="screenshots@mozilla.org",
-            os_dist={"Windows_NT": 1.0},
-            country_dist={"ES": 1.0},
-        ),
-        Row(
-            addon_id="fxmonitor@mozilla.org",
-            os_dist={"Windows_NT": 1.0},
-            country_dist={"ES": 1.0},
-        ),
-        Row(
-            addon_id="formautofill@mozilla.org",
-            os_dist={"Windows_NT": 1.0},
-            country_dist={"ES": 1.0},
-        ),
-        Row(
-            addon_id="webcompat-reporter@mozilla.org",
-            os_dist={"Windows_NT": 1.0},
-            country_dist={"ES": 1.0},
-        ),
-        Row(
-            addon_id="webcompat@mozilla.org",
-            os_dist={"Windows_NT": 1.0},
-            country_dist={"ES": 1.0},
-        ),
-    ]
-
-    expected_output = spark.createDataFrame(rows, schema)
+    d = load_expected_data("demo.json", spark)
+    expected_output = agg_map(spark.createDataFrame(d, schema))
     is_same(output, expected_output, True)
 
 
@@ -247,7 +236,7 @@ def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
             StructField("disabled", LongType(), True),
         ]
     )
-    d = load_expected_data("engagement", spark)
+    d = load_expected_data("engagement.json", spark)
     expected_output = spark.createDataFrame(d, schema)
 
     is_same(output, expected_output, True)

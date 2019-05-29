@@ -1,0 +1,27 @@
+[
+        {
+            "addon_id":"screenshots@mozilla.org",
+            "os_dist":{"Windows_NT": 1.0},
+            "country_dist":{"ES": 1.0}
+        },
+        {
+            "addon_id":"fxmonitor@mozilla.org",
+            "os_dist":{"Windows_NT": 1.0},
+            "country_dist":{"ES": 1.0}
+        },
+        {
+            "addon_id":"formautofill@mozilla.org",
+            "os_dist":{"Windows_NT": 1.0},
+            "country_dist":{"ES": 1.0}
+        },
+        {
+            "addon_id":"webcompat-reporter@mozilla.org",
+            "os_dist":{"Windows_NT": 1.0},
+            "country_dist":{"ES": 1.0}
+        },
+        {
+            "addon_id":"webcompat@mozilla.org",
+            "os_dist":{"Windows_NT": 1.0},
+            "country_dist":{"ES": 1.0}
+        }
+]
