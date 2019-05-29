@@ -73,7 +73,7 @@ def agg_addons_report(
     # # search metrics
     # search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
-    install_flow_metrics = install_flow_events(events_data)
+    # install_flow_metrics = install_flow_events(events_data)
     # raw pings metrics
     page_load_times = get_page_load_times(spark, raw_pings_data)
     tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
