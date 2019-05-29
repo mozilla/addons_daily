@@ -22,44 +22,44 @@ DEFAULT_TZ = "UTC"
 
 def agg_addons_report(
     spark,
-    main_summary_data,
-    search_daily_data,
+    #main_summary_data,
+    #search_daily_data,
     raw_pings_data
 ):
     """
     This function will create the addons dataset
     """
-    addons_and_users = main_summary_data.select(
-        "submission_date_s3",
-        "client_id",
-        F.explode("active_addons"),
-        "os",
-        "country",
-        "subsession_length",
-        "places_pages_count",
-        "places_bookmarks_count",
-        "scalar_parent_browser_engagement_total_uri_count",
-        "devtools_toolbox_opened_count",
-        "active_ticks",
-        "histogram_parent_tracking_protection_enabled",
-        "histogram_parent_webext_background_page_load_ms",
-    )
-
-    addons_expanded = addons_and_users.select(
-        "submission_date_s3",
-        "client_id",
-        "col.*",
-        "os",
-        "country",
-        "subsession_length",
-        "places_pages_count",
-        "places_bookmarks_count",
-        "scalar_parent_browser_engagement_total_uri_count",
-        "devtools_toolbox_opened_count",
-        "active_ticks",
-        "histogram_parent_tracking_protection_enabled",
-        "histogram_parent_webext_background_page_load_ms",
-    ).cache()
+    # addons_and_users = main_summary_data.select(
+    #     "submission_date_s3",
+    #     "client_id",
+    #     F.explode("active_addons"),
+    #     "os",
+    #     "country",
+    #     "subsession_length",
+    #     "places_pages_count",
+    #     "places_bookmarks_count",
+    #     "scalar_parent_browser_engagement_total_uri_count",
+    #     "devtools_toolbox_opened_count",
+    #     "active_ticks",
+    #     "histogram_parent_tracking_protection_enabled",
+    #     "histogram_parent_webext_background_page_load_ms",
+    # )
+    #
+    # addons_expanded = addons_and_users.select(
+    #     "submission_date_s3",
+    #     "client_id",
+    #     "col.*",
+    #     "os",
+    #     "country",
+    #     "subsession_length",
+    #     "places_pages_count",
+    #     "places_bookmarks_count",
+    #     "scalar_parent_browser_engagement_total_uri_count",
+    #     "devtools_toolbox_opened_count",
+    #     "active_ticks",
+    #     "histogram_parent_tracking_protection_enabled",
+    #     "histogram_parent_webext_background_page_load_ms",
+    # ).cache()
 
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
@@ -158,7 +158,7 @@ def main(date, sample):
     # bq_d = load_bq_data(datetime.date.today(), path, spark)
 
     # agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
-    agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
+    agg_data = agg_addons_report(spark, raw_pings)
     print(agg_data.collect()[0:10])
     # return agg_data
 
