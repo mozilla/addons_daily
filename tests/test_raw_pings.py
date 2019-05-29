@@ -1,8 +1,8 @@
+from .data_generators import load_expected_data
 from pyspark.sql.types import *
 from pyspark.sql import Row
-import datetime
 from addons_daily.utils.raw_pings import *
-from .helpers.data_generators import make_raw_pings
+import datetime
 import pytest
 
 
@@ -10,7 +10,7 @@ import pytest
 def raw_pings():
     sc = SparkContext.getOrCreate()
     spark = SQLContext.getOrCreate(sc)
-    return sc.parallelize(make_raw_pings())
+    return sc.parallelize(load_expected_data("raw_pings", spark))
 
 
 def test_startup_time(raw_pings):

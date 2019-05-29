@@ -1,0 +1,42 @@
+{
+  "fields": [
+    {
+      "metadata": {},
+      "name": "addon_id",
+      "nullable": true,
+      "type": "string"
+    },
+    {
+      "metadata": {},
+      "name": "avg_bookmarks",
+      "nullable": true,
+      "type": "float"
+    },
+    {
+      "metadata": {},
+      "name": "avg_tabs",
+      "nullable": true,
+      "type": "float"
+    },
+    {
+      "metadata": {},
+      "name": "avg_toolbox_opened_count",
+      "nullable": true,
+      "type": "float"
+    },
+    {
+      "metadata": {},
+      "name": "avg_uri",
+      "nullable": true,
+      "type": "float"
+    },
+    {
+      "metadata": {},
+      "name": "pct_w_tracking_prot_enabled",
+      "nullable": true,
+      "type": "float"
+    }
+  ]
+
+}
+
