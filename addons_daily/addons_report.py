@@ -111,9 +111,9 @@ def agg_addons_report(
 
 
 @click.command()
-@click.option('--date', required=True)
-@click.option('--sample', default=1, help='percent sample as int [1, 100]')
-def main(date, ):
+@click.option("--date", required=True)
+@click.option("--sample", default=1, help="percent sample as int [1, 100]")
+def main(date,):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
@@ -124,7 +124,7 @@ def main(date, ):
             spark,
             input_bucket="telemetry-parquet",
             input_prefix="main_summary",
-            input_version="v4"
+            input_version="v4",
         )
         .filter("submission_date_s3 == '{}'".format(date))
         .filter("sample_id < {}".format(sample))
@@ -135,7 +135,7 @@ def main(date, ):
             spark,
             input_bucket="telemetry-parquet",
             input_prefix="search_clients_daily",
-            input_version="v4"
+            input_version="v4",
         )
         .filter("submission_date_s3 == '{}'".format(date))
         .filter("sample_id < {}".format(sample))
@@ -146,7 +146,7 @@ def main(date, ):
             spark,
             input_bucket="telemtry-parquet",
             input_prefix="events",
-            input_version="v1"
+            input_version="v1",
         )
         .filter("submission_date_s3 == '{}'".format(date))
         .filter("sample_id < {}".format(sample))
