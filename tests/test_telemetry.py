@@ -7,6 +7,9 @@ import json
 import os
 
 
+BASE_DATE = "20190515"
+
+
 def df_to_json(df):
     return [i.asDict() for i in df.collect()]
 
@@ -148,7 +151,7 @@ def test_user_demo_metrics(addons_expanded, spark):
 
 
 def test_trend_metrics(addons_expanded, spark):
-    output = df_to_json(get_trend_metrics(addons_expanded))
+    output = df_to_json(get_trend_metrics(addons_expanded, BASE_DATE))
     expected_output = load_expected_data("trend.json")
     assert output == expected_output
 

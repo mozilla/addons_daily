@@ -1,11 +1,12 @@
 import click
 import os
 from .utils.helpers import (
-    load_data_s3,
+    load_main_summary,
     load_raw_pings,
     get_spark,
     get_sc,
     load_keyed_hist,
+    load_bq_data,
 )
 from .utils.telemetry_data import *
 from .utils.search_daily_data import *
@@ -21,12 +22,7 @@ DEFAULT_TZ = "UTC"
 
 
 def agg_addons_report(
-    # spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
-    spark,
-    main_summary_data,
-    search_daily_data,
-    raw_pings_data,
-    **kwargs
+    spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
 ):
     """
     This function will create the addons dataset
@@ -61,23 +57,32 @@ def agg_addons_report(
         "active_ticks",
         "histogram_parent_tracking_protection_enabled",
         "histogram_parent_webext_background_page_load_ms",
-    ).cache()
+    )
+
+    addons_expanded_day = addons_expanded.fitler(
+        "submission_date_s3 = '{}'".format(date)
+    )
+
+    main_summary_day = main_summary_data.filter(
+        "submission_date_s3 = '{}'".format(date)
+    )
 
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
     # telemetry metrics
-    # user_demo_metrics = get_user_demo_metrics(addons_expanded)
-    # engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
-    # browser_metrics = get_browser_metrics(addons_expanded)
-    # top_ten_others = get_top_ten_others(main_summary_data)
-    # trend_metrics = get_trend_metrics(addons_expanded)
+    user_demo_metrics = get_user_demo_metrics(addons_expanded_day)
+    engagement_metrics = get_engagement_metrics(addons_expanded_day, main_summary_day)
+    browser_metrics = get_browser_metrics(addons_expanded_day)
+    top_ten_others = get_top_ten_others(addons_expanded_day)
+    # needs to process 30 days in past, use unfiltered dataframes
+    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data, date)
 
-    # # search metrics
-    # search_metrics = get_search_metrics(search_daily_data, addons_expanded)
+    # search metrics
+    # search_daily = get_search_metrics(search_daily_data, addons_expanded)
 
     # install flow events metrics
+    install_flow_metrics = install_flow_events(events_data)
 
-    # install_flow_metrics = install_flow_events(events_data)
     # raw pings metrics
     page_load_times = get_page_load_times(spark, raw_pings_data)
     tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
@@ -96,8 +101,8 @@ def agg_addons_report(
         .join(browser_metrics, on="addon_id", how="left")
         .join(top_ten_others, on="addon_id", how="left")
         .join(trend_metrics, on="addon_id", how="left")
-        .join(search_metrics, on="addon_id", how="left")
-        # .join(install_flow_metrics, on='addon_id', how='left')
+        # .join(search_daily, on='addon_id', how='left')
+        .join(install_flow_metrics, on="addon_id", how="left")
         .join(page_load_times, on="addon_id", how="left")
         .join(tab_switch_time, on="addon_id", how="left")
         .join(storage_get, on="addon_id", how="left")
@@ -114,42 +119,56 @@ def agg_addons_report(
     return agg_data
 
 
-def main():
+@click.command()
+@click.option("--date", required=True)
+@click.option("--main_summary_version", default="v4")
+@click.option("--search_clients_daily_version", default="v5")
+@click.option("--events_version", default="v1")
+@click.option("--sample", default=1, help="percent sample as int [1, 100]")
+def main(date, sample):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    ms = load_data_s3(
+    # leave main_summary unfitlered by
+    # date to get trend metrics
+    main_summary = load_data_s3(
         spark,
         input_bucket="telemetry-parquet",
         input_prefix="main_summary",
-        input_version="v4",
+        input_version=main_summary_version,
+    ).filter(F.col("sample_id").isin(range(0, sample_id)))
+
+    search_daily = (
+        load_data_s3(
+            spark,
+            input_bucket="telemetry-parquet",
+            input_prefix="search_clients_daily",
+            input_version=search_clients_daily_version,
+        )
+        .filter(F.col("sample_id").isin(range(0, sample_id)))
+        .filter("submission_date_s3 = '{}'".format(date))
     )
-    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    sd = load_data_s3(
-        spark,
-        input_bucket="telemetry-parquet",
-        input_prefix="search_clients_daily",
-        input_version="v4",
+    events = (
+        load_data_s3(
+            spark,
+            input_bucket="telemtry-parquet",
+            input_prefix="events",
+            input_version=events_version,
+        )
+        .filter(F.col("sample_id").isin(range(0, sample_id)))
+        .fitler("submission_date_s3 = '{}'".format(date))
     )
-    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    # events = load_data_s3(
-    #     spark,
-    #     input_bucket="telemtry-parquet",
-    #     input_prefix="events",
-    #     input_version="v1",
-    # )
-    # events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
-
-    raw_pings = load_raw_pings(sc)
+    raw_pings = load_raw_pings(sc, date)
 
     # bq_d = load_bq_data(datetime.date.today(), path, spark)
 
-    # agg_data = agg_addons_report(spark, main_summary, search_daily, events, raw_pings)
-    agg_data = agg_addons_report(spark, main_summary, search_daily, raw_pings)
+    agg_data = agg_addons_report(
+        spark, main_summary, search_daily, events, raw_pings, date
+    )
     print(agg_data.collect()[0:10])
     # return agg_data
 
