@@ -62,11 +62,11 @@ def agg_addons_report(
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
     # telemetry metrics
-    user_demo_metrics = get_user_demo_metrics(addons_expanded)
-    engagement_metrics = get_engagement_metrics(addons_expanded, main_summary)
-    browser_metrics = get_browser_metrics(addons_expanded)
-    top_ten_others = get_top_ten_others(addons_expanded)
-    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
+    #user_demo_metrics = get_user_demo_metrics(addons_expanded)
+    #engagement_metrics = get_engagement_metrics(addons_expanded, main_summary)
+    #browser_metrics = get_browser_metrics(addons_expanded)
+    #top_ten_others = get_top_ten_others(addons_expanded)
+    #trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
 
     # search metrics
     # search_daily = get_search_metrics(search_daily_data, addons_expanded)
@@ -113,44 +113,44 @@ def agg_addons_report(
 @click.command()
 @click.option("--date", required=True)
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
-def main(date,):
+def main(date, sample):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    main_summary = (
-        load_main_summary(
-            spark,
-            input_bucket="telemetry-parquet",
-            input_prefix="main_summary",
-            input_version="v4",
-        )
-        .filter("submission_date_s3 == '{}'".format(date))
-        .filter("sample_id < {}".format(sample))
-    )
-
-    search_daily = (
-        load_main_summary(
-            spark,
-            input_bucket="telemetry-parquet",
-            input_prefix="search_clients_daily",
-            input_version="v4",
-        )
-        .filter("submission_date_s3 == '{}'".format(date))
-        .filter("sample_id < {}".format(sample))
-    )
-
-    events = (
-        load_main_summary(
-            spark,
-            input_bucket="telemtry-parquet",
-            input_prefix="events",
-            input_version="v1",
-        )
-        .filter("submission_date_s3 == '{}'".format(date))
-        .filter("sample_id < {}".format(sample))
-    )
+    # main_summary = (
+    #     load_main_summary(
+    #         spark,
+    #         input_bucket="telemetry-parquet",
+    #         input_prefix="main_summary",
+    #         input_version="v4",
+    #     )
+    #     .filter("submission_date_s3 == '{}'".format(date))
+    #     .filter("sample_id < {}".format(sample))
+    # )
+    #
+    # search_daily = (
+    #     load_main_summary(
+    #         spark,
+    #         input_bucket="telemetry-parquet",
+    #         input_prefix="search_clients_daily",
+    #         input_version="v4",
+    #     )
+    #     .filter("submission_date_s3 == '{}'".format(date))
+    #     .filter("sample_id < {}".format(sample))
+    # )
+    #
+    # events = (
+    #     load_main_summary(
+    #         spark,
+    #         input_bucket="telemetry-parquet",
+    #         input_prefix="events",
+    #         input_version="v1",
+    #     )
+    #     .filter("submission_date_s3 == '{}'".format(date))
+    #     .filter("sample_id < {}".format(sample))
+    # )
 
     raw_pings = load_raw_pings(sc)
 
