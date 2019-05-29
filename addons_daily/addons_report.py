@@ -110,35 +110,47 @@ def agg_addons_report(
     return agg_data
 
 
-def main():
+@click.command()
+@click.option("--date", required=True)
+@click.option("--sample", default=1, help="percent sample as int [1, 100]")
+def main(date,):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    ms = load_main_summary(
-        spark,
-        input_bucket="telemetry-parquet",
-        input_prefix="main_summary",
-        input_version="v4",
+    main_summary = (
+        load_main_summary(
+            spark,
+            input_bucket="telemetry-parquet",
+            input_prefix="main_summary",
+            input_version="v4",
+        )
+        .filter("submission_date_s3 == '{}'".format(date))
+        .filter("sample_id < {}".format(sample))
     )
-    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    sd = load_main_summary(
-        spark,
-        input_bucket="telemetry-parquet",
-        input_prefix="search_clients_daily",
-        input_version="v4",
+    search_daily = (
+        load_main_summary(
+            spark,
+            input_bucket="telemetry-parquet",
+            input_prefix="search_clients_daily",
+            input_version="v4",
+        )
+        .filter("submission_date_s3 == '{}'".format(date))
+        .filter("sample_id < {}".format(sample))
     )
-    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    events = load_main_summary(
-        spark,
-        input_bucket="telemtry-parquet",
-        input_prefix="events",
-        input_version="v1",
+    events = (
+        load_main_summary(
+            spark,
+            input_bucket="telemtry-parquet",
+            input_prefix="events",
+            input_version="v1",
+        )
+        .filter("submission_date_s3 == '{}'".format(date))
+        .filter("sample_id < {}".format(sample))
     )
-    events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     raw_pings = load_raw_pings(sc)
 
