@@ -7,7 +7,11 @@ import json
 import os
 
 
-def load_expected_data(filename, spark):
+def df_to_json(df):
+    return [i.asDict() for i in df.collect()]
+
+
+def load_expected_data(filename):
     root = os.path.dirname(__file__)
     path = os.path.join(root, "resources", filename)
     with open(path) as f:
@@ -23,7 +27,7 @@ def spark():
 
 @pytest.fixture()
 def addons_expanded(spark):
-    d = load_expected_data("telemetry.json", spark)
+    d = load_expected_data("telemetry.json")
     addons_schema = StructType(
         [
             StructField("submission_date", StringType(), True),
@@ -82,14 +86,14 @@ def main_summary_uem(spark):
             StructField("client_id", StringType(), True),
         ]
     )
-    d = load_expected_data("uem.json", spark)
+    d = load_expected_data("uem.json")
     uem_df = spark.createDataFrame(d, schema)
     return uem_df
 
 
 @pytest.fixture()
 def main_summary_tto(spark):
-    d = load_expected_data("mstto.json", spark)
+    d = load_expected_data("mstto.json")
     schema = StructType(
         [
             StructField("client_id", StringType(), True),
@@ -132,63 +136,21 @@ def test_browser_metrics(addons_expanded, spark):
     :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = get_browser_metrics(addons_expanded)
-
-    schema = StructType(
-        [
-            StructField("addon_id", StringType(), False),
-            StructField("avg_bookmarks", FloatType(), True),
-            StructField("avg_tabs", FloatType(), True),
-            StructField("avg_toolbox_opened_count", FloatType(), True),
-            StructField("avg_uri", FloatType(), True),
-            StructField("pct_w_tracking_prot_enabled", FloatType(), True),
-        ]
-    )
-
-    d = load_expected_data("browser.json", spark)
-    expected_output = spark.createDataFrame(d, schema)
-
-    is_same(output, expected_output, True)
+    output = df_to_json(get_browser_metrics(addons_expanded))
+    expected = load_expected_data("browser.json")
+    assert output == expected
 
 
-@pytest.mark.skip(reason="skipping while sorting out py4j issue")
 def test_user_demo_metrics(addons_expanded, spark):
-    # aggregate nested maps before calling intersect
-    def agg_map(df):
-        return df.select("addon_id", "os_dist.Windows_NT", "country_dist.ES")
-
-    output = agg_map(get_user_demo_metrics(addons_expanded))
-
-    schema = StructType(
-        [
-            StructField("addon_id", StringType(), False),
-            StructField("os_dist", MapType(StringType(), FloatType()), True),
-            StructField("country_dist", MapType(StringType(), FloatType()), True),
-        ]
-    )
-
-    d = load_expected_data("demo.json", spark)
-    expected_output = agg_map(spark.createDataFrame(d, schema))
-    is_same(output, expected_output, True)
+    output = df_to_json(get_user_demo_metrics(addons_expanded))
+    expected = load_expected_data("demo.json")
+    assert output == expected
 
 
 def test_trend_metrics(addons_expanded, spark):
-
-    output = get_trend_metrics(addons_expanded)
-
-    schema = StructType(
-        [
-            StructField("addon_id", StringType(), True),
-            StructField("dau", LongType(), True),
-            StructField("mau", LongType(), True),
-            StructField("wau", LongType(), True),
-        ]
-    )
-
-    d = load_expected_data("trend.json", spark)
-    expected_output = spark.createDataFrame(d, schema)
-
-    is_same(output, expected_output, True)
+    output = df_to_json(get_trend_metrics(addons_expanded))
+    expected_output = load_expected_data("trend.json")
+    assert output == expected_output
 
 
 @pytest.mark.skip(reason="skipping while sorting out py4j issue")
@@ -199,19 +161,9 @@ def test_top_ten_others(main_summary_tto, spark):
     :param main_summary_tto: pytest fixture defined above, sample data from main_summary
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = get_top_ten_others(main_summary_tto)
-
-    schema = StructType(
-        [
-            StructField("addon_id", StringType(), True),
-            StructField("top_ten_others", ArrayType(StringType(), True), True),
-        ]
-    )
-
-    d = load_expected_data("top_ten", spark)
-    expected_output = spark.createDataFrame(d, schema)
-
-    is_same(output, expected_output, True)
+    output = df_to_json(get_top_ten_others(main_summary_tto))
+    expected_output = load_expected_data("top_ten", spark)
+    assert output == expected_output
 
 
 def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
@@ -221,17 +173,6 @@ def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
     :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = get_engagement_metrics(addons_expanded, main_summary_uem)
-
-    schema = StructType(
-        [
-            StructField("active_hours", DoubleType(), True),
-            StructField("addon_id", StringType(), True),
-            StructField("avg_time_total", DoubleType(), True),
-            StructField("disabled", LongType(), True),
-        ]
-    )
-    d = load_expected_data("engagement.json", spark)
-    expected_output = spark.createDataFrame(d, schema)
-
-    is_same(output, expected_output, True)
+    output = df_to_json(get_engagement_metrics(addons_expanded, main_summary_uem))
+    expected_output = load_expected_data("engagement.json")
+    assert output == expected_output
