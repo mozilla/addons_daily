@@ -136,7 +136,7 @@ def main():
         spark,
         input_bucket="telemtry-parquet",
         input_prefix="events",
-        input_version="v1",
+        input_version="v2",
     )
     events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
