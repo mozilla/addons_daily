@@ -184,14 +184,8 @@ def test_trend_metrics(addons_expanded, spark):
         ]
     )
 
-    rows = [
-        Row(addon_id="screenshots@mozilla.org", mau=1, wau=None, dau=None),
-        Row(addon_id="fxmonitor@mozilla.org", mau=1, wau=1, dau=1),
-        Row(addon_id="webcompat-reporter@mozilla.org", mau=1, wau=None, dau=None),
-        Row(addon_id=u"webcompat@mozilla.org", dau=None, mau=1, wau=None),
-    ]
-
-    expected_output = spark.createDataFrame(rows, schema)
+    d = load_expected_data("trend.json", spark)
+    expected_output = spark.createDataFrame(d, schema)
 
     is_same(output, expected_output, True)
 

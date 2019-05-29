@@ -1,0 +1,6 @@
+[
+        {"addon_id":"screenshots@mozilla.org", "mau":1, "wau":null, "dau":null},
+        {"addon_id":"fxmonitor@mozilla.org", "mau":1, "wau":1, "dau":1},
+        {"addon_id":"webcompat-reporter@mozilla.org", "mau":1, "wau":null, "dau":null},
+        {"addon_id":"webcompat@mozilla.org", "dau":null, "mau":1, "wau":null}
+]
