@@ -16,49 +16,60 @@ def get_search_metrics(search_daily_df, addons_expanded):
         - total number of ad clicks by search engine
     """
     search_daily_df = bucket_engine(search_daily_df)
-    
-    user_addon = addons_expanded.select('client_id', 'addon_id')
-    user_addon_search = user_addon.join(search_daily_df, 'client_id')
-    
+
+    user_addon = addons_expanded.select("client_id", "addon_id")
+    user_addon_search = user_addon.join(search_daily_df, "client_id")
+
     df = (
-        user_addon_search.groupBy('addon_id', 'engine')
+        user_addon_search.groupBy("addon_id", "engine")
         .agg(
-            F.sum('sap').alias('sap_searches'),
-            F.sum('tagged_sap').alias('tagged_sap_searches'),
-            F.sum('organic').alias('organic_searches'),
-            F.sum('search_with_ads').alias('search_with_ads'),
-            F.sum('ad_click').alias('ad_click')
+            F.sum("sap").alias("sap_searches"),
+            F.sum("tagged_sap").alias("tagged_sap_searches"),
+            F.sum("organic").alias("organic_searches"),
+            F.sum("search_with_ads").alias("search_with_ads"),
+            F.sum("ad_click").alias("ad_click"),
         )
-        .groupBy('addon_id')
+        .groupBy("addon_id")
         .agg(
-            F.collect_list('engine').alias('engine'),
-            F.collect_list('sap_searches').alias('sap_searches'),
-            F.collect_list('tagged_sap_searches').alias('tagged_sap_searches'),
-            F.collect_list('organic_searches').alias('organic_searches'),
-            F.collect_list('search_with_ads').alias('search_with_ads'),
-            F.collect_list('ad_click').alias('ad_click')
+            F.collect_list("engine").alias("engine"),
+            F.collect_list("sap_searches").alias("sap_searches"),
+            F.collect_list("tagged_sap_searches").alias("tagged_sap_searches"),
+            F.collect_list("organic_searches").alias("organic_searches"),
+            F.collect_list("search_with_ads").alias("search_with_ads"),
+            F.collect_list("ad_click").alias("ad_click"),
         )
         .withColumn(
-            'sap_searches', 
-            make_map(F.col('engine'), F.col('sap_searches').cast(ArrayType(DoubleType())))
+            "sap_searches",
+            make_map(
+                F.col("engine"), F.col("sap_searches").cast(ArrayType(DoubleType()))
+            ),
         )
         .withColumn(
-            'tagged_sap_searches', 
-            make_map(F.col('engine'), F.col('tagged_sap_searches').cast(ArrayType(DoubleType())))
+            "tagged_sap_searches",
+            make_map(
+                F.col("engine"),
+                F.col("tagged_sap_searches").cast(ArrayType(DoubleType())),
+            ),
         )
         .withColumn(
-            'organic_searches', 
-            make_map(F.col('engine'), F.col('organic_searches').cast(ArrayType(DoubleType())))
+            "organic_searches",
+            make_map(
+                F.col("engine"), F.col("organic_searches").cast(ArrayType(DoubleType()))
+            ),
         )
         .withColumn(
-            'search_with_ads', 
-            make_map(F.col('engine'), F.col('search_with_ads').cast(ArrayType(DoubleType())))
+            "search_with_ads",
+            make_map(
+                F.col("engine"), F.col("search_with_ads").cast(ArrayType(DoubleType()))
+            ),
         )
         .withColumn(
-            'ad_click', 
-            make_map(F.col('ad_click'), F.col('ad_click').cast(ArrayType(DoubleType())))
+            "ad_click",
+            make_map(
+                F.col("ad_click"), F.col("ad_click").cast(ArrayType(DoubleType()))
+            ),
         )
-        .drop('engine')
+        .drop("engine")
     )
 
     return df

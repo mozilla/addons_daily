@@ -180,18 +180,15 @@ def list_expander(lis):
 
 def bucket_engine(df):
     eng = F.lower(F.col("engine"))
-    return (
-      df.withColumn("engine",
-                    F.when(eng.like("google%"),
-                          "google")
-                    .when(eng.like("ddg%"),
-                         "duckduckgo")
-                    .when(eng.like("duckduckgo%"),
-                         "duckduckgo")
-                    .when(eng.like("bing%"),
-                         "bing")
-                    .otherwise("other"))
+    return df.withColumn(
+        "engine",
+        F.when(eng.like("google%"), "google")
+        .when(eng.like("ddg%"), "duckduckgo")
+        .when(eng.like("duckduckgo%"), "duckduckgo")
+        .when(eng.like("bing%"), "bing")
+        .otherwise("other"),
     )
+
 
 def str_to_list(word):
     if word[0] == "[":
