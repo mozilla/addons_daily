@@ -1,7 +1,7 @@
 import click
 import os
 from .utils.helpers import (
-    load_main_summary,
+    load_data_s3,
     load_raw_pings,
     get_spark,
     get_sc,
