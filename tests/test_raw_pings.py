@@ -1,8 +1,8 @@
+from .data_generators import load_expected_data
 from pyspark.sql.types import *
 from pyspark.sql import Row
-import datetime
 from addons_daily.utils.raw_pings import *
-from .data_generators import load_expected_data
+import datetime
 import pytest
 
 
