@@ -1,7 +1,7 @@
 import click
 import os
 from .utils.helpers import (
-    load_main_summary,
+    load_data_s3,
     load_raw_pings,
     get_spark,
     get_sc,
@@ -21,7 +21,10 @@ DEFAULT_TZ = "UTC"
 
 
 def agg_addons_report(
-    spark, main_summary_data, search_daily_data, raw_pings_data, **kwargs
+    spark,
+    main_summary_data,
+    search_daily_data,
+    raw_pings_data
 ):
     """
     This function will create the addons dataset
@@ -61,18 +64,16 @@ def agg_addons_report(
     keyed_histograms = load_keyed_hist(raw_pings_data)
 
     # telemetry metrics
-    user_demo_metrics = get_user_demo_metrics(addons_expanded)
-    engagement_metrics = get_engagement_metrics(addons_expanded, main_summary)
-    browser_metrics = get_browser_metrics(addons_expanded)
-    top_ten_others = get_top_ten_others(addons_expanded)
-    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data)
+    # user_demo_metrics = get_user_demo_metrics(addons_expanded)
+    # engagement_metrics = get_engagement_metrics(addons_expanded, main_summary_data)
+    # browser_metrics = get_browser_metrics(addons_expanded)
+    # top_ten_others = get_top_ten_others(main_summary_data)
+    # trend_metrics = get_trend_metrics(addons_expanded)
 
-    # search metrics
-    # search_daily = get_search_metrics(search_daily_data, addons_expanded)
+    # # search metrics
+    # search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
-    # install flow events metrics
-    # install_flow_metrics = install_flow_events(events_data)
-
+    install_flow_metrics = install_flow_events(events_data)
     # raw pings metrics
     page_load_times = get_page_load_times(spark, raw_pings_data)
     tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
@@ -118,38 +119,29 @@ def main(date, sample):
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    main_summary = (
-        load_main_summary(
-            spark,
-            input_bucket="telemetry-parquet",
-            input_prefix="main_summary",
-            input_version="v4",
-        )
-        .filter("submission_date_s3 == '{}'".format(date))
-        .filter("sample_id < {}".format(sample))
+    ms = load_data_s3(
+        spark,
+        input_bucket="telemetry-parquet",
+        input_prefix="main_summary",
+        input_version="v4",
     )
+    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    search_daily = (
-        load_main_summary(
-            spark,
-            input_bucket="telemetry-parquet",
-            input_prefix="search_clients_daily",
-            input_version="v4",
-        )
-        .filter("submission_date_s3 == '{}'".format(date))
-        .filter("sample_id < {}".format(sample))
+    sd = load_data_s3(
+        spark,
+        input_bucket="telemetry-parquet",
+        input_prefix="search_clients_daily",
+        input_version="v4",
     )
+    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
-    # events = (
-    #     load_main_summary(
-    #         spark,
-    #         input_bucket="telemtry-parquet",
-    #         input_prefix="events",
-    #         input_version="v1",
-    #     )
-    #     .filter("submission_date_s3 == '{}'".format(date))
-    #     .filter("sample_id < {}".format(sample))
+    # events = load_data_s3(
+    #     spark,
+    #     input_bucket="telemtry-parquet",
+    #     input_prefix="events",
+    #     input_version="v1",
     # )
+    # events = events.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     raw_pings = load_raw_pings(sc)
 

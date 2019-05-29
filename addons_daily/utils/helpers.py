@@ -35,7 +35,7 @@ def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=
 
 
 # taken from Fx_Usage_Report
-def load_main_summary(spark, input_bucket, input_prefix, input_version):
+def load_data_s3(spark, input_bucket, input_prefix, input_version):
     """
     Loads main_summary from the bucket constructed from
     input_bucket, input_prefix, input_version
@@ -176,6 +176,18 @@ def list_expander(lis):
     for item in lis:
         list_of_lists.append([item, [i for i in lis if i != item]])
     return list_of_lists
+
+
+def bucket_engine(df):
+    eng = F.lower(F.col("engine"))
+    return df.withColumn(
+        "engine",
+        F.when(eng.like("google%"), "google")
+        .when(eng.like("ddg%"), "duckduckgo")
+        .when(eng.like("duckduckgo%"), "duckduckgo")
+        .when(eng.like("bing%"), "bing")
+        .otherwise("other"),
+    )
 
 
 def str_to_list(word):
