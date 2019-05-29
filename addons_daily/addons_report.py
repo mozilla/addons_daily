@@ -11,6 +11,7 @@ from .utils.helpers import (
 from .utils.telemetry_data import *
 from .utils.search_daily_data import *
 from .utils.events_data import *
+
 # from .utils.amo_data import *
 from .utils.bq_data import *
 from .utils.raw_pings import *
@@ -22,7 +23,11 @@ DEFAULT_TZ = "UTC"
 
 def agg_addons_report(
     # spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
-    spark, main_summary_data, search_daily_data, raw_pings_data, **kwargs
+    spark,
+    main_summary_data,
+    search_daily_data,
+    raw_pings_data,
+    **kwargs
 ):
     """
     This function will create the addons dataset
@@ -72,8 +77,8 @@ def agg_addons_report(
     # search_metrics = get_search_metrics(search_daily_data, addons_expanded)
 
     # install flow events metrics
-   
- # install_flow_metrics = install_flow_events(events_data)
+
+    # install_flow_metrics = install_flow_events(events_data)
     # raw pings metrics
     page_load_times = get_page_load_times(spark, raw_pings_data)
     tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
@@ -87,31 +92,33 @@ def agg_addons_report(
     mem_total = get_memory_total(keyed_histograms)
 
     agg_data = (
-        os_dist
-        .join(user_demo_metrics, on='addon_id', how='left')
-        .join(engagement_metrics, on='addon_id', how='left')
-        .join(browser_metrics, on='addon_id', how='left')
-        .join(top_ten_others, on='addon_id', how='left')
-        .join(trend_metrics, on='addon_id', how='left')
-        .join(search_metrics, on='addon_id', how='left')
+        os_dist.join(user_demo_metrics, on="addon_id", how="left")
+        .join(engagement_metrics, on="addon_id", how="left")
+        .join(browser_metrics, on="addon_id", how="left")
+        .join(top_ten_others, on="addon_id", how="left")
+        .join(trend_metrics, on="addon_id", how="left")
+        .join(search_metrics, on="addon_id", how="left")
         # .join(install_flow_metrics, on='addon_id', how='left')
-        .join(page_load_times, on='addon_id', how='left')
-        .join(tab_switch_time, on='addon_id', how='left')
-        .join(storage_get, on='addon_id', how='left')
-        .join(storage_set, on='addon_id', how='left')
-        .join(startup_time, on='addon_id', how='left')
-        .join(bkg_load_time, on='addon_id', how='left')
-        .join(ba_popup_lt, on='addon_id', how='left')
-        .join(pa_popup_lt, on='addon_id', how='left')
-        .join(cs_injection_time, on='addon_id', how='left')
-        .join(mem_total, on='addon_id', how='left')
+        .join(page_load_times, on="addon_id", how="left")
+        .join(tab_switch_time, on="addon_id", how="left")
+        .join(storage_get, on="addon_id", how="left")
+        .join(storage_set, on="addon_id", how="left")
+        .join(startup_time, on="addon_id", how="left")
+        .join(bkg_load_time, on="addon_id", how="left")
+        .join(ba_popup_lt, on="addon_id", how="left")
+        .join(pa_popup_lt, on="addon_id", how="left")
+        .join(cs_injection_time, on="addon_id", how="left")
+        .join(mem_total, on="addon_id", how="left")
         # .join(bq_data, on='addon_id', how='left')
     )
 
     return agg_data
 
 
-def main():
+@click.command()
+@click.option("--date", required=True)
+@click.option("--sample", default=1, help="percent sample as int [1, 100]")
+def main(date,):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
@@ -123,7 +130,6 @@ def main():
         input_prefix="main_summary",
         input_version="v4",
     )
-    main_summary = ms.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     sd = load_data_s3(
         spark,
@@ -131,7 +137,6 @@ def main():
         input_prefix="search_clients_daily",
         input_version="v4",
     )
-    search_daily = sd.filter("submission_date_s3 >= (NOW() - INTERVAL 1 DAYS)")
 
     # events = load_data_s3(
     #     spark,
