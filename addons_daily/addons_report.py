@@ -5,8 +5,7 @@ from .utils.helpers import (
     load_raw_pings,
     get_spark,
     get_sc,
-    load_keyed_hist,
-    load_bq_data,
+    load_keyed_hist
 )
 from .utils.telemetry_data import *
 from .utils.search_daily_data import *
