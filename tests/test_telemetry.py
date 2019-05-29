@@ -1,36 +1,70 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
-from .helpers.data_generators import (
-    make_telemetry_data,
-    main_summary_for_user_engagement,
-    make_main_summary_data_for_tto,
-)
+from .data_generators import main_summary_for_user_engagement, load_expected_data
 from addons_daily.utils.telemetry_data import *
-from .helpers.data_generators import make_telemetry_data
 from addons_daily.utils.helpers import is_same
 import pytest
+import json
+import os
 
 
 @pytest.fixture()
 def spark():
     spark_session = SparkSession.builder.appName("addons_daily").getOrCreate()
-    spark_session.conf.set("spark.executor.memory", "0.5g")
     return spark_session
 
 
 @pytest.fixture()
 def addons_expanded(spark):
-    addons_expanded_sample, addons_schema = make_telemetry_data()
-    addons_expanded_sample = [row.asDict() for row in addons_expanded_sample]
-    return spark.createDataFrame(addons_expanded_sample, addons_schema)
-
-
-@pytest.fixture()
-def main_summary_tto(spark):
-    main_rows, main_schema = make_main_summary_data_for_tto()
-    main_rows = [row.asDict() for row in main_rows]
-    tto_df = spark.createDataFrame(main_rows, main_schema)
-    return tto_df
+    d = load_expected_data("telemetry", spark)
+    addons_schema = StructType(
+        [
+            StructField("submission_date", StringType(), True),
+            StructField("client_id", StringType(), True),
+            StructField("addon_id", StringType(), True),
+            StructField("blocklisted", BooleanType(), True),
+            StructField("name", StringType(), True),
+            StructField("user_disabled", BooleanType(), True),
+            StructField("app_disabled", BooleanType(), True),
+            StructField("version", StringType(), True),
+            StructField("scope", IntegerType(), True),
+            StructField("type", StringType(), True),
+            StructField(
+                "scalar_parent_browser_engagement_tab_open_event_count",
+                IntegerType(),
+                True,
+            ),
+            StructField("foreign_install", BooleanType(), True),
+            StructField("has_binary_components", BooleanType(), True),
+            StructField("install_day", IntegerType(), True),
+            StructField("update_day", IntegerType(), True),
+            StructField("signed_state", IntegerType(), True),
+            StructField("is_system", BooleanType(), True),
+            StructField("is_web_extension", BooleanType(), True),
+            StructField("multiprocess_compatible", BooleanType(), True),
+            StructField("os", StringType(), True),
+            StructField("country", StringType(), True),
+            StructField("subsession_length", LongType(), True),
+            StructField("places_pages_count", IntegerType(), True),
+            StructField("places_bookmarks_count", IntegerType(), True),
+            StructField(
+                "scalar_parent_browser_engagement_total_uri_count", IntegerType(), True
+            ),
+            StructField("devtools_toolbox_opened_count", IntegerType(), True),
+            StructField("active_ticks", IntegerType(), True),
+            StructField(
+                "histogram_parent_tracking_protection_enabled",
+                MapType(StringType(), IntegerType(), True),
+                True,
+            ),
+            StructField(
+                "histogram_parent_webext_background_page_load_ms",
+                MapType(StringType(), IntegerType(), True),
+                True,
+            ),
+        ]
+    )
+    return spark.createDataFrame(d, addons_schema)
 
 
 @pytest.fixture()
@@ -39,6 +73,44 @@ def main_summary_uem(spark):
     main_rows = [row.asDict() for row in rows]
     uem_df = spark.createDataFrame(main_rows, schema)
     return uem_df
+
+
+@pytest.fixture()
+def main_summary_tto(spark):
+    d = load_expected_data("mstto", spark)
+    schema = StructType(
+        [
+            StructField("client_id", StringType(), True),
+            StructField(
+                "active_addons",
+                ArrayType(
+                    StructType(
+                        [
+                            StructField("addon_id", StringType(), True),
+                            StructField("blocklisted", BooleanType(), True),
+                            StructField("name", StringType(), True),
+                            StructField("user_disabled", BooleanType(), True),
+                            StructField("app_disabled", BooleanType(), True),
+                            StructField("version", StringType(), True),
+                            StructField("scope", IntegerType(), True),
+                            StructField("type", StringType(), True),
+                            StructField("foreign_install", BooleanType(), True),
+                            StructField("has_binary_components", BooleanType(), True),
+                            StructField("install_day", IntegerType(), True),
+                            StructField("update_day", IntegerType(), True),
+                            StructField("signed_state", IntegerType(), True),
+                            StructField("is_system", BooleanType(), True),
+                            StructField("is_web_extension", BooleanType(), True),
+                            StructField("multiprocess_compatible", BooleanType(), True),
+                        ]
+                    ),
+                    True,
+                ),
+                True,
+            ),
+        ]
+    )
+    return spark.createDataFrame(d, schema)
 
 
 def test_browser_metrics(addons_expanded, spark):
@@ -169,6 +241,7 @@ def test_trend_metrics(addons_expanded, spark):
         Row(addon_id="screenshots@mozilla.org", mau=1, wau=None, dau=None),
         Row(addon_id="fxmonitor@mozilla.org", mau=1, wau=1, dau=1),
         Row(addon_id="webcompat-reporter@mozilla.org", mau=1, wau=None, dau=None),
+        Row(addon_id=u"webcompat@mozilla.org", dau=None, mau=1, wau=None),
     ]
 
     expected_output = spark.createDataFrame(rows, schema)
