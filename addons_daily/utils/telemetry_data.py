@@ -24,20 +24,15 @@ def get_user_demo_metrics(addons_expanded):
         - distribution of users by operating system
         - distribution of users by country
     """
-    client_counts = (
-        addons_expanded.select("addon_id", "client_id")
-        .groupBy("addon_id")
-        .agg(F.countDistinct("client_id").alias("total_clients"))
+    client_counts = addons_expanded.groupBy("addon_id").agg(
+        F.countDistinct("client_id").alias("total_clients")
     )
 
     os_dist = (
-        addons_expanded.select("addon_id", "os", "client_id")
-        .groupBy("addon_id", "os")
-        .agg(F.countDistinct("client_id"))
-        .withColumnRenamed("count(DISTINCT client_id)", "os_client_count")
+        addons_expanded.groupBy("addon_id", "os")
+        .agg(F.countDistinct("client_id").alias("os_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn("os_pct", F.col("os_client_count") / F.col("total_clients"))
-        .select("addon_id", "os", "os_pct")
         .groupBy("addon_id")
         .agg(F.collect_list("os").alias("os"), F.collect_list("os_pct").alias("os_pct"))
         .withColumn(
@@ -48,14 +43,12 @@ def get_user_demo_metrics(addons_expanded):
     )
 
     ct_dist = (
-        addons_expanded.select("addon_id", "country", "client_id")
-        .groupBy("addon_id", "country")
+        addons_expanded.groupBy("addon_id", "country")
         .agg(F.countDistinct("client_id").alias("country_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn(
             "country_pct", F.col("country_client_count") / F.col("total_clients")
         )
-        .select("addon_id", "country", "country_pct")
         .groupBy("addon_id")
         .agg(
             F.collect_list("country").alias("country"),
@@ -86,14 +79,7 @@ def get_engagement_metrics(addons_expanded, main_summary):
         - number of clients with the addon disabled
     """
     engagement_metrics = (
-        addons_expanded.select(
-            "addon_id",
-            "client_id",
-            "Submission_date",
-            "subsession_length",
-            "active_ticks",
-        )
-        .groupBy("addon_id", "client_id", "Submission_date")
+        addons_expanded.groupBy("addon_id", "client_id", "Submission_date")
         .agg(
             F.sum("active_ticks").alias("total_ticks"),
             F.sum("subsession_length").alias("daily_total"),
@@ -110,7 +96,6 @@ def get_engagement_metrics(addons_expanded, main_summary):
     disabled_addons = (
         main_summary.where(F.col("disabled_addons_ids").isNotNull())
         .withColumn("addon_id", F.explode("disabled_addons_ids"))
-        .select("addon_id", "client_id")
         .groupBy("addon_id")
         .agg(F.countDistinct("client_id").alias("disabled"))
     )
@@ -146,10 +131,7 @@ def get_browser_metrics(addons_expanded):
     )
 
     avg_uri = (
-        addons_expanded.select(
-            "addon_id", "client_id", "scalar_parent_browser_engagement_total_uri_count"
-        )
-        .groupBy("addon_id", "client_id")
+        addons_expanded.groupBy("addon_id", "client_id")
         .agg(
             F.mean("scalar_parent_browser_engagement_total_uri_count").alias("avg_uri")
         )
@@ -234,17 +216,19 @@ def get_trend_metrics(addons_expanded):
         - weekly active users
         - monthly active users
     """
+    base_date = "to_date('2019-05-15')"
+
     # limit to last 30 days to calculate mau
-    addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 30 DAYS)"
-    )
+    addons_expanded = addons_expanded.withColumn(
+        "date", F.to_date("Submission_date", "yyyyMMdd")
+    ).filter("date >= ({} - INTERVAL 30 DAYS)".format(base_date))
     mau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("mau")
     )
 
     # limit to last 7 days to calculate wau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 7 DAYS)"
+        "date >= ({} - INTERVAL 7 DAYS)".format(base_date)
     )
     wau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("wau")
@@ -252,7 +236,7 @@ def get_trend_metrics(addons_expanded):
 
     # limit to last 1 day to calculate dau
     addons_expanded = addons_expanded.filter(
-        "Submission_date >= (NOW() - INTERVAL 1 DAYS)"
+        "date >= ({} - INTERVAL 1 DAYS)".format(base_date)
     )
     dau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("dau")
