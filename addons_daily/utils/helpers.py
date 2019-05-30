@@ -49,22 +49,18 @@ def load_data_s3(spark, input_bucket, input_prefix, input_version):
     return spark.read.option("mergeSchema", True).parquet(dest)
 
 
-def load_raw_pings(sc):
+def load_raw_pings(sc, date):
     """
     Function to load raw pings data
     :param sc: a spark context
     :return a spark dataframe of raw pings
     """
 
-    yesterday_str = datetime.datetime.strftime(
-        datetime.datetime.today() - datetime.timedelta(1), "%Y%m%d"
-    )
-
     raw_pings = (
         Dataset.from_source("telemetry")
         .where(docType="main")
         .where(appUpdateChannel="release")
-        .where(submissionDate=lambda x: x.startswith(yesterday_str))
+        .where(submissionDate=date)
         .records(sc, sample=0.01)
     )
     return raw_pings
@@ -147,7 +143,7 @@ def dataframe_joiner(dfs):
     """
     left = dfs[0]
     for right in dfs[1:]:
-        left = left.join(right, on="addon_id", how=left)
+        left = left.join(right, on="addon_id", how="left")
     return left
 
 

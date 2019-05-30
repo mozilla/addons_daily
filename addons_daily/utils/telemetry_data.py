@@ -79,7 +79,7 @@ def get_engagement_metrics(addons_expanded, main_summary):
         - number of clients with the addon disabled
     """
     engagement_metrics = (
-        addons_expanded.groupBy("addon_id", "client_id", "Submission_date")
+        addons_expanded.groupBy("addon_id", "client_id", "submission_date_s3")
         .agg(
             F.sum("active_ticks").alias("total_ticks"),
             F.sum("subsession_length").alias("daily_total"),
@@ -125,7 +125,9 @@ def get_browser_metrics(addons_expanded):
             - percent of users with tracking enabled
     """
     browser_metrics = addons_expanded.groupby("addon_id").agg(
-        F.avg("places_pages_count").alias("avg_tabs"),
+        F.avg("scalar_parent_browser_engagement_tab_open_event_count").alias(
+            "avg_tabs"
+        ),
         F.avg("places_bookmarks_count").alias("avg_bookmarks"),
         F.avg("devtools_toolbox_opened_count").alias("avg_toolbox_opened_count"),
     )
@@ -221,7 +223,7 @@ def get_trend_metrics(addons_expanded, date):
 
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.withColumn(
-        "date", F.to_date("Submission_date", "yyyyMMdd")
+        "date", F.to_date("submission_date_s3", "yyyyMMdd")
     ).filter("date >= ({} - INTERVAL 30 DAYS)".format(base_date))
     mau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("mau")

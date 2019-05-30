@@ -20,20 +20,15 @@ from pyspark.sql import SparkSession
 DEFAULT_TZ = "UTC"
 
 
-def agg_addons_report(
-    spark, main_summary_data, search_daily_data, events_data, raw_pings_data, **kwargs
-):
-    """
-    This function will create the addons dataset
-    """
-    addons_and_users = main_summary_data.select(
+def expand_addons(main_summary):
+    addons_and_users = main_summary.select(
         "submission_date_s3",
         "client_id",
         F.explode("active_addons"),
         "os",
         "country",
         "subsession_length",
-        "places_pages_count",
+        "scalar_parent_browser_engagement_tab_open_event_count",
         "places_bookmarks_count",
         "scalar_parent_browser_engagement_total_uri_count",
         "devtools_toolbox_opened_count",
@@ -49,7 +44,7 @@ def agg_addons_report(
         "os",
         "country",
         "subsession_length",
-        "places_pages_count",
+        "scalar_parent_browser_engagement_tab_open_event_count",
         "places_bookmarks_count",
         "scalar_parent_browser_engagement_total_uri_count",
         "devtools_toolbox_opened_count",
@@ -58,6 +53,23 @@ def agg_addons_report(
         "histogram_parent_webext_background_page_load_ms",
     )
 
+    return addons_expanded
+
+
+def agg_addons_report(
+    spark,
+    date,
+    main_summary_data,
+    search_daily_data,
+    events_data,
+    raw_pings_data,
+    **kwargs
+):
+    """
+    This function will create the addons dataset
+    """
+
+    addons_expanded = expand_addons(main_summary_data)
     addons_expanded_day = addons_expanded.filter(
         "submission_date_s3 = '{}'".format(date)
     )
@@ -168,7 +180,7 @@ def main(
     # bq_d = load_bq_data(datetime.date.today(), path, spark)
 
     agg_data = agg_addons_report(
-        spark, main_summary, search_daily, events, raw_pings, date
+        spark, date, main_summary, search_daily, events, raw_pings
     )
     print(agg_data.collect()[0:10])
     # return agg_data
