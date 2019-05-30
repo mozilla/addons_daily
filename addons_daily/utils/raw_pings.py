@@ -4,39 +4,6 @@ import pandas as pd
 from pyspark.sql import SQLContext
 
 
-def get_page_load_times(spark, df):
-    """
-    Function to aggreagte raw pings by addon_id and get average page load time
-    :param df: raw pings dataframe
-    :param spark: a spark instance
-    :return: aggregated dataframe
-    """
-    hist = "FX_PAGE_LOAD_MS_2"
-
-    avg_page_load = df.filter(lambda x: hist in x["payload"]["histograms"]).flatMap(
-        lambda x: [
-            (item, histogram_mean(x["payload"]["histograms"][hist]["values"]))
-            for item in x["environment"]["addons"]["activeAddons"].keys()
-        ]
-    )
-
-    schema = StructType(
-        [
-            StructField("addon_id", StringType(), True),
-            StructField("avg_page_loadtime", FloatType(), True),
-        ]
-    )
-
-    avg_page_load_df = spark.createDataFrame(data=avg_page_load, schema=schema)
-
-    avg_page_load_agg = (
-        avg_page_load_df.groupBy("addon_id")
-        .agg(F.mean("avg_page_loadtime"))
-        .withColumnRenamed("avg(avg_page_loadtime)", "avg_page_load_time")
-    )
-    return avg_page_load_agg
-
-
 def get_tab_switch_time(spark, df):
     """
     :param df: raw pings

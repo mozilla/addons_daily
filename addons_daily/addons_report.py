@@ -57,65 +57,46 @@ def expand_addons(main_summary):
 
 
 def agg_addons_report(
-    spark,
-    date,
-    main_summary_data,
-    search_daily_data,
-    events_data,
-    raw_pings_data,
-    **kwargs
+    spark, date, main_summary, search_clients_daily, events, raw_pings, **kwargs
 ):
     """
     This function will create the addons dataset
     """
 
-    addons_expanded = expand_addons(main_summary_data)
+    addons_expanded = expand_addons(main_summary)
     addons_expanded_day = addons_expanded.filter(
         "submission_date_s3 = '{}'".format(date)
     )
 
-    main_summary_day = main_summary_data.filter(
-        "submission_date_s3 = '{}'".format(date)
-    )
-
-    keyed_histograms = load_keyed_hist(raw_pings_data)
+    main_summary_day = main_summary.filter("submission_date_s3 = '{}'".format(date))
 
     # telemetry metrics
     user_demo_metrics = get_user_demo_metrics(addons_expanded_day)
     engagement_metrics = get_engagement_metrics(addons_expanded_day, main_summary_day)
     browser_metrics = get_browser_metrics(addons_expanded_day)
-    top_ten_others = get_top_ten_others(addons_expanded_day)
+    search_metrics = get_search_metrics(search_clients_daily, addons_expanded_day)
+    # top_ten_others = get_top_ten_others(addons_expanded_day)
     # needs to process 30 days in past, use unfiltered dataframes
-    trend_metrics = get_trend_metrics(addons_expanded, main_summary_data, date)
-
-    # search metrics
-    # search_daily = get_search_metrics(search_daily_data, addons_expanded)
-
-    # install flow events metrics
-    install_flow_metrics = install_flow_events(events_data)
+    trend_metrics = get_trend_metrics(addons_expanded, date)
+    event_metrics = install_flow_events(events)
 
     # raw pings metrics
-    page_load_times = get_page_load_times(spark, raw_pings_data)
-    tab_switch_time = get_tab_switch_time(spark, raw_pings_data)
-    storage_get = get_storage_local_get_time(keyed_histograms)
-    storage_set = get_storage_local_set_time(keyed_histograms)
-    startup_time = get_startup_time(keyed_histograms)
-    bkg_load_time = get_bkgd_load_time(keyed_histograms)
-    ba_popup_lt = get_ba_popup_load_time(keyed_histograms)
-    pa_popup_lt = get_pa_popup_load_time(keyed_histograms)
-    cs_injection_time = get_cs_injection_time(keyed_histograms)
-    mem_total = get_memory_total(keyed_histograms)
+    storage_get = get_storage_local_get_time(raw_pings)
+    storage_set = get_storage_local_set_time(raw_pings)
+    startup_time = get_startup_time(raw_pings)
+    bkg_load_time = get_bkgd_load_time(raw_pings)
+    ba_popup_lt = get_ba_popup_load_time(raw_pings)
+    pa_popup_lt = get_pa_popup_load_time(raw_pings)
+    cs_injection_time = get_cs_injection_time(raw_pings)
+    mem_total = get_memory_total(raw_pings)
 
-    agg_data = (
-        os_dist.join(user_demo_metrics, on="addon_id", how="left")
-        .join(engagement_metrics, on="addon_id", how="left")
+    agg = (
+        user_demo_metrics.join(engagement_metrics, on="addon_id", how="left")
         .join(browser_metrics, on="addon_id", how="left")
-        .join(top_ten_others, on="addon_id", how="left")
+        # .join(top_ten_others, on="addon_id", how="left")
         .join(trend_metrics, on="addon_id", how="left")
-        # .join(search_daily, on='addon_id', how='left')
-        .join(install_flow_metrics, on="addon_id", how="left")
-        .join(page_load_times, on="addon_id", how="left")
-        .join(tab_switch_time, on="addon_id", how="left")
+        .join(search_metrics, on="addon_id", how="left")
+        .join(event_metrics, on="addon_id", how="left")
         .join(storage_get, on="addon_id", how="left")
         .join(storage_set, on="addon_id", how="left")
         .join(startup_time, on="addon_id", how="left")
@@ -124,10 +105,9 @@ def agg_addons_report(
         .join(pa_popup_lt, on="addon_id", how="left")
         .join(cs_injection_time, on="addon_id", how="left")
         .join(mem_total, on="addon_id", how="left")
-        # .join(bq_data, on='addon_id', how='left')
     )
 
-    return agg_data
+    return agg
 
 
 @click.command()

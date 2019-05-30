@@ -1,7 +1,7 @@
 import pyspark.sql.functions as F
 
 
-def install_flow_events(events_df):
+def install_flow_events(events):
     """
     
     """
@@ -18,6 +18,7 @@ def install_flow_events(events_df):
                 "event_map_values.addon_id",
             ]
         )
+        .filter("event_category = 'addonsManager'")
         .filter("event_object = 'extension'")
         .filter(
             """

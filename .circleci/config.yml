@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  py27: &py27
+  py3:
     docker:
-    - image: python:2.7
+    - image: python:3
     steps:
     - checkout
     - run:
@@ -20,13 +20,8 @@ jobs:
           # convert `.coverage` to `coverage.xml`
           coverage xml -i
           bash <(curl -s https://codecov.io/bash) -F $CIRCLE_JOB
-  py3:
-    <<: *py27
-    docker:
-    - image: python:3
 workflows:
   version: 2
   build:
     jobs:
-    - py27
     - py3
