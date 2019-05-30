@@ -79,7 +79,7 @@ def get_engagement_metrics(addons_expanded, main_summary):
         - number of clients with the addon disabled
     """
     engagement_metrics = (
-        addons_expanded.groupBy("addon_id", "client_id", "Submission_date")
+        addons_expanded.groupBy("addon_id", "client_id", "submission_date_s3")
         .agg(
             F.sum("active_ticks").alias("total_ticks"),
             F.sum("subsession_length").alias("daily_total"),

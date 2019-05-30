@@ -149,6 +149,11 @@ def main_summary(spark):
 
 
 @pytest.fixture()
+def main_summary_day(main_summary):
+    return main_summary.filter("submission_date_s3 = '{}'".format(BASE_DATE))
+
+
+@pytest.fixture()
 def addons_expanded(main_summary):
     return expand_addons(main_summary)
 
@@ -258,10 +263,42 @@ def test_user_demo_metrics(addons_expanded_day, spark):
     assert output == expected
 
 
-@pytest.mark.skip(reason="skipping while sorting out py4j issue")
 def test_trend_metrics(addons_expanded, spark):
     output = df_to_json(get_trend_metrics(addons_expanded, BASE_DATE))
-    expected_output = load_expected_data("trend.json")
+    expected_output = [
+        {
+            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "dau": 1,
+            "mau": 1,
+            "wau": 1,
+        },
+        {
+            "addon_id": u"tls13-version-fallback-rollout-bug1462099@mozilla.org",
+            "dau": None,
+            "mau": 1,
+            "wau": None,
+        },
+        {"addon_id": u"screenshots@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
+        {"addon_id": u"firefox@getpocket.com", "dau": None, "mau": 1, "wau": None},
+        {
+            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
+            "dau": 1,
+            "mau": 1,
+            "wau": 1,
+        },
+        {"addon_id": u"fxmonitor@mozilla.org", "dau": 1, "mau": 1, "wau": 1},
+        {"addon_id": u"aushelper@mozilla.org", "dau": None, "mau": 1, "wau": None},
+        {"addon_id": u"onboarding@mozilla.org", "dau": None, "mau": 1, "wau": None},
+        {
+            "addon_id": u"activity-stream@mozilla.org",
+            "dau": None,
+            "mau": 1,
+            "wau": None,
+        },
+        {"addon_id": u"followonsearch@mozilla.com", "dau": None, "mau": 1, "wau": None},
+        {"addon_id": u"formautofill@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
+        {"addon_id": u"webcompat@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
+    ]
     addons_expanded.unpersist()
     assert output == expected_output
 
@@ -274,22 +311,56 @@ def test_top_ten_others(main_summary_tto, spark):
     :param main_summary_tto: pytest fixture defined above, sample data from main_summary
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = df_to_json(get_top_ten_others(main_summary_tto))
+    output = df_to_json(get_top_ten_others(main_summary_day))
     expected_output = load_expected_data("top_ten", spark)
     main_summary_tto.unpersist()
     assert output == expected_output
 
 
-@pytest.mark.skip(reason="skipping while sorting out py4j issue")
-def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
+def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
     :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = df_to_json(get_engagement_metrics(addons_expanded, main_summary_uem))
-    expected_output = load_expected_data("engagement.json")
-    addons_expanded.unpersist()
-    main_summary_uem.unpersist()
+    output = df_to_json(get_engagement_metrics(addons_expanded_day, main_summary_day))
+    expected_output = [
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"screenshots@mozilla.org",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"fxmonitor@mozilla.org",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"formautofill@mozilla.org",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"webcompat@mozilla.org",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+    ]
     assert output == expected_output
