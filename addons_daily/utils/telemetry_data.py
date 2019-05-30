@@ -125,7 +125,9 @@ def get_browser_metrics(addons_expanded):
             - percent of users with tracking enabled
     """
     browser_metrics = addons_expanded.groupby("addon_id").agg(
-        F.avg("places_pages_count").alias("avg_tabs"),
+        F.avg("scalar_parent_browser_engagement_tab_open_event_count").alias(
+            "avg_tabs"
+        ),
         F.avg("places_bookmarks_count").alias("avg_bookmarks"),
         F.avg("devtools_toolbox_opened_count").alias("avg_toolbox_opened_count"),
     )

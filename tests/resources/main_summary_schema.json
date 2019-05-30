@@ -1,0 +1,255 @@
+{
+   "fields":[
+      {
+         "nullable":true,
+         "type":"string",
+         "name":"submission_date_s3",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"string",
+         "name":"client_id",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":{
+            "type":"array",
+            "elementType":{
+               "fields":[
+                  {
+                     "nullable":true,
+                     "type":"string",
+                     "name":"addon_id",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"blocklisted",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"string",
+                     "name":"name",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"user_disabled",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"app_disabled",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"string",
+                     "name":"version",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"integer",
+                     "name":"scope",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"string",
+                     "name":"type",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"foreign_install",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"has_binary_components",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"integer",
+                     "name":"install_day",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"integer",
+                     "name":"update_day",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"integer",
+                     "name":"signed_state",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"is_system",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"is_web_extension",
+                     "metadata":{
+
+                     }
+                  },
+                  {
+                     "nullable":true,
+                     "type":"boolean",
+                     "name":"multiprocess_compatible",
+                     "metadata":{
+
+                     }
+                  }
+               ],
+               "type":"struct"
+            },
+            "containsNull":true
+         },
+         "name":"active_addons",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"string",
+         "name":"os",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"string",
+         "name":"country",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"long",
+         "name":"subsession_length",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"integer",
+         "name":"scalar_parent_browser_engagement_tab_open_event_count",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"integer",
+         "name":"places_bookmarks_count",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"integer",
+         "name":"scalar_parent_browser_engagement_total_uri_count",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"integer",
+         "name":"devtools_toolbox_opened_count",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":"integer",
+         "name":"active_ticks",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":{
+            "keyType":"string",
+            "type":"map",
+            "valueContainsNull":true,
+            "valueType":"integer"
+         },
+         "name":"histogram_parent_tracking_protection_enabled",
+         "metadata":{
+
+         }
+      },
+      {
+         "nullable":true,
+         "type":{
+            "keyType":"string",
+            "type":"map",
+            "valueContainsNull":true,
+            "valueType":"integer"
+         },
+         "name":"histogram_parent_webext_background_page_load_ms",
+         "metadata":{
+
+         }
+      }
+   ],
+   "type":"struct"
+}

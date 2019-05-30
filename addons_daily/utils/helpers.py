@@ -143,7 +143,7 @@ def dataframe_joiner(dfs):
     """
     left = dfs[0]
     for right in dfs[1:]:
-        left = left.join(right, on="addon_id", how=left)
+        left = left.join(right, on="addon_id", how="left")
     return left
 
 
