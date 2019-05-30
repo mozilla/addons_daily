@@ -207,7 +207,7 @@ def get_top_ten_others(df):
 ###############################
 
 
-def get_trend_metrics(addons_expanded):
+def get_trend_metrics(addons_expanded, date):
     """
     :param df: addons_expanded
     :return: aggregated dataframe by addon_id
@@ -216,7 +216,8 @@ def get_trend_metrics(addons_expanded):
         - weekly active users
         - monthly active users
     """
-    base_date = "to_date('2019-05-15')"
+    fdate = lambda x: x[:4] + "-" + x[4:6] + "-" + x[6:]
+    base_date = "to_date('{}')".format(fdate(date))
 
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.withColumn(
