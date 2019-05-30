@@ -124,7 +124,9 @@ def agg_addons_report(
 @click.option("--search_clients_daily_version", default="v5")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
-def main(date, sample, main_summary_version, search_clients_daily_version, events_version):
+def main(
+    date, sample, main_summary_version, search_clients_daily_version, events_version
+):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
