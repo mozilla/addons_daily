@@ -158,22 +158,68 @@ def addons_expanded_day(addons_expanded):
     return addons_expanded.filter("submission_date_s3 = '{}'".format(BASE_DATE))
 
 
-@pytest.mark.skip(reason="skipping while sorting out py4j issue")
-def test_browser_metrics(addons_expanded, spark):
+def test_browser_metrics(addons_expanded_day, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
     :param addons_expanded: pytest fixture defined above
     :return: assertion whether the expected output indeed matches the true output
     """
-    output = df_to_json(get_browser_metrics(addons_expanded))
-    expected = load_expected_data("browser.json")
-    addons_expanded.unpersist()
+    output = df_to_json(get_browser_metrics(addons_expanded_day))
+    expected = [
+        {
+            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"screenshots@mozilla.org",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"fxmonitor@mozilla.org",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"formautofill@mozilla.org",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"webcompat@mozilla.org",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+    ]
     assert output == expected
 
 
 def test_user_demo_metrics(addons_expanded_day, spark):
-    print("AED", addons_expanded_day.collect())
     output = df_to_json(get_user_demo_metrics(addons_expanded_day))
     expected = [
         {
