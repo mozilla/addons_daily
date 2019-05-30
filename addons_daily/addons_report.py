@@ -6,7 +6,6 @@ from .utils.helpers import (
     get_spark,
     get_sc,
     load_keyed_hist,
-    load_bq_data,
 )
 from .utils.telemetry_data import *
 from .utils.search_daily_data import *
@@ -59,7 +58,7 @@ def agg_addons_report(
         "histogram_parent_webext_background_page_load_ms",
     )
 
-    addons_expanded_day = addons_expanded.fitler(
+    addons_expanded_day = addons_expanded.filter(
         "submission_date_s3 = '{}'".format(date)
     )
 
@@ -125,20 +124,20 @@ def agg_addons_report(
 @click.option("--search_clients_daily_version", default="v5")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
-def main(date, sample):
+def main(date, sample, main_summary_version, search_clients_daily_version, events_version):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
 
-    # leave main_summary unfitlered by
+    # leave main_summary unfiltered by
     # date to get trend metrics
     main_summary = load_data_s3(
         spark,
         input_bucket="telemetry-parquet",
         input_prefix="main_summary",
         input_version=main_summary_version,
-    ).filter(F.col("sample_id").isin(range(0, sample_id)))
+    ).filter(F.col("sample_id").isin(range(0, sample)))
 
     search_daily = (
         load_data_s3(
@@ -147,19 +146,19 @@ def main(date, sample):
             input_prefix="search_clients_daily",
             input_version=search_clients_daily_version,
         )
-        .filter(F.col("sample_id").isin(range(0, sample_id)))
+        .filter(F.col("sample_id").isin(range(0, sample)))
         .filter("submission_date_s3 = '{}'".format(date))
     )
 
     events = (
         load_data_s3(
             spark,
-            input_bucket="telemtry-parquet",
+            input_bucket="telemetry-parquet",
             input_prefix="events",
             input_version=events_version,
         )
-        .filter(F.col("sample_id").isin(range(0, sample_id)))
-        .fitler("submission_date_s3 = '{}'".format(date))
+        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter("submission_date_s3 = '{}'".format(date))
     )
 
     raw_pings = load_raw_pings(sc, date)
