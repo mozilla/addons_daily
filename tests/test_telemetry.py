@@ -145,7 +145,7 @@ def test_browser_metrics(addons_expanded, spark):
     assert output == expected
 
 
-@pytest.mark.skip(reason="skipping while sorting out py4j issue")
+#@pytest.mark.skip(reason="skipping while sorting out py4j issue")
 def test_user_demo_metrics(addons_expanded, spark):
     output = df_to_json(get_user_demo_metrics(addons_expanded))
     expected = load_expected_data("demo.json")
@@ -156,6 +156,7 @@ def test_user_demo_metrics(addons_expanded, spark):
 def test_trend_metrics(addons_expanded, spark):
     output = df_to_json(get_trend_metrics(addons_expanded, BASE_DATE))
     expected_output = load_expected_data("trend.json")
+    addons_expanded.unpersist()
     assert output == expected_output
 
 
@@ -169,6 +170,7 @@ def test_top_ten_others(main_summary_tto, spark):
     """
     output = df_to_json(get_top_ten_others(main_summary_tto))
     expected_output = load_expected_data("top_ten", spark)
+    main_summary_tto.unpersist()
     assert output == expected_output
 
 
@@ -181,4 +183,6 @@ def test_engagement_metrics(addons_expanded, main_summary_uem, spark):
     """
     output = df_to_json(get_engagement_metrics(addons_expanded, main_summary_uem))
     expected_output = load_expected_data("engagement.json")
+    addons_expanded.unpersist()
+    main_summary_uem.unpersist()
     assert output == expected_output
