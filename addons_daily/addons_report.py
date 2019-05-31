@@ -4,6 +4,7 @@ from .utils.helpers import (
     load_data_s3,
     load_raw_pings,
     get_spark,
+    dataframe_joiner,
     get_sc,
     load_keyed_hist,
 )
@@ -19,39 +20,26 @@ from pyspark.sql import SparkSession
 
 DEFAULT_TZ = "UTC"
 
+CORE_FIELDS = [
+    "submission_date_s3",
+    "client_id",
+    "os",
+    "country",
+    "subsession_length",
+    "scalar_parent_browser_engagement_tab_open_event_count",
+    "places_bookmarks_count",
+    "scalar_parent_browser_engagement_total_uri_count",
+    "devtools_toolbox_opened_count",
+    "active_ticks",
+    "histogram_parent_tracking_protection_enabled",
+    "histogram_parent_webext_background_page_load_ms",
+]
+
 
 def expand_addons(main_summary):
-    addons_and_users = main_summary.select(
-        "submission_date_s3",
-        "client_id",
-        F.explode("active_addons"),
-        "os",
-        "country",
-        "subsession_length",
-        "scalar_parent_browser_engagement_tab_open_event_count",
-        "places_bookmarks_count",
-        "scalar_parent_browser_engagement_total_uri_count",
-        "devtools_toolbox_opened_count",
-        "active_ticks",
-        "histogram_parent_tracking_protection_enabled",
-        "histogram_parent_webext_background_page_load_ms",
-    )
+    addons_and_users = main_summary.select(CORE_FIELDS + [F.explode("active_addons")])
 
-    addons_expanded = addons_and_users.select(
-        "submission_date_s3",
-        "client_id",
-        "col.*",
-        "os",
-        "country",
-        "subsession_length",
-        "scalar_parent_browser_engagement_tab_open_event_count",
-        "places_bookmarks_count",
-        "scalar_parent_browser_engagement_total_uri_count",
-        "devtools_toolbox_opened_count",
-        "active_ticks",
-        "histogram_parent_tracking_protection_enabled",
-        "histogram_parent_webext_background_page_load_ms",
-    )
+    addons_expanded = addons_and_users.select(CORE_FIELDS + ["col.*"])
 
     return addons_expanded
 
@@ -90,21 +78,23 @@ def agg_addons_report(
     cs_injection_time = get_cs_injection_time(raw_pings)
     mem_total = get_memory_total(raw_pings)
 
-    agg = (
-        user_demo_metrics.join(engagement_metrics, on="addon_id", how="left")
-        .join(browser_metrics, on="addon_id", how="left")
-        # .join(top_ten_others, on="addon_id", how="left")
-        .join(trend_metrics, on="addon_id", how="left")
-        .join(search_metrics, on="addon_id", how="left")
-        .join(event_metrics, on="addon_id", how="left")
-        .join(storage_get, on="addon_id", how="left")
-        .join(storage_set, on="addon_id", how="left")
-        .join(startup_time, on="addon_id", how="left")
-        .join(bkg_load_time, on="addon_id", how="left")
-        .join(ba_popup_lt, on="addon_id", how="left")
-        .join(pa_popup_lt, on="addon_id", how="left")
-        .join(cs_injection_time, on="addon_id", how="left")
-        .join(mem_total, on="addon_id", how="left")
+    agg = dataframe_joiner(
+        [
+            user_demo_metrics,
+            engagement_metrics,
+            browser_metrics,
+            trend_metrics,
+            search_metrics,
+            event_metrics,
+            storage_get,
+            storage_set,
+            startup_time,
+            bkg_load_time,
+            ba_popup_lt,
+            pa_popup_lt,
+            cs_injection_time,
+            mem_total,
+        ]
     )
 
     return agg
