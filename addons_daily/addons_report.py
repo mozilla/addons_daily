@@ -35,9 +35,7 @@ CORE_FIELDS = [
 
 def expand_addons(main_summary):
     addons_and_users = main_summary.select(CORE_FIELDS + [F.explode("active_addons")])
-
     addons_expanded = addons_and_users.select(CORE_FIELDS + ["col.*"])
-
     return addons_expanded
 
 
@@ -56,11 +54,12 @@ def agg_addons_report(
     main_summary_day = main_summary.filter("submission_date_s3 = '{}'".format(date))
 
     # telemetry metrics
+    addon_names = get_top_addon_names(addons_expanded_day)
     user_demo_metrics = get_user_demo_metrics(addons_expanded_day)
     engagement_metrics = get_engagement_metrics(addons_expanded_day, main_summary_day)
     browser_metrics = get_browser_metrics(addons_expanded_day)
     search_metrics = get_search_metrics(search_clients_daily, addons_expanded_day)
-    # top_ten_others = get_top_ten_others(addons_expanded_day)
+    top_ten_coinstalls = get_top_10_coinstalls(addons_expanded_day)
     # needs to process 30 days in past, use unfiltered dataframes
     trend_metrics = get_trend_metrics(addons_expanded, date)
     event_metrics = install_flow_events(events)
@@ -76,6 +75,7 @@ def agg_addons_report(
 
     agg = dataframe_joiner(
         [
+            addon_names,
             user_demo_metrics,
             engagement_metrics,
             browser_metrics,
@@ -85,6 +85,7 @@ def agg_addons_report(
             storage_get,
             storage_set,
             startup_time,
+            top_ten_coinstalls,
             bkg_load_time,
             ba_popup_lt,
             pa_popup_lt,

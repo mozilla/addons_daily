@@ -51,6 +51,27 @@ def addons_expanded_day(addons_expanded):
     return addons_expanded.filter("submission_date_s3 = '{}'".format(BASE_DATE))
 
 
+def test_addon_names(addons_expanded_day, spark):
+    output = df_to_json(get_top_addon_names(addons_expanded_day))
+    expected = [
+        {
+            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "name": u"Baidu Search Update",
+        },
+        {"addon_id": u"screenshots@mozilla.org", "name": u"Firefox Screenshots"},
+        {"addon_id": u"non-system-addon1", "name": u"Non systemn Addon 1"},
+        {
+            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
+            "name": u"hotfix-update-xpi-intermediate",
+        },
+        {"addon_id": u"fxmonitor@mozilla.org", "name": u"Firefox Monitor"},
+        {"addon_id": u"non-system-addon2", "name": u"Non System Addon 2"},
+        {"addon_id": u"formautofill@mozilla.org", "name": u"Form Autofill"},
+        {"addon_id": u"webcompat@mozilla.org", "name": u"Web Compat"},
+    ]
+    assert output == expected
+
+
 def test_browser_metrics(addons_expanded_day, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
@@ -77,6 +98,14 @@ def test_browser_metrics(addons_expanded_day, spark):
             "pct_w_tracking_prot_enabled": 0.0,
         },
         {
+            "addon_id": u"non-system-addon1",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
             "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
             "avg_bookmarks": None,
             "avg_tabs": None,
@@ -86,6 +115,14 @@ def test_browser_metrics(addons_expanded_day, spark):
         },
         {
             "addon_id": u"fxmonitor@mozilla.org",
+            "avg_bookmarks": None,
+            "avg_tabs": None,
+            "avg_toolbox_opened_count": None,
+            "avg_uri": 33.0,
+            "pct_w_tracking_prot_enabled": 0.0,
+        },
+        {
+            "addon_id": u"non-system-addon2",
             "avg_bookmarks": None,
             "avg_tabs": None,
             "avg_toolbox_opened_count": None,
@@ -126,12 +163,22 @@ def test_user_demo_metrics(addons_expanded_day, spark):
             "os_dist": {u"Windows_NT": 1.0},
         },
         {
+            "addon_id": u"non-system-addon1",
+            "country_dist": {u"GB": 1.0},
+            "os_dist": {u"Windows_NT": 1.0},
+        },
+        {
             "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
             "country_dist": {u"GB": 1.0},
             "os_dist": {u"Windows_NT": 1.0},
         },
         {
             "addon_id": u"fxmonitor@mozilla.org",
+            "country_dist": {u"GB": 1.0},
+            "os_dist": {u"Windows_NT": 1.0},
+        },
+        {
+            "addon_id": u"non-system-addon2",
             "country_dist": {u"GB": 1.0},
             "os_dist": {u"Windows_NT": 1.0},
         },
@@ -167,6 +214,7 @@ def test_trend_metrics(addons_expanded, spark):
             "wau": None,
         },
         {"addon_id": u"screenshots@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
+        {"addon_id": u"non-system-addon1", "dau": 1, "mau": 1, "wau": 1},
         {"addon_id": u"firefox@getpocket.com", "dau": None, "mau": 1, "wau": None},
         {
             "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
@@ -183,6 +231,7 @@ def test_trend_metrics(addons_expanded, spark):
             "mau": 1,
             "wau": None,
         },
+        {"addon_id": u"non-system-addon2", "dau": 1, "mau": 1, "wau": 1},
         {"addon_id": u"followonsearch@mozilla.com", "dau": None, "mau": 1, "wau": None},
         {"addon_id": u"formautofill@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
         {"addon_id": u"webcompat@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
@@ -190,14 +239,72 @@ def test_trend_metrics(addons_expanded, spark):
     assert output == expected_output
 
 
-def test_top_ten_others(main_summary_day, spark):
+def test_top_ten_coinstalls(addons_expanded_day, spark):
     """
     Given a dataframe of some actual sampled data, ensure that
     the get_pct_tracking_enabled outputs the correct dataframe
     :param main_summary_tto: pytest fixture defined above, sample data from main_summary
     :return: assertion whether the expected output indeed matches the true output
     """
-    pass
+    output = df_to_json(get_top_10_coinstalls(addons_expanded_day))
+    expected = [
+        {
+            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon2",
+                u"1": u"non-system-addon1",
+            },
+        },
+        {
+            "addon_id": u"screenshots@mozilla.org",
+            "top_10_coinstalls": {
+                u"0": u"hotfix-update-xpi-intermediate@mozilla.com",
+                u"1": u"non-system-addon1",
+            },
+        },
+        {
+            "addon_id": u"non-system-addon1",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon1",
+                u"1": u"non-system-addon2",
+            },
+        },
+        {
+            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon1",
+                u"1": u"non-system-addon2",
+            },
+        },
+        {
+            "addon_id": u"fxmonitor@mozilla.org",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon1",
+                u"1": u"hotfix-update-xpi-intermediate@mozilla.com",
+            },
+        },
+        {
+            "addon_id": u"non-system-addon2",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon2",
+                u"1": u"non-system-addon1",
+            },
+        },
+        {
+            "addon_id": u"formautofill@mozilla.org",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon1",
+                u"1": u"non-system-addon2",
+            },
+        },
+        {
+            "addon_id": u"webcompat@mozilla.org",
+            "top_10_coinstalls": {
+                u"0": u"non-system-addon1",
+                u"1": u"non-system-addon2",
+            },
+        },
+    ]
 
 
 def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
@@ -223,6 +330,12 @@ def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
         },
         {
             "active_hours": 0.18194444444444444,
+            "addon_id": u"non-system-addon1",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
             "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
             "avg_time_total": 747.0,
             "disabled": None,
@@ -230,6 +343,12 @@ def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
         {
             "active_hours": 0.18194444444444444,
             "addon_id": u"fxmonitor@mozilla.org",
+            "avg_time_total": 747.0,
+            "disabled": None,
+        },
+        {
+            "active_hours": 0.18194444444444444,
+            "addon_id": u"non-system-addon2",
             "avg_time_total": 747.0,
             "disabled": None,
         },

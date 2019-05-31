@@ -1,7 +1,8 @@
 from .helpers import *
 import pyspark.sql.functions as F
 import pandas as pd
-from pyspark.sql import SQLContext
+from pyspark.sql import SQLContext, Row
+from pyspark.sql.window import Window
 
 
 # just so pycharm is not mad at me while I type this code
@@ -164,44 +165,43 @@ def get_browser_metrics(addons_expanded):
     return browser_metrics
 
 
-#######################
-# top ten other add ons
-#######################
+def get_top_10_coinstalls(addons_expanded_day):
+    def str_map_to_dict(m):
+        result = {}
+        for i in m:
+            k, v = i.split("=")
+            result[k] = v
+        return result
 
-
-def get_top_ten_others(df):
-    """
-    :param df: this df should actually be main_summary, not addons_expanded
-    :return:
-    """
-    ttt = F.udf(take_top_ten, ArrayType(StringType()))
-    str_to_list_udf = F.udf(str_to_list, ArrayType(StringType()))
-    list_expander_udf = F.udf(list_expander, ArrayType(ArrayType(StringType())))
-
-    other_addons_df = (
-        df.filter("active_addons is not null")
-        .select("client_id", F.explode("active_addons"))
-        .select("client_id", "col.addon_id")
-        .groupBy("client_id")
-        .agg(F.collect_set("addon_id").alias("addons_list"))
-        .withColumn("test", F.explode(list_expander_udf(F.col("addons_list"))))
-        .withColumn("addon_id", F.col("test").getItem(0))
-        .withColumn("others", str_to_list_udf(F.col("test").getItem(1)))
-        .withColumn("other_addon", F.explode("others"))
-        .drop("others", "addons_list", "test")
-        .groupBy("addon_id", "other_addon")
-        .agg(F.countDistinct("client_id").alias("seen_together"))
-        .withColumn(
-            "others_counts", F.create_map(F.col("other_addon"), F.col("seen_together"))
+    def format_row(row):
+        return Row(
+            addon_id=row.addon_id,
+            top_10_coinstalls=str_map_to_dict(row.top_10_coinstalls),
         )
-        .drop("other_addon", "seen_together")
-        .groupBy("addon_id")
-        .agg(F.collect_list("others_counts").alias("others_w_counts"))
-        .withColumn("top_ten_others", ttt(F.col("others_w_counts")))
-        .drop("others_w_counts")
+
+    w = Window().partitionBy("addon_id").orderBy(F.col("count").desc())
+    d = (
+        addons_expanded_day.join(
+            addons_expanded_day.filter("is_system=false").withColumnRenamed(
+                "addon_id", "coaddon"
+            ),
+            on="client_id",
+        )
+        .groupby("client_id", "addon_id", "coaddon")
+        .count()
+        .withColumn("rn", (F.row_number().over(w) - F.lit(1)))  # start at 0
+        .filter("rn BETWEEN 1 and 10")  # ignore 0th addon (where coaddon==addon_id)
+        .groupby("addon_id")
+        .agg(
+            F.collect_list(
+                F.concat((F.col("rn") - F.lit(1)), F.lit("="), "coaddon")
+            ).alias("top_10_coinstalls")
+        )
+        .rdd.map(format_row)
+        .toDF()
     )
 
-    return other_addons_df
+    return d
 
 
 ###############################
@@ -250,6 +250,19 @@ def get_trend_metrics(addons_expanded, date):
     )
 
     return trend_metrics
+
+
+def get_top_addon_names(addons_expanded):
+    w = Window().partitionBy("addon_id").orderBy(F.col("n").desc())
+    cnts = addons_expanded.groupby("addon_id", "name").agg(
+        F.countDistinct("client_id").alias("n")
+    )
+    addon_names = (
+        cnts.withColumn("rn", F.row_number().over(w))
+        .where(F.col("rn") == 1)
+        .select("addon_id", "name")
+    )
+    return addon_names
 
 
 def install_flow_events(events):
