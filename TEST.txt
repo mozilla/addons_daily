@@ -1,0 +1,1 @@
+[{'addon_id': 'hotfix-update-xpi-intermediate@mozilla.com', 'top_ten_others': ['{=1}']}]
