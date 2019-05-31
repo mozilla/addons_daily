@@ -74,6 +74,10 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
         raw_pings=raw_pings,
     )
 
+    # uncomment for test dev
+    # with open("TEST.json", "w") as f:
+    #     f.write(str([i.asDict() for i in agg.collect()]))
+
     result = df_to_json(agg)
     expected_result = load_json("expected_results.json")
     assert result == expected_result
