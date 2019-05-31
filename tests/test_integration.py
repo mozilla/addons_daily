@@ -73,6 +73,7 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
         events=events,
         raw_pings=raw_pings,
     )
+
     result = df_to_json(agg)
     expected_result = load_json("expected_results.json")
     assert result == expected_result

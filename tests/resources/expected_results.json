@@ -1,649 +1,794 @@
- [{
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "baidu-code-update@mozillaonline.com",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": null,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": null,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "screenshots@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 194772.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4087.0,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 1577.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": 2,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "screenshots@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 194772.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4087.0,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 485.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": 2,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "screenshots@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 194772.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4087.0,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 5665.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": 2,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "screenshots@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 194772.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4087.0,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 964.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": 2,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": null,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": null,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "fxmonitor@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 1295.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "fxmonitor@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 485.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "fxmonitor@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 5134.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "fxmonitor@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 1,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": 1,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 964.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "formautofill@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4076.5,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 1295.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "formautofill@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4076.5,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 440.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "formautofill@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4076.5,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 5134.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "formautofill@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": null,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4076.5,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 964.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "webcompat@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 201173.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 1295.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "webcompat@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 201173.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 485.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "webcompat@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 201173.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 4653.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }, {
- 	"avg_tabs": null,
- 	"pct_w_tracking_prot_enabled": 0.0,
- 	"avg_storage_local_set_ms": null,
- 	"addon_id": "webcompat@mozilla.org",
- 	"sap_searches": {},
- 	"mau": 2,
- 	"organic_searches": {},
- 	"avg_memory_total": 201173.0,
- 	"search_with_ads": {},
- 	"avg_startup_time": 4059.75,
- 	"uninstalls": null,
- 	"avg_toolbox_opened_count": null,
- 	"avg_content_script_injection_ms": null,
- 	"avg_time_total": 747.0,
- 	"avg_ba_popup_load_time": null,
- 	"country_dist": {
- 		"GB": 1.0
- 	},
- 	"active_hours": 0.18194444444444444,
- 	"avg_webext_background_page_load_ms_by_addonid": 964.0,
- 	"wau": 1,
- 	"os_dist": {
- 		"Windows_NT": 1.0
- 	},
- 	"installs": null,
- 	"avg_pa_popup_load_time": null,
- 	"avg_bookmarks": null,
- 	"ad_click": {},
- 	"avg_uri": 33.0,
- 	"avg_storage_local_get_ms": null,
- 	"dau": 1,
- 	"disabled": null,
- 	"tagged_sap_searches": {
- 		"google": 10.0
- 	}
- }]
+[
+   {
+      "addon_id":"baidu-code-update@mozillaonline.com",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":null,
+      "avg_webext_background_page_load_ms_by_addonid":null,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"screenshots@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":2,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4087.0,
+      "avg_webext_background_page_load_ms_by_addonid":1577.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"screenshots@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":2,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4087.0,
+      "avg_webext_background_page_load_ms_by_addonid":485.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"screenshots@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":2,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4087.0,
+      "avg_webext_background_page_load_ms_by_addonid":5665.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"screenshots@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":2,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4087.0,
+      "avg_webext_background_page_load_ms_by_addonid":964.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"hotfix-update-xpi-intermediate@mozilla.com",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":null,
+      "avg_webext_background_page_load_ms_by_addonid":null,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"fxmonitor@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":1295.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"fxmonitor@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":485.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"fxmonitor@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":5134.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"fxmonitor@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":1,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":1,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":964.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"formautofill@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4076.5,
+      "avg_webext_background_page_load_ms_by_addonid":1295.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"formautofill@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4076.5,
+      "avg_webext_background_page_load_ms_by_addonid":440.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"formautofill@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4076.5,
+      "avg_webext_background_page_load_ms_by_addonid":5134.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"formautofill@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4076.5,
+      "avg_webext_background_page_load_ms_by_addonid":964.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"webcompat@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":1295.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"webcompat@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":485.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"webcompat@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":4653.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   },
+   {
+      "addon_id":"webcompat@mozilla.org",
+      "os_dist":{
+         "Windows_NT":1.0
+      },
+      "country_dist":{
+         "GB":1.0
+      },
+      "avg_time_total":747.0,
+      "active_hours":0.18194444444444444,
+      "disabled":null,
+      "avg_tabs":null,
+      "avg_bookmarks":null,
+      "avg_toolbox_opened_count":null,
+      "avg_uri":33.0,
+      "pct_w_tracking_prot_enabled":0.0,
+      "mau":2,
+      "wau":1,
+      "dau":1,
+      "sap_searches":{
+
+      },
+      "tagged_sap_searches":{
+         "google":10.0
+      },
+      "organic_searches":{
+
+      },
+      "search_with_ads":{
+
+      },
+      "ad_click":{
+
+      },
+      "installs":null,
+      "uninstalls":null,
+      "avg_webext_storage_local_get_ms_":null,
+      "avg_webext_storage_local_set_ms_":null,
+      "avg_webext_extension_startup_ms_":4059.75,
+      "avg_webext_background_page_load_ms_by_addonid":964.0,
+      "avg_webext_browseraction_popup_open_ms_":null,
+      "avg_webext_pageaction_popup_open_ms_":null,
+      "avg_webext_content_script_injection_ms_":null
+   }
+]

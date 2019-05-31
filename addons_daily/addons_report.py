@@ -9,13 +9,10 @@ from .utils.helpers import (
     load_keyed_hist,
 )
 from .utils.telemetry_data import *
-from .utils.search_daily_data import *
-from .utils.events_data import *
 
 # from .utils.amo_data import *
 from .utils.bq_data import *
 from .utils.raw_pings import *
-from .utils.events_data import *
 from pyspark.sql import SparkSession
 
 DEFAULT_TZ = "UTC"
@@ -76,7 +73,6 @@ def agg_addons_report(
     ba_popup_lt = get_ba_popup_load_time(raw_pings)
     pa_popup_lt = get_pa_popup_load_time(raw_pings)
     cs_injection_time = get_cs_injection_time(raw_pings)
-    mem_total = get_memory_total(raw_pings)
 
     agg = dataframe_joiner(
         [
@@ -93,7 +89,6 @@ def agg_addons_report(
             ba_popup_lt,
             pa_popup_lt,
             cs_injection_time,
-            mem_total,
         ]
     )
 

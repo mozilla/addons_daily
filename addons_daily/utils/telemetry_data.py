@@ -250,3 +250,133 @@ def get_trend_metrics(addons_expanded, date):
     )
 
     return trend_metrics
+
+
+def install_flow_events(events):
+    """
+    
+    """
+    install_flow_events = (
+        events.select(
+            [
+                "client_id",
+                "submission_date_s3",
+                "event_map_values.method",
+                "event_method",
+                "event_string_value",
+                "event_map_values.source",
+                "event_map_values.download_time",
+                "event_map_values.addon_id",
+            ]
+        )
+        .filter("event_category = 'addonsManager'")
+        .filter("event_object = 'extension'")
+        .filter(
+            """
+        (event_method = 'install' and event_map_values.step = 'download_completed') or 
+        (event_method = 'uninstall')
+        """
+        )
+        .withColumn(
+            "addon_id",
+            F.when(F.col("addon_id").isNull(), F.col("event_string_value")).otherwise(
+                F.col("addon_id")
+            ),
+        )  # uninstalls populate addon_id in a different place
+        .drop("event_string_value")
+        .groupby("addon_id", "event_method", "source")
+        .agg(
+            F.avg("download_time").alias("avg_download_time"),
+            F.countDistinct("client_id").alias("n_distinct_users"),
+        )
+    )
+
+    number_installs = (
+        install_flow_events.where(install_flow_events.event_method == "install")
+        .groupby("addon_id")
+        .agg(F.sum("n_distinct_users").alias("installs"))
+    )
+
+    number_uninstalls = (
+        install_flow_events.where(install_flow_events.event_method == "uninstall")
+        .groupby("addon_id")
+        .agg(F.sum("n_distinct_users").alias("uninstalls"))
+    )
+
+    install_flow_events_df = number_installs.join(
+        number_uninstalls, "addon_id", how="full"
+    )
+
+    return install_flow_events_df
+
+
+def get_search_metrics(search_daily_df, addons_expanded):
+    """
+    :param search_daily_df: search clients daily dataframe
+    :param addons_expanded: addons_expanded dataframe
+    :return: aggregated dataframe by addon_id
+        with metris from the search clients daily dataset
+        - average sap searches by search engine
+        - average tagged sap searches by search engine
+        - average organic searches by search engine
+        - total number of searches with ads by search engine
+        - total number of ad clicks by search engine
+    """
+    search_daily_df = bucket_engine(search_daily_df)
+
+    user_addon = addons_expanded.select("client_id", "addon_id")
+    user_addon_search = user_addon.join(search_daily_df, "client_id")
+
+    df = (
+        user_addon_search.groupBy("addon_id", "engine")
+        .agg(
+            F.sum("sap").alias("sap_searches"),
+            F.sum("tagged_sap").alias("tagged_sap_searches"),
+            F.sum("organic").alias("organic_searches"),
+            F.sum("search_with_ads").alias("search_with_ads"),
+            F.sum("ad_click").alias("ad_click"),
+        )
+        .groupBy("addon_id")
+        .agg(
+            F.collect_list("engine").alias("engine"),
+            F.collect_list("sap_searches").alias("sap_searches"),
+            F.collect_list("tagged_sap_searches").alias("tagged_sap_searches"),
+            F.collect_list("organic_searches").alias("organic_searches"),
+            F.collect_list("search_with_ads").alias("search_with_ads"),
+            F.collect_list("ad_click").alias("ad_click"),
+        )
+        .withColumn(
+            "sap_searches",
+            make_map(
+                F.col("engine"), F.col("sap_searches").cast(ArrayType(DoubleType()))
+            ),
+        )
+        .withColumn(
+            "tagged_sap_searches",
+            make_map(
+                F.col("engine"),
+                F.col("tagged_sap_searches").cast(ArrayType(DoubleType())),
+            ),
+        )
+        .withColumn(
+            "organic_searches",
+            make_map(
+                F.col("engine"), F.col("organic_searches").cast(ArrayType(DoubleType()))
+            ),
+        )
+        .withColumn(
+            "search_with_ads",
+            make_map(
+                F.col("engine"), F.col("search_with_ads").cast(ArrayType(DoubleType()))
+            ),
+        )
+        .withColumn(
+            "ad_click",
+            make_map(
+                F.col("ad_click"), F.col("ad_click").cast(ArrayType(DoubleType()))
+            ),
+        )
+        .drop("engine")
+    )
+
+    return df
