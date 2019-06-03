@@ -1,19 +1,30 @@
-[
-        {
+[{
+    "payload": {
+        "keyedHistograms": {
             "HTTP_CHANNEL_DISPOSITION_UPGRADE": {
                 "disabledNoReason": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 2930,
-                    "values": {"0": 17, "1": 888, "2": 1018, "3": 2, "4": 0}
+                    "values": {
+                        "0": 17,
+                        "1": 888,
+                        "2": 1018,
+                        "3": 2,
+                        "4": 0
+                    }
                 },
                 "disabledWont": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 28,
-                    "values": {"1": 0, "2": 14, "3": 0}
+                    "values": {
+                        "1": 0,
+                        "2": 14,
+                        "3": 0
+                    }
                 }
             },
             "SSL_TIME_UNTIL_HANDSHAKE_FINISHED_KEYED_BY_KA": {
@@ -72,28 +83,34 @@
                     "histogram_type": 0,
                     "range": [32768, 16777216],
                     "sum": 410536,
-                    "values": {"182760": 0, "194772": 2, "207574": 0}
-                },
-                "webcompat@mozilla.org": {
-                    "bucket_count": 100,
-                    "histogram_type": 0,
-                    "range": [32768, 16777216],
-                    "sum": 410536,
-                    "values": {"182760": 0, "194772": 1, "207574": 1}
+                    "values": {
+                        "182760": 0,
+                        "194772": 1,
+                        "207574": 1
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [32768, 16777216],
                     "sum": 410536,
-                    "values": {"182760": 0, "194772": 2, "207574": 0}
+                    "values": {
+                        "182760": 0,
+                        "194772": 2,
+                        "207574": 0
+                    }
                 }
             },
             "WEBEXT_STORAGE_LOCAL_SET_MS_BY_ADDONID": {
                 "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}": {
                     "range": [1, 50000],
                     "histogram_type": 0,
-                    "values": {"1": 0, "3": 1, "2": 2, "4": 1},
+                    "values": {
+                        "1": 0,
+                        "3": 1,
+                        "2": 2,
+                        "4": 1
+                    },
                     "bucket_count": 100,
                     "sum": 7
                 }
@@ -102,7 +119,12 @@
                 "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}": {
                     "range": [1, 50000],
                     "histogram_type": 0,
-                    "values": {"1": 0, "3": 1, "2": 2, "4": 0},
+                    "values": {
+                        "1": 0,
+                        "3": 1,
+                        "2": 2,
+                        "4": 0
+                    },
                     "bucket_count": 100,
                     "sum": 7
                 }
@@ -113,7 +135,12 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 310,
-                    "values": {"67": 0, "74": 3, "81": 1, "89": 0}
+                    "values": {
+                        "67": 0,
+                        "74": 3,
+                        "81": 1,
+                        "89": 0
+                    }
                 }
             },
             "WEBEXT_CONTENT_SCRIPT_INJECTION_MS_BY_ADDONID": {
@@ -138,147 +165,222 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "blocklists/certificates": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "blocklists/gfx": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "blocklists/plugins": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/fxmonitor-breaches": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/language-dictionaries": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/onboarding": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/sites-classification": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/tippytop": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "normandy/action/AddonStudyAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 2,
-                    "values": {"0": 0, "1": 2, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 2,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ConsoleLogAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceExperimentAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRollbackAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRolloutAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ShowHeartbeatAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/597": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/634": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/721": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/runner": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "pinning/pins": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "settings-changes-monitoring": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_CL_KEYED_UPDATE_TIME": {
@@ -287,14 +389,22 @@
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 2265,
-                    "values": {"1531": 0, "2091": 1, "2855": 0}
+                    "values": {
+                        "1531": 0,
+                        "2091": 1,
+                        "2855": 0
+                    }
                 },
                 "test": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 68,
-                    "values": {"50": 0, "68": 1, "93": 0}
+                    "values": {
+                        "50": 0,
+                        "68": 1,
+                        "93": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_REMOTE_STATUS2": {
@@ -303,7 +413,11 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 12,
-                    "values": {"0": 0, "1": 12, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 12,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_SERVER_RESPONSE_TIME": {
@@ -328,7 +442,10 @@
                     "histogram_type": 2,
                     "range": [1, 2],
                     "sum": 0,
-                    "values": {"0": 12, "1": 0}
+                    "values": {
+                        "0": 12,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_ERROR": {
@@ -337,14 +454,20 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_NETWORK_ERROR": {
@@ -353,14 +476,20 @@
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 31,
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_STATUS2": {
@@ -369,14 +498,22 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_SERVER_RESPONSE_TIME": {
@@ -385,14 +522,22 @@
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 339,
-                    "values": {"153": 0, "229": 1, "343": 0}
+                    "values": {
+                        "153": 0,
+                        "229": 1,
+                        "343": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 789,
-                    "values": {"1156": 0, "514": 0, "771": 1}
+                    "values": {
+                        "1156": 0,
+                        "514": 0,
+                        "771": 1
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_TIMEOUT": {
@@ -401,14 +546,20 @@
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 5,
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID": {
@@ -417,49 +568,77 @@
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1407,
-                    "values": {"1174": 0, "1295": 1, "1429": 0}
+                    "values": {
+                        "1174": 0,
+                        "1295": 1,
+                        "1429": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1407,
-                    "values": {"1174": 0, "1295": 1, "1429": 0}
+                    "values": {
+                        "1174": 0,
+                        "1295": 1,
+                        "1429": 0
+                    }
                 },
                 "jid1-NIfFY2CA8fy1tg@jetpack": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1651,
-                    "values": {"1429": 0, "1577": 1, "1740": 0}
+                    "values": {
+                        "1429": 0,
+                        "1577": 1,
+                        "1740": 0
+                    }
                 },
                 "mozilla_cc3@internetdownloadmanager.com": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1682,
-                    "values": {"1429": 0, "1577": 1, "1740": 0}
+                    "values": {
+                        "1429": 0,
+                        "1577": 1,
+                        "1740": 0
+                    }
                 },
                 "plg@frhadiadsk": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1411,
-                    "values": {"1174": 0, "1295": 1, "1429": 0}
+                    "values": {
+                        "1174": 0,
+                        "1295": 1,
+                        "1429": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1662,
-                    "values": {"1429": 0, "1577": 1, "1740": 0}
+                    "values": {
+                        "1429": 0,
+                        "1577": 1,
+                        "1740": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1407,
-                    "values": {"1174": 0, "1295": 1, "1429": 0}
+                    "values": {
+                        "1174": 0,
+                        "1295": 1,
+                        "1429": 0
+                    }
                 }
             },
             "WEBEXT_BROWSERACTION_POPUP_PRELOAD_RESULT_COUNT_BY_ADDONID": {
@@ -468,7 +647,11 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID": {
@@ -477,67 +660,104 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 842,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 826,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 },
                 "jid1-NIfFY2CA8fy1tg@jetpack": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 1019,
-                    "values": {"1075": 0, "888": 0, "977": 1}
+                    "values": {
+                        "1075": 0,
+                        "888": 0,
+                        "977": 1
+                    }
                 },
                 "mozilla_cc3@internetdownloadmanager.com": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 823,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 },
                 "plg@frhadiadsk": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 822,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 844,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 820,
-                    "values": {"733": 0, "807": 1, "888": 0}
+                    "values": {
+                        "733": 0,
+                        "807": 1,
+                        "888": 0
+                    }
                 }
             }
-        },
-        {
+        }
+    }
+}, {
+    "payload": {
+        "keyedHistograms": {
             "APPLICATION_REPUTATION_SERVER_VERDICT_2": {
                 ".exe": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 ".zip": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 11, "1": 0}
+                    "values": {
+                        "0": 11,
+                        "1": 0
+                    }
                 }
             },
             "FX_URLBAR_SELECTED_RESULT_INDEX_BY_TYPE": {
@@ -546,7 +766,10 @@
                     "histogram_type": 1,
                     "range": [1, 14],
                     "sum": 0,
-                    "values": {"0": 3, "1": 0}
+                    "values": {
+                        "0": 3,
+                        "1": 0
+                    }
                 }
             },
             "HTTP_CHANNEL_DISPOSITION_UPGRADE": {
@@ -569,7 +792,10 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 8, "1": 0}
+                    "values": {
+                        "0": 8,
+                        "1": 0
+                    }
                 },
                 "disabledWont": {
                     "bucket_count": 51,
@@ -592,21 +818,30 @@
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 10,
-                    "values": {"0": 10, "1": 0}
+                    "values": {
+                        "0": 10,
+                        "1": 0
+                    }
                 },
                 "google.in-content:sap-follow-on:firefox-b-d": {
                     "bucket_count": 3,
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 4,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 },
                 "google.in-content:sap:firefox-b-d": {
                     "bucket_count": 3,
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 17,
-                    "values": {"0": 17, "1": 0}
+                    "values": {
+                        "0": 17,
+                        "1": 0
+                    }
                 }
             },
             "SSL_TIME_UNTIL_HANDSHAKE_FINISHED_KEYED_BY_KA": {
@@ -698,7 +933,12 @@
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 255,
-                    "values": {"115": 0, "120": 1, "132": 1, "138": 0}
+                    "values": {
+                        "115": 0,
+                        "120": 1,
+                        "132": 1,
+                        "138": 0
+                    }
                 },
                 "custom": {
                     "bucket_count": 200,
@@ -837,7 +1077,11 @@
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 4627,
-                    "values": {"1121": 4, "1531": 0, "821": 0}
+                    "values": {
+                        "1121": 4,
+                        "1531": 0,
+                        "821": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_REMOTE_STATUS2": {
@@ -846,7 +1090,11 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 14,
-                    "values": {"0": 0, "1": 14, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 14,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_SERVER_RESPONSE_TIME": {
@@ -871,7 +1119,10 @@
                     "histogram_type": 2,
                     "range": [1, 2],
                     "sum": 0,
-                    "values": {"0": 14, "1": 0}
+                    "values": {
+                        "0": 14,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_ERROR": {
@@ -880,14 +1131,20 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 2, "1": 0}
+                    "values": {
+                        "0": 2,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_NETWORK_ERROR": {
@@ -896,14 +1153,20 @@
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 31,
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 2, "1": 0}
+                    "values": {
+                        "0": 2,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_STATUS2": {
@@ -912,14 +1175,22 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 4,
-                    "values": {"0": 0, "1": 4, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 4,
+                        "2": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 2,
-                    "values": {"0": 0, "1": 2, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 2,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_SERVER_RESPONSE_TIME": {
@@ -928,14 +1199,25 @@
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 508,
-                    "values": {"102": 1, "153": 2, "20": 0, "229": 0, "30": 1}
+                    "values": {
+                        "102": 1,
+                        "153": 2,
+                        "20": 0,
+                        "229": 0,
+                        "30": 1
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 1398,
-                    "values": {"1156": 0, "343": 0, "514": 1, "771": 1}
+                    "values": {
+                        "1156": 0,
+                        "343": 0,
+                        "514": 1,
+                        "771": 1
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_TIMEOUT": {
@@ -944,32 +1226,52 @@
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 5,
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 2, "1": 0}
+                    "values": {
+                        "0": 2,
+                        "1": 0
+                    }
                 }
             }
-        },
-        {
+        }
+    }
+}, {
+    "payload": {
+        "keyedHistograms": {
             "HTTP_CHANNEL_DISPOSITION_UPGRADE": {
                 "disabledNoReason": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 35244,
-                    "values": {"0": 169, "1": 1062, "2": 17085, "4": 3, "5": 0}
+                    "values": {
+                        "0": 169,
+                        "1": 1062,
+                        "2": 17085,
+                        "4": 3,
+                        "5": 0
+                    }
                 },
                 "disabledWont": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1005,
-                    "values": {"0": 26, "1": 203, "2": 401, "3": 0}
+                    "values": {
+                        "0": 26,
+                        "1": 203,
+                        "2": 401,
+                        "3": 0
+                    }
                 }
             },
             "SEARCH_COUNTS": {
@@ -978,7 +1280,10 @@
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 1,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "SSL_TIME_UNTIL_HANDSHAKE_FINISHED_KEYED_BY_KA": {
@@ -1207,147 +1512,221 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "blocklists/certificates": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "blocklists/gfx": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "blocklists/plugins": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/fxmonitor-breaches": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/language-dictionaries": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/onboarding": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/sites-classification": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "main/tippytop": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "normandy/action/AddonStudyAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 2,
-                    "values": {"0": 0, "1": 2, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 2,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ConsoleLogAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceExperimentAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRollbackAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRolloutAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ShowHeartbeatAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/597": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/634": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/721": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/runner": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "pinning/pins": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "settings-changes-monitoring": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_CL_KEYED_UPDATE_TIME": {
@@ -1356,14 +1735,23 @@
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 7505,
-                    "values": {"1531": 1, "2091": 0, "601": 0, "821": 6}
+                    "values": {
+                        "1531": 1,
+                        "2091": 0,
+                        "601": 0,
+                        "821": 6
+                    }
                 },
                 "test": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 103,
-                    "values": {"127": 0, "68": 0, "93": 1}
+                    "values": {
+                        "127": 0,
+                        "68": 0,
+                        "93": 1
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_REMOTE_STATUS2": {
@@ -1372,7 +1760,11 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 41,
-                    "values": {"0": 0, "1": 41, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 41,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_SERVER_RESPONSE_TIME": {
@@ -1399,7 +1791,10 @@
                     "histogram_type": 2,
                     "range": [1, 2],
                     "sum": 0,
-                    "values": {"0": 41, "1": 0}
+                    "values": {
+                        "0": 41,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_ERROR": {
@@ -1408,14 +1803,20 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_NETWORK_ERROR": {
@@ -1424,14 +1825,20 @@
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 31,
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_STATUS2": {
@@ -1440,14 +1847,22 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 7,
-                    "values": {"0": 0, "1": 7, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 7,
+                        "2": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 4,
-                    "values": {"0": 0, "1": 4, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 4,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_SERVER_RESPONSE_TIME": {
@@ -1487,14 +1902,20 @@
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 5,
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 }
             },
             "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID": {
@@ -1503,35 +1924,55 @@
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 482,
-                    "values": {"399": 0, "440": 1, "485": 0}
+                    "values": {
+                        "399": 0,
+                        "440": 1,
+                        "485": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 491,
-                    "values": {"440": 0, "485": 1, "535": 0}
+                    "values": {
+                        "440": 0,
+                        "485": 1,
+                        "535": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 532,
-                    "values": {"440": 0, "485": 1, "535": 0}
+                    "values": {
+                        "440": 0,
+                        "485": 1,
+                        "535": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 492,
-                    "values": {"440": 0, "485": 1, "535": 0}
+                    "values": {
+                        "440": 0,
+                        "485": 1,
+                        "535": 0
+                    }
                 },
                 "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 546,
-                    "values": {"485": 0, "535": 1, "590": 0}
+                    "values": {
+                        "485": 0,
+                        "535": 1,
+                        "590": 0
+                    }
                 }
             },
             "WEBEXT_BROWSERACTION_POPUP_PRELOAD_RESULT_COUNT_BY_ADDONID": {
@@ -1540,7 +1981,11 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID": {
@@ -1549,39 +1994,62 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 433,
-                    "values": {"374": 0, "412": 1, "454": 0}
+                    "values": {
+                        "374": 0,
+                        "412": 1,
+                        "454": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 427,
-                    "values": {"374": 0, "412": 1, "454": 0}
+                    "values": {
+                        "374": 0,
+                        "412": 1,
+                        "454": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 474,
-                    "values": {"412": 0, "454": 1, "500": 0}
+                    "values": {
+                        "412": 0,
+                        "454": 1,
+                        "500": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 426,
-                    "values": {"374": 0, "412": 1, "454": 0}
+                    "values": {
+                        "374": 0,
+                        "412": 1,
+                        "454": 0
+                    }
                 },
                 "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 476,
-                    "values": {"412": 0, "454": 1, "500": 0}
+                    "values": {
+                        "412": 0,
+                        "454": 1,
+                        "500": 0
+                    }
                 }
             }
-        },
-        {
+        }
+    }
+}, {
+    "payload": {
+        "keyedHistograms": {
             "HTTP_CHANNEL_DISPOSITION_UPGRADE": {
                 "disabledNoReason": {
                     "bucket_count": 51,
@@ -1602,7 +2070,12 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 369,
-                    "values": {"0": 24, "1": 3, "2": 183, "3": 0}
+                    "values": {
+                        "0": 24,
+                        "1": 3,
+                        "2": 183,
+                        "3": 0
+                    }
                 }
             },
             "SEARCH_COUNTS": {
@@ -1611,14 +2084,20 @@
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 4,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 },
                 "google.in-content:sap:firefox-b-d": {
                     "bucket_count": 3,
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 4,
-                    "values": {"0": 4, "1": 0}
+                    "values": {
+                        "0": 4,
+                        "1": 0
+                    }
                 }
             },
             "SSL_TIME_UNTIL_HANDSHAKE_FINISHED_KEYED_BY_KA": {
@@ -1937,7 +2416,10 @@
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 6,
-                    "values": {"0": 6, "1": 0}
+                    "values": {
+                        "0": 6,
+                        "1": 0
+                    }
                 }
             },
             "SUBPROCESS_KILL_HARD": {
@@ -1946,7 +2428,10 @@
                     "histogram_type": 4,
                     "range": [1, 2],
                     "sum": 6,
-                    "values": {"0": 6, "1": 0}
+                    "values": {
+                        "0": 6,
+                        "1": 0
+                    }
                 }
             },
             "UPTAKE_REMOTE_CONTENT_RESULT_1": {
@@ -1955,77 +2440,121 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 2,
-                    "values": {"0": 0, "1": 2, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 2,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ConsoleLogAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceExperimentAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRollbackAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/PreferenceRolloutAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/action/ShowHeartbeatAction": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/597": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/634": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/718": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/recipe/721": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "normandy/runner": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_CL_KEYED_UPDATE_TIME": {
@@ -2047,7 +2576,11 @@
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 1337,
-                    "values": {"1121": 1, "1531": 0, "821": 0}
+                    "values": {
+                        "1121": 1,
+                        "1531": 0,
+                        "821": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_REMOTE_STATUS2": {
@@ -2056,7 +2589,12 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 42,
-                    "values": {"0": 0, "1": 16, "13": 2, "14": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 16,
+                        "13": 2,
+                        "14": 0
+                    }
                 }
             },
             "URLCLASSIFIER_COMPLETE_SERVER_RESPONSE_TIME": {
@@ -2083,7 +2621,11 @@
                     "histogram_type": 2,
                     "range": [1, 2],
                     "sum": 2,
-                    "values": {"0": 18, "1": 2, "2": 0}
+                    "values": {
+                        "0": 18,
+                        "1": 2,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_ERROR": {
@@ -2092,14 +2634,20 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 13, "1": 0}
+                    "values": {
+                        "0": 13,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_NETWORK_ERROR": {
@@ -2108,14 +2656,20 @@
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 13, "1": 0}
+                    "values": {
+                        "0": 13,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 31,
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_STATUS2": {
@@ -2124,14 +2678,22 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 13,
-                    "values": {"0": 0, "1": 13, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 13,
+                        "2": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 7,
-                    "values": {"0": 0, "1": 7, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 7,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_SERVER_RESPONSE_TIME": {
@@ -2172,14 +2734,20 @@
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 13, "1": 0}
+                    "values": {
+                        "0": 13,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 5,
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 7, "1": 0}
+                    "values": {
+                        "0": 7,
+                        "1": 0
+                    }
                 }
             },
             "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID": {
@@ -2188,35 +2756,55 @@
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 7641,
-                    "values": {"6896": 0, "7609": 1, "8395": 0}
+                    "values": {
+                        "6896": 0,
+                        "7609": 1,
+                        "8395": 0
+                    }
                 },
                 "formautofill@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 5272,
-                    "values": {"4653": 0, "5134": 1, "5665": 0}
+                    "values": {
+                        "4653": 0,
+                        "5134": 1,
+                        "5665": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 5341,
-                    "values": {"4653": 0, "5134": 1, "5665": 0}
+                    "values": {
+                        "4653": 0,
+                        "5134": 1,
+                        "5665": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 5769,
-                    "values": {"5134": 0, "5665": 1, "6250": 0}
+                    "values": {
+                        "5134": 0,
+                        "5665": 1,
+                        "6250": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 5017,
-                    "values": {"4217": 0, "4653": 1, "5134": 0}
+                    "values": {
+                        "4217": 0,
+                        "4653": 1,
+                        "5134": 0
+                    }
                 }
             },
             "WEBEXT_BROWSERACTION_POPUP_OPEN_MS_BY_ADDONID": {
@@ -2225,7 +2813,11 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 356,
-                    "values": {"309": 0, "340": 1, "374": 0}
+                    "values": {
+                        "309": 0,
+                        "340": 1,
+                        "374": 0
+                    }
                 }
             },
             "WEBEXT_BROWSERACTION_POPUP_PRELOAD_RESULT_COUNT_BY_ADDONID": {
@@ -2234,7 +2826,11 @@
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 7,
-                    "values": {"0": 1, "1": 7, "2": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 7,
+                        "2": 0
+                    }
                 }
             },
             "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID": {
@@ -2243,53 +2839,86 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 15358,
-                    "values": {"13040": 0, "14354": 1, "15800": 0}
+                    "values": {
+                        "13040": 0,
+                        "14354": 1,
+                        "15800": 0
+                    }
                 },
                 "formautofill@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 15303,
-                    "values": {"13040": 0, "14354": 1, "15800": 0}
+                    "values": {
+                        "13040": 0,
+                        "14354": 1,
+                        "15800": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 15301,
-                    "values": {"13040": 0, "14354": 1, "15800": 0}
+                    "values": {
+                        "13040": 0,
+                        "14354": 1,
+                        "15800": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 15354,
-                    "values": {"13040": 0, "14354": 1, "15800": 0}
+                    "values": {
+                        "13040": 0,
+                        "14354": 1,
+                        "15800": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 15296,
-                    "values": {"13040": 0, "14354": 1, "15800": 0}
+                    "values": {
+                        "13040": 0,
+                        "14354": 1,
+                        "15800": 0
+                    }
                 }
             }
-        },
-        {
+        }
+    }
+}, {
+    "payload": {
+        "keyedHistograms": {
             "HTTP_CHANNEL_DISPOSITION_UPGRADE": {
                 "disabledNoReason": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 788,
-                    "values": {"0": 16, "1": 144, "2": 322, "3": 0}
+                    "values": {
+                        "0": 16,
+                        "1": 144,
+                        "2": 322,
+                        "3": 0
+                    }
                 },
                 "disabledWont": {
                     "bucket_count": 51,
                     "histogram_type": 5,
                     "range": [1, 50],
                     "sum": 1394,
-                    "values": {"1": 0, "2": 22, "3": 450, "4": 0}
+                    "values": {
+                        "1": 0,
+                        "2": 22,
+                        "3": 450,
+                        "4": 0
+                    }
                 }
             },
             "SSL_TIME_UNTIL_HANDSHAKE_FINISHED_KEYED_BY_KA": {
@@ -2381,14 +3010,22 @@
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 1743,
-                    "values": {"1121": 0, "1531": 1, "2091": 0}
+                    "values": {
+                        "1121": 0,
+                        "1531": 1,
+                        "2091": 0
+                    }
                 },
                 "test": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [20, 120000],
                     "sum": 507,
-                    "values": {"322": 0, "440": 1, "601": 0}
+                    "values": {
+                        "322": 0,
+                        "440": 1,
+                        "601": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_ERROR": {
@@ -2397,14 +3034,20 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_NETWORK_ERROR": {
@@ -2413,14 +3056,20 @@
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 31,
                     "histogram_type": 1,
                     "range": [1, 30],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_REMOTE_STATUS2": {
@@ -2429,14 +3078,22 @@
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 17,
                     "histogram_type": 1,
                     "range": [1, 16],
                     "sum": 1,
-                    "values": {"0": 0, "1": 1, "2": 0}
+                    "values": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_SERVER_RESPONSE_TIME": {
@@ -2445,14 +3102,22 @@
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 3656,
-                    "values": {"1734": 0, "2601": 1, "3902": 0}
+                    "values": {
+                        "1734": 0,
+                        "2601": 1,
+                        "3902": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 30,
                     "histogram_type": 0,
                     "range": [1, 100000],
                     "sum": 2172,
-                    "values": {"1156": 0, "1734": 1, "2601": 0}
+                    "values": {
+                        "1156": 0,
+                        "1734": 1,
+                        "2601": 0
+                    }
                 }
             },
             "URLCLASSIFIER_UPDATE_TIMEOUT": {
@@ -2461,14 +3126,20 @@
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 },
                 "mozilla": {
                     "bucket_count": 5,
                     "histogram_type": 1,
                     "range": [1, 4],
                     "sum": 0,
-                    "values": {"0": 1, "1": 0}
+                    "values": {
+                        "0": 1,
+                        "1": 0
+                    }
                 }
             },
             "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID": {
@@ -2477,49 +3148,77 @@
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1062,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "browser-mon@xdman.sourceforge.net": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1058,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "formautofill@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1047,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1052,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1057,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "uBlock0@raymondhill.net": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1056,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 60000],
                     "sum": 1053,
-                    "values": {"1064": 0, "874": 0, "964": 1}
+                    "values": {
+                        "1064": 0,
+                        "874": 0,
+                        "964": 1
+                    }
                 }
             },
             "WEBEXT_EXTENSION_STARTUP_MS_BY_ADDONID": {
@@ -2528,50 +3227,79 @@
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 741,
-                    "values": {"666": 0, "733": 1, "807": 0}
+                    "values": {
+                        "666": 0,
+                        "733": 1,
+                        "807": 0
+                    }
                 },
                 "browser-mon@xdman.sourceforge.net": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 900,
-                    "values": {"807": 0, "888": 1, "977": 0}
+                    "values": {
+                        "807": 0,
+                        "888": 1,
+                        "977": 0
+                    }
                 },
                 "formautofill@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 740,
-                    "values": {"666": 0, "733": 1, "807": 0}
+                    "values": {
+                        "666": 0,
+                        "733": 1,
+                        "807": 0
+                    }
                 },
                 "fxmonitor@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 714,
-                    "values": {"605": 0, "666": 1, "733": 0}
+                    "values": {
+                        "605": 0,
+                        "666": 1,
+                        "733": 0
+                    }
                 },
                 "screenshots@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 740,
-                    "values": {"666": 0, "733": 1, "807": 0}
+                    "values": {
+                        "666": 0,
+                        "733": 1,
+                        "807": 0
+                    }
                 },
                 "uBlock0@raymondhill.net": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 895,
-                    "values": {"807": 0, "888": 1, "977": 0}
+                    "values": {
+                        "807": 0,
+                        "888": 1,
+                        "977": 0
+                    }
                 },
                 "webcompat@mozilla.org": {
                     "bucket_count": 100,
                     "histogram_type": 0,
                     "range": [1, 50000],
                     "sum": 711,
-                    "values": {"605": 0, "666": 1, "733": 0}
+                    "values": {
+                        "605": 0,
+                        "666": 1,
+                        "733": 0
+                    }
                 }
             }
         }
-    ]
+    }
+}]

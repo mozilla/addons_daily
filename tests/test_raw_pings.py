@@ -1,6 +1,7 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 from addons_daily.utils.raw_pings import *
+from addons_daily.utils.helpers import load_keyed_hist
 import json
 import datetime
 import pytest
@@ -18,7 +19,7 @@ def load_expected_data(filename, spark):
 def raw_pings():
     sc = SparkContext.getOrCreate()
     spark = SQLContext.getOrCreate(sc)
-    return sc.parallelize(load_expected_data("raw_pings.json", spark))
+    return load_keyed_hist(sc.parallelize(load_expected_data("raw_pings.json", spark)))
 
 
 def test_startup_time(raw_pings):
