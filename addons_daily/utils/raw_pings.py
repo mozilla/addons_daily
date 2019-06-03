@@ -1,4 +1,4 @@
-from addons_daily.utils.helpers import *
+from .helpers import *
 import pyspark.sql.functions as F
 import pandas as pd
 import re
@@ -27,8 +27,7 @@ def get_startup_time(df):
 
 
 def get_bkgd_load_time(df):
-    hist = "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID"
-    return get_hist_avg(hist, df)
+    return agg_hist_keyed_by_addon(df, "WEBEXT_BACKGROUND_PAGE_LOAD_MS_BY_ADDONID")
 
 
 def get_ba_popup_load_time(df):
