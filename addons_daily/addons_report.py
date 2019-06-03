@@ -64,14 +64,15 @@ def agg_addons_report(
     trend_metrics = get_trend_metrics(addons_expanded, date)
     event_metrics = install_flow_events(events)
 
+    keyed_hists = load_keyed_hist(raw_pings)
     # raw pings metrics
-    storage_get = get_storage_local_get_time(raw_pings)
-    storage_set = get_storage_local_set_time(raw_pings)
-    startup_time = get_startup_time(raw_pings)
-    bkg_load_time = get_bkgd_load_time(raw_pings)
-    ba_popup_lt = get_ba_popup_load_time(raw_pings)
-    pa_popup_lt = get_pa_popup_load_time(raw_pings)
-    cs_injection_time = get_cs_injection_time(raw_pings)
+    storage_get = get_storage_local_get_time(keyed_hists)
+    storage_set = get_storage_local_set_time(keyed_hists)
+    startup_time = get_startup_time(keyed_hists)
+    bkg_load_time = get_bkgd_load_time(keyed_hists)
+    ba_popup_lt = get_ba_popup_load_time(keyed_hists)
+    pa_popup_lt = get_pa_popup_load_time(keyed_hists)
+    cs_injection_time = get_cs_injection_time(keyed_hists)
 
     agg = dataframe_joiner(
         [
