@@ -393,3 +393,20 @@ def get_search_metrics(search_daily_df, addons_expanded):
     )
 
     return df
+
+
+########################
+# Addon info - is_system
+########################
+
+
+def get_is_system(addons_expanded):
+    is_system = (
+        addons_expanded
+        .select(['addon_id', 'is_system'])
+        .groupby('addon_id')
+        .agg(F.first('is_system').alias('is_system'))
+    )
+
+    return is_system
+
