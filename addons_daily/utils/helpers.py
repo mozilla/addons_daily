@@ -49,7 +49,7 @@ def load_data_s3(spark, input_bucket, input_prefix, input_version):
     return (
         spark.read.option("mergeSchema", True)
         .parquet(dest)
-        .filter("normalize_channel = 'release'")
+        .filter("normalized_channel = 'release'")
     )
 
 
