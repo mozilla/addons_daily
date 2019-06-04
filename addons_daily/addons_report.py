@@ -49,9 +49,11 @@ def agg_addons_report(
     addons_expanded = expand_addons(main_summary)
     addons_expanded_day = addons_expanded.filter(
         "submission_date_s3 = '{}'".format(date)
-    )
+    ).cache()
 
-    main_summary_day = main_summary.filter("submission_date_s3 = '{}'".format(date))
+    main_summary_day = main_summary.filter(
+        "submission_date_s3 = '{}'".format(date)
+    ).cache()
 
     # telemetry metrics
     addon_names = get_top_addon_names(addons_expanded_day)
