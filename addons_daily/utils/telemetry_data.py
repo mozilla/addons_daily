@@ -241,7 +241,7 @@ def get_trend_metrics(addons_expanded, date):
     addons_expanded = addons_expanded.filter(
         "date >= ({} - INTERVAL 1 DAYS)".format(base_date)
     )
-    absolute_dau = addons_expanded.select(F.countDistinct("client_id")).collect()[0][0]
+    absolute_dau = addons_expanded.select("client_id").distinct().count()
 
     dau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("dau")
