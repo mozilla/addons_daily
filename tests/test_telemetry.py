@@ -46,6 +46,13 @@ def events(spark):
 
 
 @pytest.fixture()
+def search_clients_daily(spark):
+    return load_test_data("search_clients_daily", spark).filter(
+        "submission_date_s3 = '{}'".format(BASE_DATE)
+    )
+
+
+@pytest.fixture()
 def addons_expanded(main_summary):
     return expand_addons(main_summary)
 
@@ -488,3 +495,78 @@ def test_install_flows(events):
             "uninstalls": None,
         },
     ]
+
+    assert output == expected_output
+
+
+def test_searches_and_ads(search_clients_daily, addons_expanded_day, spark):
+    output = df_to_json(get_search_metrics(search_clients_daily, addons_expanded_day))
+    print("OUT", output)
+    expected_output = [
+        {
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "non-system-addon1",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "non-system-addon2",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "formautofill@mozilla.org",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+        {
+            "addon_id": "webcompat@mozilla.org",
+            "sap_searches": {},
+            "tagged_sap_searches": {"google": 10.0},
+            "organic_searches": {},
+            "search_with_ads": {"google": 3.0},
+            "ad_click": {},
+        },
+    ]
+
+    assert output == expected_output
