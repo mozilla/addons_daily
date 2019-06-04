@@ -350,13 +350,10 @@ def install_flow_events(events):
 
     agg = (
         installs.na.fill(0)
-        .select("addon_id", source_map(installs, "installs", "n_distinct_users"))
-        .join(
-            installs.na.fill(0).select(
-                "addon_id", source_map(installs, "download_times", "avg_download_time")
-            ),
-            on="addon_id",
-            how="full",
+        .select(
+            "addon_id",
+            source_map(installs, "installs", "n_distinct_users"),
+            source_map(installs, "download_times", "avg_download_time"),
         )
         .join(
             uninstalls.na.fill(0).select(
@@ -430,7 +427,7 @@ def get_search_metrics(search_daily_df, addons_expanded):
         )
     )
 
-    df_mapped = df.select(
+    df_mapped = df.na.fill(0).select(
         "addon_id",
         engine_map(df, "search_with_ads"),
         engine_map(df, "ad_click"),
