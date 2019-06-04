@@ -3,18 +3,30 @@ import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext, Row
 from pyspark.sql.window import Window
+from pyspark.sql.types import StringType
 
 
-# just so pycharm is not mad at me while I type this code
-# these will be replaced later
+TOP_COUNTRIES = {
+    "US": "United States",
+    "DE": "Germany",
+    "FR": "France",
+    "IN": "India",
+    "BR": "Brazil",
+    "CN": "China",
+    "ID": "Indonesia",
+    "RU": "Russia",
+    "IT": "Italy",
+    "PL": "Poland",
+    "GB": "Great Britain",
+    "CA": "Canada",
+}
 
 
-# this script assumes we have the data from main_summary and the raw_pings
-# already loaded and processed
-
-###########################################################
-# User Demographics - country distribution, os distribution
-###########################################################
+@F.udf(returnType=StringType())
+def bucket_country(country):
+    if country in TOP_COUNTRIES:
+        return country
+    return "Other"
 
 
 def get_user_demo_metrics(addons_expanded):
@@ -44,7 +56,8 @@ def get_user_demo_metrics(addons_expanded):
     )
 
     ct_dist = (
-        addons_expanded.groupBy("addon_id", "country")
+        addons_expanded.withColumn("country", bucket_country("country"))
+        .groupBy("addon_id", "country")
         .agg(F.countDistinct("client_id").alias("country_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn(

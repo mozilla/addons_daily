@@ -65,7 +65,7 @@ def load_raw_pings(sc, date):
         .where(docType="main")
         .where(appUpdateChannel="release")
         .where(submissionDate=date)
-        .records(sc)
+        .records(sc, sample=0.01)
     )
     return raw_pings
 
