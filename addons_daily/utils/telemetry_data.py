@@ -4,6 +4,7 @@ import pandas as pd
 from pyspark.sql import SQLContext, Row
 from pyspark.sql.window import Window
 from pyspark.sql.types import StringType
+from itertools import chain
 
 
 TOP_COUNTRIES = {
@@ -285,9 +286,20 @@ def get_top_addon_names(addons_expanded):
 
 
 def install_flow_events(events):
-    """
-    
-    """
+    def source_map(df, alias):
+        m = F.create_map(
+            list(
+                chain(
+                    *(
+                        (F.lit(name), F.col(name))
+                        for name in df.columns
+                        if name != "addon_id"
+                    )
+                )
+            )
+        ).alias(alias)
+        return m
+
     install_flow_events = (
         events.select(
             [
@@ -323,23 +335,52 @@ def install_flow_events(events):
         )
     )
 
-    number_installs = (
-        install_flow_events.where(install_flow_events.event_method == "install")
-        .groupby("addon_id")
-        .agg(F.sum("n_distinct_users").alias("installs"))
+    installs = (
+        install_flow_events.filter("event_method = 'install'")
+        .groupBy("addon_id")
+        .pivot("source")
+        .agg(F.sum("n_distinct_users"))
+    )
+    uninstalls = (
+        install_flow_events.filter("event_method = 'uninstall'")
+        .groupBy("addon_id")
+        .pivot("source")
+        .agg(F.sum("n_distinct_users"))
+    )
+    avg_downloads = install_flow_events.select(
+        "addon_id", "avg_download_time"
+    ).distinct()
+
+    flows = (
+        installs.na.fill(0)
+        .select("addon_id", source_map(installs, "installs"))
+        .join(
+            uninstalls.na.fill(0).select(
+                "addon_id", source_map(uninstalls, "uninstalls")
+            ),
+            on="addon_id",
+            how="full",
+        )
     )
 
-    number_uninstalls = (
-        install_flow_events.where(install_flow_events.event_method == "uninstall")
-        .groupby("addon_id")
-        .agg(F.sum("n_distinct_users").alias("uninstalls"))
-    )
+    return avg_downloads.join(flows, on="addon_id", how="full")
+    # number_installs = (
+    #     install_flow_events.where(install_flow_events.event_method == "install")
+    #     .groupby("addon_id")
+    #     .agg(F.sum("n_distinct_users").alias("installs"))
+    # )
 
-    install_flow_events_df = number_installs.join(
-        number_uninstalls, "addon_id", how="full"
-    )
+    # number_uninstalls = (
+    #     install_flow_events.where(install_flow_events.event_method == "uninstall")
+    #     .groupby("addon_id")
+    #     .agg(F.sum("n_distinct_users").alias("uninstalls"))
+    # )
 
-    return install_flow_events_df
+    # install_flow_events_df = number_installs.join(
+    #     number_uninstalls, "addon_id", how="full"
+    # )
+
+    # return install_flow_events_df
 
 
 def get_search_metrics(search_daily_df, addons_expanded):
