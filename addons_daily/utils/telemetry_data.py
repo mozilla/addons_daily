@@ -241,12 +241,18 @@ def get_trend_metrics(addons_expanded, date):
     addons_expanded = addons_expanded.filter(
         "date >= ({} - INTERVAL 1 DAYS)".format(base_date)
     )
+    absolute_dau = addons_expanded.select(F.countDistinct("client_id")).collect()[0][0]
+
     dau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("dau")
     )
 
-    trend_metrics = mau.join(wau, on="addon_id", how="outer").join(
-        dau, on="addon_id", how="outer"
+    dau_pct = dau.withColumn("dau_prop", F.col("dau") / absolute_dau).drop(F.col("dau"))
+
+    trend_metrics = (
+        mau.join(wau, on="addon_id", how="outer")
+        .join(dau, on="addon_id", how="outer")
+        .join(dau_pct, on="addon_id", how="outer")
     )
 
     return trend_metrics
