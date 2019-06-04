@@ -451,35 +451,42 @@ def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
 
 def test_install_flows(events):
     output = df_to_json(install_flow_events(events))
+    print("OUT", output)
     expected_output = [
         {
             "addon_id": "screenshots@mozilla.org",
-            "installs": {"amo": 584.5, "unknown": 0.0},
+            "installs": {"amo": 2, "unknown": 0},
+            "download_times": {"amo": 584.5, "unknown": 0.0},
             "uninstalls": {"system-addon": 1},
         },
         {
             "addon_id": "fxmonitor@mozilla.org",
             "installs": None,
+            "download_times": None,
             "uninstalls": {"system-addon": 1},
         },
         {
             "addon_id": "jid1-h4Ke2h5q31uuK7@jetpack",
-            "installs": {"amo": 1704.0, "unknown": 0.0},
+            "installs": {"amo": 1, "unknown": 0},
+            "download_times": {"amo": 1704.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "{87e997f4-ae0e-42e6-a780-ff73977188c5}",
-            "installs": {"amo": 3015.0, "unknown": 0.0},
+            "installs": {"amo": 1, "unknown": 0},
+            "download_times": {"amo": 3015.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "{08cc31c0-b1cb-461c-8ba2-95edd9e76a02}",
-            "installs": {"amo": 998.0, "unknown": 0.0},
+            "installs": {"amo": 1, "unknown": 0},
+            "download_times": {"amo": 998.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "Directions_Found_mVBuOLkFzz@www.directionsfoundnt.com",
-            "installs": {"amo": 0.0, "unknown": 572.0},
+            "installs": {"amo": 0, "unknown": 1},
+            "download_times": {"amo": 0.0, "unknown": 572.0},
             "uninstalls": None,
         },
     ]
