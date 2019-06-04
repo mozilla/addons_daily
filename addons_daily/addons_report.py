@@ -97,49 +97,6 @@ def agg_addons_report(
     return agg
 
 
-def load_test_data(spark, sc):
-    import json
-
-    schema_path = "/home/hadoop/analyses/src/addons_daily/tests/resources/main_summary_schema.json"
-    with open(schema_path) as f:
-        d = json.load(f)
-        schema = StructType.fromJson(d)
-    rows_path = "/main_summary.json"
-    # FAILFAST causes us to abort early if the data doesn't match
-    # the given schema. Without this there was as very annoying
-    # problem where dataframe.collect() would return an empty set.
-    main_summary = spark.read.json(rows_path, schema, mode="FAILFAST")
-
-    schema_path = "/home/hadoop/analyses/src/addons_daily/tests/resources/search_clients_daily_schema.json"
-    with open(schema_path) as f:
-        d = json.load(f)
-        schema = StructType.fromJson(d)
-    rows_path = "/search_clients_daily.json"
-    # FAILFAST causes us to abort early if the data doesn't match
-    # the given schema. Without this there was as very annoying
-    # problem where dataframe.collect() would return an empty set.
-    search_clients_daily = spark.read.json(rows_path, schema, mode="FAILFAST")
-
-    schema_path = (
-        "/home/hadoop/analyses/src/addons_daily/tests/resources/events_schema.json"
-    )
-    with open(schema_path) as f:
-        d = json.load(f)
-        schema = StructType.fromJson(d)
-    rows_path = "/events.json"
-    # FAILFAST causes us to abort early if the data doesn't match
-    # the given schema. Without this there was as very annoying
-    # problem where dataframe.collect() would return an empty set.
-    events = spark.read.json(rows_path, schema, mode="FAILFAST")
-
-    with open(
-        "/home/hadoop/analyses/src/addons_daily/tests/resources/raw_pings.json"
-    ) as f:
-        j = json.load(f)
-        raw_pings = sc.parallelize(j)
-    return main_summary, search_clients_daily, events, raw_pings
-
-
 @click.command()
 @click.option("--date", required=True)
 @click.option("--use_test_data", default=False)
@@ -160,42 +117,44 @@ def main(
     spark = get_spark(DEFAULT_TZ)
     sc = get_sc()
     sc.setLogLevel("INFO")
-
-    if use_test_data:
-        main_summary, search_daily, events, raw_pings = load_test_data(spark, sc)
-    else:
-        # leave main_summary unfiltered by
-        # date to get trend metrics
-        main_summary = load_data_s3(
+    fdate = lambda x: x[:4] + "-" + x[4:6] + "-" + x[6:]
+    base_date = "to_date('{}')".format(fdate(date))
+    # leave main_summary fitlered to last 28 days
+    # to get trend metrics
+    main_summary = (
+        load_data_s3(
             spark,
             input_bucket="telemetry-parquet",
             input_prefix="main_summary",
             input_version=main_summary_version,
-        ).filter(F.col("sample_id").isin(range(0, sample)))
-
-        search_daily = (
-            load_data_s3(
-                spark,
-                input_bucket="telemetry-parquet",
-                input_prefix="search_clients_daily",
-                input_version=search_clients_daily_version,
-            )
-            .filter(F.col("sample_id").isin(range(0, sample)))
-            .filter("submission_date_s3 = '{}'".format(date))
         )
+        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+    )
 
-        events = (
-            load_data_s3(
-                spark,
-                input_bucket="telemetry-parquet",
-                input_prefix="events",
-                input_version=events_version,
-            )
-            .filter(F.col("sample_id").isin(range(0, sample)))
-            .filter("submission_date_s3 = '{}'".format(date))
+    search_daily = (
+        load_data_s3(
+            spark,
+            input_bucket="telemetry-parquet",
+            input_prefix="search_clients_daily",
+            input_version=search_clients_daily_version,
         )
+        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter("submission_date_s3 = '{}'".format(date))
+    )
 
-        raw_pings = load_raw_pings(sc, date)
+    events = (
+        load_data_s3(
+            spark,
+            input_bucket="telemetry-parquet",
+            input_prefix="events",
+            input_version=events_version,
+        )
+        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter("submission_date_s3 = '{}'".format(date))
+    )
+
+    raw_pings = load_raw_pings(sc, date)
 
     # bq_d = load_bq_data(datetime.date.today(), path, spark)
 

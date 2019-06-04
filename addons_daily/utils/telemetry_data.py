@@ -238,7 +238,7 @@ def get_trend_metrics(addons_expanded, date):
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.withColumn(
         "date", F.to_date("submission_date_s3", "yyyyMMdd")
-    ).filter("date >= ({} - INTERVAL 30 DAYS)".format(base_date))
+    ).filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
     mau = addons_expanded.groupby("addon_id").agg(
         F.countDistinct("client_id").alias("mau")
     )
