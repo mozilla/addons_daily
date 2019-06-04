@@ -15,6 +15,20 @@ def df_to_json(df):
     return [i.asDict() for i in df.collect()]
 
 
+def load_test_data(prefix, spark):
+    root = os.path.dirname(__file__)
+    schema_path = os.path.join(root, "resources", "{}_schema.json".format(prefix))
+    with open(schema_path) as f:
+        d = json.load(f)
+        schema = StructType.fromJson(d)
+    rows_path = os.path.join(root, "resources", "{}.json".format(prefix))
+    # FAILFAST causes us to abort early if the data doesn't match
+    # the given schema. Without this there was as very annoying
+    # problem where dataframe.collect() would return an empty set.
+    frame = spark.read.json(rows_path, schema, mode="FAILFAST")
+    return frame
+
+
 @pytest.fixture()
 def spark():
     spark_session = SparkSession.builder.appName("addons_daily_tests").getOrCreate()
@@ -23,17 +37,12 @@ def spark():
 
 @pytest.fixture()
 def main_summary(spark):
-    root = os.path.dirname(__file__)
-    schema_path = os.path.join(root, "resources", "main_summary_schema.json")
-    with open(schema_path) as f:
-        d = json.load(f)
-        schema = StructType.fromJson(d)
-    rows_path = os.path.join(root, "resources", "main_summary.json")
-    # FAILFAST causes us to abort early if the data doesn't match
-    # the given schema. Without this there was as very annoying
-    # problem where dataframe.collect() would return an empty set.
-    frame = spark.read.json(rows_path, schema, mode="FAILFAST")
-    return frame
+    return load_test_data("main_summary", spark)
+
+
+@pytest.fixture()
+def events(spark):
+    return load_test_data("events", spark)
 
 
 @pytest.fixture()
@@ -431,3 +440,51 @@ def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
         },
     ]
     assert output == expected_output
+
+
+def test_install_flows(events):
+    output = df_to_json(install_flow_events(events))
+    expected_output = [
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "avg_download_time": None,
+            "installs": {"amo": 2, "unknown": 0},
+            "uninstalls": {"system-addon": 1},
+        },
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "avg_download_time": 584.5,
+            "installs": {"amo": 2, "unknown": 0},
+            "uninstalls": {"system-addon": 1},
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
+            "avg_download_time": None,
+            "installs": None,
+            "uninstalls": {"system-addon": 1},
+        },
+        {
+            "addon_id": "jid1-h4Ke2h5q31uuK7@jetpack",
+            "avg_download_time": 1704.0,
+            "installs": {"amo": 1, "unknown": 0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "{87e997f4-ae0e-42e6-a780-ff73977188c5}",
+            "avg_download_time": 3015.0,
+            "installs": {"amo": 1, "unknown": 0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "{08cc31c0-b1cb-461c-8ba2-95edd9e76a02}",
+            "avg_download_time": 998.0,
+            "installs": {"amo": 1, "unknown": 0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "Directions_Found_mVBuOLkFzz@www.directionsfoundnt.com",
+            "avg_download_time": 572.0,
+            "installs": {"amo": 0, "unknown": 1},
+            "uninstalls": None,
+        },
+    ]
