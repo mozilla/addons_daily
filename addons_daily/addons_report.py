@@ -130,6 +130,7 @@ def main(
         )
         .filter(F.col("sample_id").isin(range(0, sample)))
         .filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+        .filter("normalized_channel = 'release'")
     )
 
     search_daily = (
@@ -141,6 +142,7 @@ def main(
         )
         .filter(F.col("sample_id").isin(range(0, sample)))
         .filter("submission_date_s3 = '{}'".format(date))
+        .filter("channel = 'release'")
     )
 
     events = (
@@ -152,6 +154,7 @@ def main(
         )
         .filter(F.col("sample_id").isin(range(0, sample)))
         .filter("submission_date_s3 = '{}'".format(date))
+        .filter("normalized_channel = 'release'")
     )
 
     raw_pings = load_raw_pings(sc, date)

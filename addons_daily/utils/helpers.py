@@ -46,11 +46,7 @@ def load_data_s3(spark, input_bucket, input_prefix, input_version):
     :return SparkDF
     """
     dest = get_dest(input_bucket, input_prefix, input_version)
-    return (
-        spark.read.option("mergeSchema", True)
-        .parquet(dest)
-        .filter("normalized_channel = 'release'")
-    )
+    return spark.read.option("mergeSchema", True).parquet(dest)
 
 
 def load_raw_pings(sc, date):
