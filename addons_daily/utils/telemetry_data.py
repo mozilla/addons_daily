@@ -404,8 +404,23 @@ def get_search_metrics(search_daily_df, addons_expanded):
     user_addon = addons_expanded.select("client_id", "addon_id")
     user_addon_search = user_addon.join(search_daily_df, "client_id")
 
+    def engine_map(df, extra_filter=""):
+        m = F.create_map(
+            list(
+                chain(
+                    *(
+                        (F.lit(name.split("_")[0]), F.col(name))
+                        for name in df.columns
+                        if name != "addon_id" and extra_filter in name
+                    )
+                )
+            )
+        ).alias(extra_filter)
+        return m
+
     df = (
-        user_addon_search.groupBy("addon_id", "engine")
+        user_addon_search.groupBy("addon_id")
+        .pivot("engine")
         .agg(
             F.sum("sap").alias("sap_searches"),
             F.sum("tagged_sap").alias("tagged_sap_searches"),
@@ -413,47 +428,15 @@ def get_search_metrics(search_daily_df, addons_expanded):
             F.sum("search_with_ads").alias("search_with_ads"),
             F.sum("ad_click").alias("ad_click"),
         )
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("engine").alias("engine"),
-            F.collect_list("sap_searches").alias("sap_searches"),
-            F.collect_list("tagged_sap_searches").alias("tagged_sap_searches"),
-            F.collect_list("organic_searches").alias("organic_searches"),
-            F.collect_list("search_with_ads").alias("search_with_ads"),
-            F.collect_list("ad_click").alias("ad_click"),
-        )
-        .withColumn(
-            "sap_searches",
-            make_map(
-                F.col("engine"), F.col("sap_searches").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "tagged_sap_searches",
-            make_map(
-                F.col("engine"),
-                F.col("tagged_sap_searches").cast(ArrayType(DoubleType())),
-            ),
-        )
-        .withColumn(
-            "organic_searches",
-            make_map(
-                F.col("engine"), F.col("organic_searches").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "search_with_ads",
-            make_map(
-                F.col("engine"), F.col("search_with_ads").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "ad_click",
-            make_map(
-                F.col("ad_click"), F.col("ad_click").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .drop("engine")
     )
 
-    return df
+    df_mapped = df.select(
+        "addon_id",
+        engine_map(df, "search_with_ads"),
+        engine_map(df, "ad_click"),
+        engine_map(df, "organic_searches"),
+        engine_map(df, "sap_searches"),
+        engine_map(df, "tagged_sap_searches"),
+    )
+
+    return df_mapped
