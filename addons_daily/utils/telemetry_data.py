@@ -286,14 +286,14 @@ def get_top_addon_names(addons_expanded):
 
 
 def install_flow_events(events):
-    def source_map(df, alias):
+    def source_map(df, alias, extra_filter=""):
         m = F.create_map(
             list(
                 chain(
                     *(
-                        (F.lit(name), F.col(name))
+                        (F.lit(name.split("_")[0]), F.col(name))
                         for name in df.columns
-                        if name != "addon_id"
+                        if name != "addon_id" and extra_filter in name
                     )
                 )
             )
@@ -339,7 +339,7 @@ def install_flow_events(events):
         install_flow_events.filter("event_method = 'install'")
         .groupBy("addon_id")
         .pivot("source")
-        .agg(F.sum("n_distinct_users"))
+        .agg(F.sum("n_distinct_users"), F.avg("avg_download_time"))
     )
     uninstalls = (
         install_flow_events.filter("event_method = 'uninstall'")
@@ -347,13 +347,17 @@ def install_flow_events(events):
         .pivot("source")
         .agg(F.sum("n_distinct_users"))
     )
-    avg_downloads = install_flow_events.select(
-        "addon_id", "avg_download_time"
-    ).distinct()
 
-    flows = (
+    agg = (
         installs.na.fill(0)
-        .select("addon_id", source_map(installs, "installs"))
+        .select("addon_id", source_map(installs, "installs", "n_distinct_users"))
+        .join(
+            installs.na.fill(0).select(
+                "addon_id", source_map(installs, "installs", "avg_download_time")
+            ),
+            on="addon_id",
+            how="full",
+        )
         .join(
             uninstalls.na.fill(0).select(
                 "addon_id", source_map(uninstalls, "uninstalls")
@@ -363,7 +367,7 @@ def install_flow_events(events):
         )
     )
 
-    return avg_downloads.join(flows, on="addon_id", how="full")
+    return agg
     # number_installs = (
     #     install_flow_events.where(install_flow_events.event_method == "install")
     #     .groupby("addon_id")

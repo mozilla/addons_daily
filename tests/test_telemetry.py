@@ -454,48 +454,35 @@ def test_install_flows(events):
     expected_output = [
         {
             "addon_id": "screenshots@mozilla.org",
-            "avg_download_time": None,
-            "installs": {"amo": 2, "unknown": 0},
-            "uninstalls": {"system-addon": 1},
-        },
-        {
-            "addon_id": "screenshots@mozilla.org",
-            "avg_download_time": 584.5,
-            "installs": {"amo": 2, "unknown": 0},
+            "installs": {"amo": 584.5, "unknown": 0.0},
             "uninstalls": {"system-addon": 1},
         },
         {
             "addon_id": "fxmonitor@mozilla.org",
-            "avg_download_time": None,
             "installs": None,
             "uninstalls": {"system-addon": 1},
         },
         {
             "addon_id": "jid1-h4Ke2h5q31uuK7@jetpack",
-            "avg_download_time": 1704.0,
-            "installs": {"amo": 1, "unknown": 0},
+            "installs": {"amo": 1704.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "{87e997f4-ae0e-42e6-a780-ff73977188c5}",
-            "avg_download_time": 3015.0,
-            "installs": {"amo": 1, "unknown": 0},
+            "installs": {"amo": 3015.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "{08cc31c0-b1cb-461c-8ba2-95edd9e76a02}",
-            "avg_download_time": 998.0,
-            "installs": {"amo": 1, "unknown": 0},
+            "installs": {"amo": 998.0, "unknown": 0.0},
             "uninstalls": None,
         },
         {
             "addon_id": "Directions_Found_mVBuOLkFzz@www.directionsfoundnt.com",
-            "avg_download_time": 572.0,
-            "installs": {"amo": 0, "unknown": 1},
+            "installs": {"amo": 0.0, "unknown": 572.0},
             "uninstalls": None,
         },
     ]
-
     assert output == expected_output
 
 
