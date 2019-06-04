@@ -353,7 +353,7 @@ def install_flow_events(events):
         .select("addon_id", source_map(installs, "installs", "n_distinct_users"))
         .join(
             installs.na.fill(0).select(
-                "addon_id", source_map(installs, "installs", "avg_download_time")
+                "addon_id", source_map(installs, "download_times", "avg_download_time")
             ),
             on="addon_id",
             how="full",
