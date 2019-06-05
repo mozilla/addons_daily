@@ -13,7 +13,8 @@ The addons_daily dataset serves as the central hub for all Firefox extension rel
 Prior to construction of this dataset, extension related data lived in several different sources. Addons_daily has combined metrics aggregated from several sources, including raw pings, telemetry data, and google analytics data.
 
 ### Accessing the Data
-The data is stored as a parquet table in S3 at the following address.
+The data is stored as a parquet table in S3 at the following address:
+
 s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/
 
 ***The addons_daily table is accessible through re:dash using the Athena data source. It is also available via the Presto data source, though Athena should be preferred for performance and stability reasons.***
