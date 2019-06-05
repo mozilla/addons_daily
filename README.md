@@ -13,8 +13,9 @@ The addons_daily dataset serves as the central hub for all Firefox extension rel
 Prior to construction of this dataset, extension related data lived in several different sources. Addons_daily has combined metrics aggregated from several sources, including raw pings, telemetry data, and google analytics data.
 
 ### Accessing the Data
-The data is stored as a parquet table in S3 at the following address.
-insert_s3_path
+The data is stored as a parquet table in S3 at the following address:
+
+s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/
 
 ***The addons_daily table is accessible through re:dash using the Athena data source. It is also available via the Presto data source, though Athena should be preferred for performance and stability reasons.***
 
@@ -22,17 +23,27 @@ insert_s3_path
 
 ### Example Queries
 
+
+#### Query 1
+
 Get Top ten addons by average DAU
 
-
+```
   SELECT addon_id, avg(dau) as avg_dau
   FROM addons_daily_tt
   GROUP BY addon_id
   ORDER BY avg_dau desc
   LIMIT 10
+```
 
+#### Query 2
 
-Query 2
+Get daily active users for all days in dataset
+```
+  SELECT submission_date_s3, avg(dau) as avg_dau
+  FROM addons_daily_tt
+  GROUP BY submission_date_s3
+```
 
 ### Scheduling
 
@@ -40,8 +51,8 @@ This dataset is updated daily via the telemetry-airflow infrastructure. The job 
 
 ### Schema
 
-The data is partitioned by submission_date_s3 which is formatted as %Y%m%d, like 20180130.
-As of 2019-06-03, the current version of the clients_daily dataset is v6, and has a schema as follows:
+The data is partitioned by `submission_date_s3` which is formatted as `%Y%m%d`, like `20180130`.
+As of 2019-06-05, the current version of the addons_daily dataset is v1, and has a schema as follows:
 
 ```
 root
