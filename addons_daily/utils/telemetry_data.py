@@ -1,4 +1,5 @@
 from addons_daily.utils.helpers import *
+from addons_daily.addons_report import expand_addons
 import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext, Row

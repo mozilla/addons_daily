@@ -2,7 +2,7 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 from pyspark import SparkContext
-from moztelemetry import Dataset
+# from moztelemetry import Dataset
 import datetime
 import os
 
