@@ -10,15 +10,10 @@ This ETL code produces daily aggregates of Firefox extensions. It supports the b
     - Accessing the Data
 
 * Data Reference
-
- - Example Queries
-
-  1) Ex 1
-
-  2) Ex 2
-
+    - Example Queries
+        1) Ex 1
+        2) Ex 2
 * Scheduling
-
 * Schema
 
 
