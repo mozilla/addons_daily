@@ -6,14 +6,23 @@ Contributers: Sarah Melancon, Ben Miroglio, Brian Wright, Daniel Thorn
 This ETL code produces daily aggregates of Firefox extensions. It supports the broader "Extention Data for Developers" Project.
 
 Introduction
+
 Contents
+
 Accessing the Data
+
 Data Reference
+
 Example Queries
+
 Ex 1
+
 Ex 2
+
 Scheduling
+
 Schema
+
 Code Reference
 
 
