@@ -5,18 +5,6 @@ Contributers: Sarah Melancon, Ben Miroglio, Brian Wright, Daniel Thorn
 
 This ETL code produces daily aggregates of Firefox extensions. It supports the broader "Extention Data for Developers" Project.
 
-* Introduction
-    - Contents
-    - Accessing the Data
-
-* Data Reference
-    - Example Queries
-        1) Ex 1
-        2) Ex 2
-* Scheduling
-* Schema
-
-
 ## Introduction:
 
 The addons_daily dataset serves as the central hub for all Firefox extension related questions. This includes questions regarding browser performance, user engagement, click through rates, etc. Each row in the table represents a unique addon, and each column is a unique metric.
