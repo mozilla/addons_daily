@@ -151,7 +151,7 @@ def get_engagement_metrics(addons_expanded, main_summary):
         main_summary.where(F.col("disabled_addons_ids").isNotNull())
         .withColumn("addon_id", F.explode("disabled_addons_ids"))
         .groupBy("addon_id")
-        .agg(F.countDistinct("client_id").alias("disabled"))
+        .agg((F.countDistinct("client_id") * F.lit(100)).alias("disabled"))
     )
 
     engagement_metrics = engagement_metrics.join(
@@ -279,7 +279,7 @@ def get_trend_metrics(addons_expanded, date):
         "date", F.to_date("submission_date_s3", "yyyyMMdd")
     ).filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
     mau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("mau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("mau")
     )
 
     # limit to last 7 days to calculate wau
@@ -287,7 +287,7 @@ def get_trend_metrics(addons_expanded, date):
         "date >= ({} - INTERVAL 7 DAYS)".format(base_date)
     )
     wau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("wau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("wau")
     )
 
     # limit to last 1 day to calculate dau
@@ -297,7 +297,7 @@ def get_trend_metrics(addons_expanded, date):
     absolute_dau = addons_expanded.select("client_id").distinct().count()
 
     dau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("dau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("dau")
     )
 
     dau_pct = dau.withColumn("dau_prop", F.col("dau") / absolute_dau).drop(F.col("dau"))
@@ -378,13 +378,13 @@ def install_flow_events(events):
         install_flow_events.filter("event_method = 'install'")
         .groupBy("addon_id")
         .pivot("source")
-        .agg(F.sum("n_distinct_users"), F.avg("avg_download_time"))
+        .agg((F.sum("n_distinct_users") * F.lit(100)), F.avg("avg_download_time"))
     )
     uninstalls = (
         install_flow_events.filter("event_method = 'uninstall'")
         .groupBy("addon_id")
         .pivot("source")
-        .agg(F.sum("n_distinct_users"))
+        .agg((F.sum("n_distinct_users") * F.lit(100)))
     )
 
     agg = (
