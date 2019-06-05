@@ -1,4 +1,6 @@
 from addons_daily.utils.helpers import *
+
+# from addons_daily.addons_report import expand_addons
 import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext, Row
@@ -462,3 +464,13 @@ def get_search_metrics(search_daily_df, addons_expanded):
     )
 
     return df_mapped
+
+
+def get_is_system(addons_expanded):
+    is_system = (
+        addons_expanded.select(["addon_id", "is_system"])
+        .groupby("addon_id")
+        .agg(F.first("is_system").alias("is_system"))
+    )
+
+    return is_system

@@ -77,7 +77,17 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
     with open("TEST.json", "w") as f:
         import re
 
-        f.write(re.sub("None", "null", re.sub("'", '"', str(df_to_json(agg)))))
+        f.write(
+            re.sub(
+                "None",
+                "null",
+                re.sub(
+                    "True",
+                    "true",
+                    re.sub("False", "false", re.sub("'", '"', str(df_to_json(agg)))),
+                ),
+            )
+        )
 
     result = df_to_json(agg)
     expected_result = load_json("expected_results.json")
