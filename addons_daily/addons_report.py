@@ -16,7 +16,8 @@ from .utils.raw_pings import *
 from pyspark.sql import SparkSession
 
 DEFAULT_TZ = "UTC"
-
+DATASET_VERSION = 1
+OUTPATH = "s3://telemetry-parquet/addons_daily/v{}/".format(DATASET_VERSION)
 CORE_FIELDS = [
     "submission_date_s3",
     "client_id",
@@ -168,8 +169,14 @@ def main(
     agg_data = agg_addons_report(
         spark, date, main_summary, search_daily, events, raw_pings
     )
-    print(agg_data.collect()[0:10])
-    # return agg_data
+
+    # write to s3
+    (
+        agg_data.drop("submission_date_s3")
+        .repartition(10)
+        .write.mode("overwrite")
+        .parquet(OUTPATH + "submission_date_s3={}".format(date))
+    )
 
 
 if __name__ == "__main__":
