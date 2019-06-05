@@ -431,6 +431,36 @@ def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
     assert output == expected_output
 
 
+def test_is_system(addons_expanded, spark):
+    """
+    Given a dataframe of some actual sampled data, ensure that
+    is_system outputs the correct dataframe
+    :param addons_expanded: pytest fixture defined above
+    :return: assertion whether the expected output indeed matches the true output
+    """
+    output = df_to_json(get_is_system(addons_expanded))
+    expected_output = [
+        {"addon_id": "baidu-code-update@mozillaonline.com", "is_system": True},
+        {
+            "addon_id": "tls13-version-fallback-rollout-bug1462099@mozilla.org",
+            "is_system": True,
+        },
+        {"addon_id": "screenshots@mozilla.org", "is_system": True},
+        {"addon_id": "non-system-addon1", "is_system": False},
+        {"addon_id": "firefox@getpocket.com", "is_system": True},
+        {"addon_id": "hotfix-update-xpi-intermediate@mozilla.com", "is_system": False},
+        {"addon_id": "fxmonitor@mozilla.org", "is_system": True},
+        {"addon_id": "aushelper@mozilla.org", "is_system": True},
+        {"addon_id": "onboarding@mozilla.org", "is_system": True},
+        {"addon_id": "activity-stream@mozilla.org", "is_system": True},
+        {"addon_id": "non-system-addon2", "is_system": False},
+        {"addon_id": "followonsearch@mozilla.com", "is_system": True},
+        {"addon_id": "formautofill@mozilla.org", "is_system": True},
+        {"addon_id": "webcompat@mozilla.org", "is_system": True},
+    ]
+    assert output == expected_output
+
+
 def test_install_flows(events):
     output = df_to_json(install_flow_events(events))
     expected_output = [

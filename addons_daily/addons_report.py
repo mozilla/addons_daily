@@ -65,6 +65,7 @@ def agg_addons_report(
     # needs to process 30 days in past, use unfiltered dataframes
     trend_metrics = get_trend_metrics(addons_expanded, date)
     event_metrics = install_flow_events(events)
+    is_system = get_is_system(addons_expanded)
 
     keyed_hists = load_keyed_hist(raw_pings)
     # raw pings metrics
@@ -85,6 +86,7 @@ def agg_addons_report(
             trend_metrics,
             search_metrics,
             event_metrics,
+            is_system,
             storage_get,
             storage_set,
             startup_time,
