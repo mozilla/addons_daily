@@ -14,7 +14,7 @@ Prior to construction of this dataset, extension related data lived in several d
 
 ### Accessing the Data
 The data is stored as a parquet table in S3 at the following address.
-insert_s3_path
+[s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/](s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/)
 
 ***The addons_daily table is accessible through re:dash using the Athena data source. It is also available via the Presto data source, though Athena should be preferred for performance and stability reasons.***
 
@@ -50,8 +50,8 @@ This dataset is updated daily via the telemetry-airflow infrastructure. The job 
 
 ### Schema
 
-The data is partitioned by submission_date_s3 which is formatted as %Y%m%d, like 20180130.
-As of 2019-06-03, the current version of the clients_daily dataset is v6, and has a schema as follows:
+The data is partitioned by `submission_date_s3` which is formatted as `%Y%m%d`, like `20180130`.
+As of 2019-06-05, the current version of the addons_daily dataset is v1, and has a schema as follows:
 
 ```
 root
