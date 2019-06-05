@@ -14,7 +14,7 @@ Prior to construction of this dataset, extension related data lived in several d
 
 ### Accessing the Data
 The data is stored as a parquet table in S3 at the following address.
-[s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/](s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/)
+s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/
 
 ***The addons_daily table is accessible through re:dash using the Athena data source. It is also available via the Presto data source, though Athena should be preferred for performance and stability reasons.***
 
