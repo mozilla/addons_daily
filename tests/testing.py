@@ -1,13 +1,14 @@
-from addons_daily.utils.telemetry_data import *
-from addons_daily.utils.helpers import *
+#from addons_daily.utils.telemetry_data import g
+#from addons_daily.utils.helpers import *
 from addons_daily.addons_report import *
 from pyspark.sql.types import *
-from pyspark.sql import Row
+#from pyspark.sql import Row
 import json
 import os
 
 
 BASE_DATE = "20190515"
+
 
 def load_json(filename):
     root = os.path.dirname(__file__)
