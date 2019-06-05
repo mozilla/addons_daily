@@ -114,7 +114,6 @@ def get_user_demo_metrics(addons_expanded):
     ct_dist = ct_dist.na.fill(0).select("addon_id", source_map(ct_dist, "country_pct"))
 
     combined_dist = os_dist.join(ct_dist, on="addon_id", how="outer")
-
     return combined_dist
 
 
@@ -247,9 +246,9 @@ def get_top_10_coinstalls(addons_expanded_day):
         .filter("rn BETWEEN 1 and 10")  # ignore 0th addon (where coaddon==addon_id)
         .groupby("addon_id")
         .agg(
-            F.collect_list(
-                F.concat((F.col("rn") - F.lit(1)), F.lit("="), "coaddon")
-            ).alias("top_10_coinstalls")
+            F.collect_list(F.concat(F.col("rn"), F.lit("="), "coaddon")).alias(
+                "top_10_coinstalls"
+            )
         )
         .rdd.map(format_row)
         .toDF()
