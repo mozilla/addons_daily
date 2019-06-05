@@ -169,48 +169,46 @@ def test_user_demo_metrics(addons_expanded_day, spark):
     output = df_to_json(get_user_demo_metrics(addons_expanded_day))
     expected = [
         {
-            "addon_id": u"baidu-code-update@mozillaonline.com",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"screenshots@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "screenshots@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"non-system-addon1",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "non-system-addon1",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"fxmonitor@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "fxmonitor@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"non-system-addon2",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "non-system-addon2",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"formautofill@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "formautofill@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"webcompat@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "webcompat@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
     ]
-    print("output", output)
-    print("expected", expected)
     assert output == expected
 
 
