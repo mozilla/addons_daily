@@ -5,35 +5,33 @@ Contributers: Sarah Melancon, Ben Miroglio, Brian Wright, Daniel Thorn
 
 This ETL code produces daily aggregates of Firefox extensions. It supports the broader "Extention Data for Developers" Project.
 
-Introduction
+* Introduction
 
-Contents
+ - Contents
 
-Accessing the Data
+ - Accessing the Data
 
-Data Reference
+* Data Reference
 
-Example Queries
+ - Example Queries
 
-Ex 1
+  1) Ex 1
 
-Ex 2
+  2) Ex 2
 
-Scheduling
+* Scheduling
 
-Schema
-
-Code Reference
+* Schema
 
 
 ## Introduction:
 
 The addons_daily dataset serves as the central hub for all Firefox extension related questions. This includes questions regarding browser performance, user engagement, click through rates, etc. Each row in the table represents a unique addon, and each column is a unique metric.
 
-## Contents
+### Contents
 Prior to construction of this dataset, extension related data lived in several different sources. Addons_daily has combined metrics aggregated from several sources, including raw pings, telemetry data, and google analytics data.
 
-## Accessing the Data
+### Accessing the Data
 The data is stored as a parquet table in S3 at the following address.
 insert_s3_path
 
@@ -122,8 +120,4 @@ root
  |-- avg_webext_pageaction_popup_open_ms_: double (nullable = true)
  |-- avg_webext_content_script_injection_ms_: double (nullable = true)
 ```
-
-## Code Reference
-Refer to the addons-daily repository for code that generates the dataset.
-
 
