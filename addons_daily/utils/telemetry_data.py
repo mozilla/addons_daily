@@ -4,18 +4,57 @@ import pyspark.sql.functions as F
 import pandas as pd
 from pyspark.sql import SQLContext, Row
 from pyspark.sql.window import Window
+from pyspark.sql.types import StringType
+from itertools import chain
 
 
-# just so pycharm is not mad at me while I type this code
-# these will be replaced later
+TOP_COUNTRIES = {
+    "US": "United States",
+    "DE": "Germany",
+    "FR": "France",
+    "IN": "India",
+    "BR": "Brazil",
+    "CN": "China",
+    "ID": "Indonesia",
+    "RU": "Russia",
+    "IT": "Italy",
+    "PL": "Poland",
+    "GB": "Great Britain",
+    "CA": "Canada",
+}
+
+TOP_OS = {"Windows_NT", "Darwin", "Linux"}
 
 
-# this script assumes we have the data from main_summary and the raw_pings
-# already loaded and processed
+def source_map(df, extra_filter=""):
+    m = F.create_map(
+        list(
+            chain(
+                *(
+                    (F.lit(name.split("_")[0]), F.col(name))
+                    for name in df.columns
+                    if name != "addon_id" and extra_filter in name
+                )
+            )
+        )
+    ).alias(extra_filter)
+    return m
 
-###########################################################
-# User Demographics - country distribution, os distribution
-###########################################################
+
+def bucket_field(field, ref):
+    if field in ref:
+        return field
+    return "Other"
+
+
+@F.udf(StringType())
+def bucket_os(os):
+    return bucket_field(os, TOP_OS)
+
+
+@F.udf(StringType())
+def bucket_country(country):
+    return bucket_field(country, TOP_COUNTRIES)
 
 
 def get_user_demo_metrics(addons_expanded):
@@ -26,42 +65,56 @@ def get_user_demo_metrics(addons_expanded):
         - distribution of users by operating system
         - distribution of users by country
     """
-    client_counts = addons_expanded.groupBy("addon_id").agg(
-        F.countDistinct("client_id").alias("total_clients")
+
+    def source_map(df, extra_filter=""):
+        m = F.create_map(
+            list(
+                chain(
+                    *(
+                        (F.lit(name), F.col(name))
+                        for name in df.columns
+                        if name != "addon_id"
+                    )
+                )
+            )
+        ).alias(extra_filter)
+        return m
+
+    client_counts = (
+        addons_expanded.groupBy("addon_id")
+        .agg(F.countDistinct("client_id").alias("total_clients"))
+        .cache()
     )
 
     os_dist = (
-        addons_expanded.groupBy("addon_id", "os")
+        addons_expanded.withColumn("os", bucket_os("os"))
+        .groupBy("addon_id", "os")
         .agg(F.countDistinct("client_id").alias("os_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn("os_pct", F.col("os_client_count") / F.col("total_clients"))
-        .groupBy("addon_id")
-        .agg(F.collect_list("os").alias("os"), F.collect_list("os_pct").alias("os_pct"))
-        .withColumn(
-            "os_dist",
-            make_map(F.col("os"), F.col("os_pct").cast(ArrayType(DoubleType()))),
-        )
-        .drop("os", "os_pct")
+        .groupby("addon_id")
+        .pivot("os")
+        .agg(F.first("os_pct").alias("os_pct"))
     )
 
+    os_dist = os_dist.na.fill(0).select("addon_id", source_map(os_dist, "os_pct"))
+
     ct_dist = (
-        addons_expanded.groupBy("addon_id", "country")
+        addons_expanded.withColumn("country", bucket_country("country"))
+        .groupBy("addon_id", "country")
         .agg(F.countDistinct("client_id").alias("country_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn(
             "country_pct", F.col("country_client_count") / F.col("total_clients")
         )
         .groupBy("addon_id")
-        .agg(
-            F.collect_list("country").alias("country"),
-            F.collect_list("country_pct").alias("country_pct"),
-        )
-        .withColumn("country_dist", make_map(F.col("country"), F.col("country_pct")))
-        .drop("country", "country_pct")
+        .pivot("country")
+        .agg(F.first("country_pct").alias("country_pct"))
     )
 
-    combined_dist = os_dist.join(ct_dist, on="addon_id", how="outer")
+    ct_dist = ct_dist.na.fill(0).select("addon_id", source_map(ct_dist, "country_pct"))
 
+    combined_dist = os_dist.join(ct_dist, on="addon_id", how="outer")
     return combined_dist
 
 
@@ -99,7 +152,7 @@ def get_engagement_metrics(addons_expanded, main_summary):
         main_summary.where(F.col("disabled_addons_ids").isNotNull())
         .withColumn("addon_id", F.explode("disabled_addons_ids"))
         .groupBy("addon_id")
-        .agg(F.countDistinct("client_id").alias("disabled"))
+        .agg((F.countDistinct("client_id") * F.lit(100)).alias("disabled"))
     )
 
     engagement_metrics = engagement_metrics.join(
@@ -194,9 +247,9 @@ def get_top_10_coinstalls(addons_expanded_day):
         .filter("rn BETWEEN 1 and 10")  # ignore 0th addon (where coaddon==addon_id)
         .groupby("addon_id")
         .agg(
-            F.collect_list(
-                F.concat((F.col("rn") - F.lit(1)), F.lit("="), "coaddon")
-            ).alias("top_10_coinstalls")
+            F.collect_list(F.concat(F.col("rn"), F.lit("="), "coaddon")).alias(
+                "top_10_coinstalls"
+            )
         )
         .rdd.map(format_row)
         .toDF()
@@ -225,9 +278,9 @@ def get_trend_metrics(addons_expanded, date):
     # limit to last 30 days to calculate mau
     addons_expanded = addons_expanded.withColumn(
         "date", F.to_date("submission_date_s3", "yyyyMMdd")
-    ).filter("date >= ({} - INTERVAL 30 DAYS)".format(base_date))
+    ).filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
     mau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("mau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("mau")
     )
 
     # limit to last 7 days to calculate wau
@@ -235,19 +288,25 @@ def get_trend_metrics(addons_expanded, date):
         "date >= ({} - INTERVAL 7 DAYS)".format(base_date)
     )
     wau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("wau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("wau")
     )
 
     # limit to last 1 day to calculate dau
     addons_expanded = addons_expanded.filter(
         "date >= ({} - INTERVAL 1 DAYS)".format(base_date)
     )
+    absolute_dau = addons_expanded.select("client_id").distinct().count()
+
     dau = addons_expanded.groupby("addon_id").agg(
-        F.countDistinct("client_id").alias("dau")
+        (F.countDistinct("client_id") * F.lit(100)).alias("dau")
     )
 
-    trend_metrics = mau.join(wau, on="addon_id", how="outer").join(
-        dau, on="addon_id", how="outer"
+    dau_pct = dau.withColumn("dau_prop", F.col("dau") / absolute_dau).drop(F.col("dau"))
+
+    trend_metrics = (
+        mau.join(wau, on="addon_id", how="outer")
+        .join(dau, on="addon_id", how="outer")
+        .join(dau_pct, on="addon_id", how="outer")
     )
 
     return trend_metrics
@@ -267,9 +326,20 @@ def get_top_addon_names(addons_expanded):
 
 
 def install_flow_events(events):
-    """
-    
-    """
+    def source_map(df, alias, extra_filter=""):
+        m = F.create_map(
+            list(
+                chain(
+                    *(
+                        (F.lit(name.split("_")[0]), F.col(name))
+                        for name in df.columns
+                        if name != "addon_id" and extra_filter in name
+                    )
+                )
+            )
+        ).alias(alias)
+        return m
+
     install_flow_events = (
         events.select(
             [
@@ -305,23 +375,53 @@ def install_flow_events(events):
         )
     )
 
-    number_installs = (
-        install_flow_events.where(install_flow_events.event_method == "install")
-        .groupby("addon_id")
-        .agg(F.sum("n_distinct_users").alias("installs"))
+    installs = (
+        install_flow_events.filter("event_method = 'install'")
+        .groupBy("addon_id")
+        .pivot("source")
+        .agg((F.sum("n_distinct_users") * F.lit(100)), F.avg("avg_download_time"))
+    )
+    uninstalls = (
+        install_flow_events.filter("event_method = 'uninstall'")
+        .groupBy("addon_id")
+        .pivot("source")
+        .agg((F.sum("n_distinct_users") * F.lit(100)))
     )
 
-    number_uninstalls = (
-        install_flow_events.where(install_flow_events.event_method == "uninstall")
-        .groupby("addon_id")
-        .agg(F.sum("n_distinct_users").alias("uninstalls"))
+    agg = (
+        installs.na.fill(0)
+        .select(
+            "addon_id",
+            source_map(installs, "installs", "n_distinct_users"),
+            source_map(installs, "download_times", "avg_download_time"),
+        )
+        .join(
+            uninstalls.na.fill(0).select(
+                "addon_id", source_map(uninstalls, "uninstalls")
+            ),
+            on="addon_id",
+            how="full",
+        )
     )
 
-    install_flow_events_df = number_installs.join(
-        number_uninstalls, "addon_id", how="full"
-    )
+    return agg
+    # number_installs = (
+    #     install_flow_events.where(install_flow_events.event_method == "install")
+    #     .groupby("addon_id")
+    #     .agg(F.sum("n_distinct_users").alias("installs"))
+    # )
 
-    return install_flow_events_df
+    # number_uninstalls = (
+    #     install_flow_events.where(install_flow_events.event_method == "uninstall")
+    #     .groupby("addon_id")
+    #     .agg(F.sum("n_distinct_users").alias("uninstalls"))
+    # )
+
+    # install_flow_events_df = number_installs.join(
+    #     number_uninstalls, "addon_id", how="full"
+    # )
+
+    # return install_flow_events_df
 
 
 def get_search_metrics(search_daily_df, addons_expanded):
@@ -342,7 +442,8 @@ def get_search_metrics(search_daily_df, addons_expanded):
     user_addon_search = user_addon.join(search_daily_df, "client_id")
 
     df = (
-        user_addon_search.groupBy("addon_id", "engine")
+        user_addon_search.groupBy("addon_id")
+        .pivot("engine")
         .agg(
             F.sum("sap").alias("sap_searches"),
             F.sum("tagged_sap").alias("tagged_sap_searches"),
@@ -350,55 +451,18 @@ def get_search_metrics(search_daily_df, addons_expanded):
             F.sum("search_with_ads").alias("search_with_ads"),
             F.sum("ad_click").alias("ad_click"),
         )
-        .groupBy("addon_id")
-        .agg(
-            F.collect_list("engine").alias("engine"),
-            F.collect_list("sap_searches").alias("sap_searches"),
-            F.collect_list("tagged_sap_searches").alias("tagged_sap_searches"),
-            F.collect_list("organic_searches").alias("organic_searches"),
-            F.collect_list("search_with_ads").alias("search_with_ads"),
-            F.collect_list("ad_click").alias("ad_click"),
-        )
-        .withColumn(
-            "sap_searches",
-            make_map(
-                F.col("engine"), F.col("sap_searches").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "tagged_sap_searches",
-            make_map(
-                F.col("engine"),
-                F.col("tagged_sap_searches").cast(ArrayType(DoubleType())),
-            ),
-        )
-        .withColumn(
-            "organic_searches",
-            make_map(
-                F.col("engine"), F.col("organic_searches").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "search_with_ads",
-            make_map(
-                F.col("engine"), F.col("search_with_ads").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .withColumn(
-            "ad_click",
-            make_map(
-                F.col("ad_click"), F.col("ad_click").cast(ArrayType(DoubleType()))
-            ),
-        )
-        .drop("engine")
     )
 
-    return df
+    df_mapped = df.na.fill(0).select(
+        "addon_id",
+        source_map(df, "search_with_ads"),
+        source_map(df, "ad_click"),
+        source_map(df, "organic_searches"),
+        source_map(df, "sap_searches"),
+        source_map(df, "tagged_sap_searches"),
+    )
 
-
-########################
-# Addon info - is_system
-########################
+    return df_mapped
 
 
 def get_is_system(addons_expanded):
@@ -410,4 +474,3 @@ def get_is_system(addons_expanded):
     )
 
     return is_system
-

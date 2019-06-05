@@ -73,10 +73,11 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
         events=events,
         raw_pings=raw_pings,
     )
-    agg.printSchema()
     # uncomment for test dev
     with open("TEST.json", "w") as f:
-        f.write(str(df_to_json(agg)))
+        import re
+
+        f.write(re.sub("None", "null", re.sub("'", '"', str(df_to_json(agg)))))
 
     result = df_to_json(agg)
     expected_result = load_json("expected_results.json")

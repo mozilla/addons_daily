@@ -10,6 +10,6 @@ metastore_db/
 *__pycache__/
 
 *.egg-info/
-
+TEST.json
 # Ignore vim temp files
 .*sw?

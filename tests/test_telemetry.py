@@ -15,6 +15,20 @@ def df_to_json(df):
     return [i.asDict() for i in df.collect()]
 
 
+def load_test_data(prefix, spark):
+    root = os.path.dirname(__file__)
+    schema_path = os.path.join(root, "resources", "{}_schema.json".format(prefix))
+    with open(schema_path) as f:
+        d = json.load(f)
+        schema = StructType.fromJson(d)
+    rows_path = os.path.join(root, "resources", "{}.json".format(prefix))
+    # FAILFAST causes us to abort early if the data doesn't match
+    # the given schema. Without this there was as very annoying
+    # problem where dataframe.collect() would return an empty set.
+    frame = spark.read.json(rows_path, schema, mode="FAILFAST")
+    return frame
+
+
 @pytest.fixture()
 def spark():
     spark_session = SparkSession.builder.appName("addons_daily_tests").getOrCreate()
@@ -23,17 +37,19 @@ def spark():
 
 @pytest.fixture()
 def main_summary(spark):
-    root = os.path.dirname(__file__)
-    schema_path = os.path.join(root, "resources", "main_summary_schema.json")
-    with open(schema_path) as f:
-        d = json.load(f)
-        schema = StructType.fromJson(d)
-    rows_path = os.path.join(root, "resources", "main_summary.json")
-    # FAILFAST causes us to abort early if the data doesn't match
-    # the given schema. Without this there was as very annoying
-    # problem where dataframe.collect() would return an empty set.
-    frame = spark.read.json(rows_path, schema, mode="FAILFAST")
-    return frame
+    return load_test_data("main_summary", spark)
+
+
+@pytest.fixture()
+def events(spark):
+    return load_test_data("events", spark)
+
+
+@pytest.fixture()
+def search_clients_daily(spark):
+    return load_test_data("search_clients_daily", spark).filter(
+        "submission_date_s3 = '{}'".format(BASE_DATE)
+    )
 
 
 @pytest.fixture()
@@ -153,48 +169,46 @@ def test_user_demo_metrics(addons_expanded_day, spark):
     output = df_to_json(get_user_demo_metrics(addons_expanded_day))
     expected = [
         {
-            "addon_id": u"baidu-code-update@mozillaonline.com",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"screenshots@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "screenshots@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"non-system-addon1",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "non-system-addon1",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"fxmonitor@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "fxmonitor@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"non-system-addon2",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "non-system-addon2",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"formautofill@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "formautofill@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
         {
-            "addon_id": u"webcompat@mozilla.org",
-            "country_dist": {u"GB": 1.0},
-            "os_dist": {u"Windows_NT": 1.0},
+            "addon_id": "webcompat@mozilla.org",
+            "os_pct": {"Windows_NT": 1.0},
+            "country_pct": {"GB": 1.0},
         },
     ]
-    print("output", output)
-    print("expected", expected)
     assert output == expected
 
 
@@ -202,40 +216,105 @@ def test_trend_metrics(addons_expanded, spark):
     output = df_to_json(get_trend_metrics(addons_expanded, BASE_DATE))
     expected_output = [
         {
-            "addon_id": u"baidu-code-update@mozillaonline.com",
-            "dau": 1,
-            "mau": 1,
-            "wau": 1,
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "mau": 100,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
         },
         {
-            "addon_id": u"tls13-version-fallback-rollout-bug1462099@mozilla.org",
-            "dau": None,
-            "mau": 1,
+            "addon_id": "tls13-version-fallback-rollout-bug1462099@mozilla.org",
+            "mau": 100,
             "wau": None,
-        },
-        {"addon_id": u"screenshots@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
-        {"addon_id": u"non-system-addon1", "dau": 1, "mau": 1, "wau": 1},
-        {"addon_id": u"firefox@getpocket.com", "dau": None, "mau": 1, "wau": None},
-        {
-            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
-            "dau": 1,
-            "mau": 1,
-            "wau": 1,
-        },
-        {"addon_id": u"fxmonitor@mozilla.org", "dau": 1, "mau": 1, "wau": 1},
-        {"addon_id": u"aushelper@mozilla.org", "dau": None, "mau": 1, "wau": None},
-        {"addon_id": u"onboarding@mozilla.org", "dau": None, "mau": 1, "wau": None},
-        {
-            "addon_id": u"activity-stream@mozilla.org",
             "dau": None,
-            "mau": 1,
-            "wau": None,
+            "dau_prop": None,
         },
-        {"addon_id": u"non-system-addon2", "dau": 1, "mau": 1, "wau": 1},
-        {"addon_id": u"followonsearch@mozilla.com", "dau": None, "mau": 1, "wau": None},
-        {"addon_id": u"formautofill@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
-        {"addon_id": u"webcompat@mozilla.org", "dau": 1, "mau": 2, "wau": 1},
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "mau": 200,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "non-system-addon1",
+            "mau": 100,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "firefox@getpocket.com",
+            "mau": 100,
+            "wau": None,
+            "dau": None,
+            "dau_prop": None,
+        },
+        {
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "mau": 100,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
+            "mau": 100,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "aushelper@mozilla.org",
+            "mau": 100,
+            "wau": None,
+            "dau": None,
+            "dau_prop": None,
+        },
+        {
+            "addon_id": "onboarding@mozilla.org",
+            "mau": 100,
+            "wau": None,
+            "dau": None,
+            "dau_prop": None,
+        },
+        {
+            "addon_id": "activity-stream@mozilla.org",
+            "mau": 100,
+            "wau": None,
+            "dau": None,
+            "dau_prop": None,
+        },
+        {
+            "addon_id": "non-system-addon2",
+            "mau": 100,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "followonsearch@mozilla.com",
+            "mau": 100,
+            "wau": None,
+            "dau": None,
+            "dau_prop": None,
+        },
+        {
+            "addon_id": "formautofill@mozilla.org",
+            "mau": 200,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
+        {
+            "addon_id": "webcompat@mozilla.org",
+            "mau": 200,
+            "wau": 100,
+            "dau": 100,
+            "dau_prop": 100.0,
+        },
     ]
+
     assert output == expected_output
 
 
@@ -249,62 +328,46 @@ def test_top_ten_coinstalls(addons_expanded_day, spark):
     output = df_to_json(get_top_10_coinstalls(addons_expanded_day))
     expected = [
         {
-            "addon_id": u"baidu-code-update@mozillaonline.com",
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "top_10_coinstalls": {"1": "non-system-addon2", "2": "non-system-addon1"},
+        },
+        {
+            "addon_id": "screenshots@mozilla.org",
             "top_10_coinstalls": {
-                u"0": u"non-system-addon2",
-                u"1": u"non-system-addon1",
+                "1": "hotfix-update-xpi-intermediate@mozilla.com",
+                "2": "non-system-addon1",
             },
         },
         {
-            "addon_id": u"screenshots@mozilla.org",
+            "addon_id": "non-system-addon1",
+            "top_10_coinstalls": {"1": "non-system-addon1", "2": "non-system-addon2"},
+        },
+        {
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "top_10_coinstalls": {"1": "non-system-addon1", "2": "non-system-addon2"},
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
             "top_10_coinstalls": {
-                u"0": u"hotfix-update-xpi-intermediate@mozilla.com",
-                u"1": u"non-system-addon1",
+                "1": "non-system-addon1",
+                "2": "hotfix-update-xpi-intermediate@mozilla.com",
             },
         },
         {
-            "addon_id": u"non-system-addon1",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon1",
-                u"1": u"non-system-addon2",
-            },
+            "addon_id": "non-system-addon2",
+            "top_10_coinstalls": {"1": "non-system-addon2", "2": "non-system-addon1"},
         },
         {
-            "addon_id": u"hotfix-update-xpi-intermediate@mozilla.com",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon1",
-                u"1": u"non-system-addon2",
-            },
+            "addon_id": "formautofill@mozilla.org",
+            "top_10_coinstalls": {"1": "non-system-addon1", "2": "non-system-addon2"},
         },
         {
-            "addon_id": u"fxmonitor@mozilla.org",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon1",
-                u"1": u"hotfix-update-xpi-intermediate@mozilla.com",
-            },
-        },
-        {
-            "addon_id": u"non-system-addon2",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon2",
-                u"1": u"non-system-addon1",
-            },
-        },
-        {
-            "addon_id": u"formautofill@mozilla.org",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon1",
-                u"1": u"non-system-addon2",
-            },
-        },
-        {
-            "addon_id": u"webcompat@mozilla.org",
-            "top_10_coinstalls": {
-                u"0": u"non-system-addon1",
-                u"1": u"non-system-addon2",
-            },
+            "addon_id": "webcompat@mozilla.org",
+            "top_10_coinstalls": {"1": "non-system-addon1", "2": "non-system-addon2"},
         },
     ]
+
+    assert output == expected
 
 
 def test_engagement_metrics(addons_expanded_day, main_summary_day, spark):
@@ -434,3 +497,116 @@ def test_is_system(addons_expanded, spark):
     assert output == expected_output
 
 
+def test_install_flows(events):
+    output = df_to_json(install_flow_events(events))
+    expected_output = [
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "installs": {"amo": 200, "unknown": 0},
+            "download_times": {"amo": 584.5, "unknown": 0.0},
+            "uninstalls": {"system-addon": 100},
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
+            "installs": None,
+            "download_times": None,
+            "uninstalls": {"system-addon": 100},
+        },
+        {
+            "addon_id": "jid1-h4Ke2h5q31uuK7@jetpack",
+            "installs": {"amo": 100, "unknown": 0},
+            "download_times": {"amo": 1704.0, "unknown": 0.0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "{87e997f4-ae0e-42e6-a780-ff73977188c5}",
+            "installs": {"amo": 100, "unknown": 0},
+            "download_times": {"amo": 3015.0, "unknown": 0.0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "{08cc31c0-b1cb-461c-8ba2-95edd9e76a02}",
+            "installs": {"amo": 100, "unknown": 0},
+            "download_times": {"amo": 998.0, "unknown": 0.0},
+            "uninstalls": None,
+        },
+        {
+            "addon_id": "Directions_Found_mVBuOLkFzz@www.directionsfoundnt.com",
+            "installs": {"amo": 0, "unknown": 100},
+            "download_times": {"amo": 0.0, "unknown": 572.0},
+            "uninstalls": None,
+        },
+    ]
+    assert output == expected_output
+
+
+def test_searches_and_ads(search_clients_daily, addons_expanded_day, spark):
+    output = df_to_json(get_search_metrics(search_clients_daily, addons_expanded_day))
+    expected_output = [
+        {
+            "addon_id": "baidu-code-update@mozillaonline.com",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "screenshots@mozilla.org",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "non-system-addon1",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "hotfix-update-xpi-intermediate@mozilla.com",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "fxmonitor@mozilla.org",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "non-system-addon2",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "formautofill@mozilla.org",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+        {
+            "addon_id": "webcompat@mozilla.org",
+            "search_with_ads": {"google": 3},
+            "ad_click": {"google": 0},
+            "organic_searches": {"google": 0},
+            "sap_searches": {"google": 10},
+            "tagged_sap_searches": {"google": 10},
+        },
+    ]
+
+    assert output == expected_output
