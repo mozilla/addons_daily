@@ -22,12 +22,38 @@ TOP_COUNTRIES = {
     "CA": "Canada",
 }
 
+TOP_OS = {"Windows_NT", "Darwin", "Linux"}
 
-@F.udf(returnType=StringType())
-def bucket_country(country):
-    if country in TOP_COUNTRIES:
-        return country
+
+def source_map(df, extra_filter=""):
+    m = F.create_map(
+        list(
+            chain(
+                *(
+                    (F.lit(name.split("_")[0]), F.col(name))
+                    for name in df.columns
+                    if name != "addon_id" and extra_filter in name
+                )
+            )
+        )
+    ).alias(extra_filter)
+    return m
+
+
+def bucket_field(field, ref):
+    if field in ref:
+        return field
     return "Other"
+
+
+@F.udf(StringType())
+def bucket_os(os):
+    return bucket_field(os, TOP_OS)
+
+
+@F.udf(StringType())
+def bucket_country(country):
+    return bucket_field(country, TOP_COUNTRIES)
 
 
 def get_user_demo_metrics(addons_expanded):
@@ -38,23 +64,39 @@ def get_user_demo_metrics(addons_expanded):
         - distribution of users by operating system
         - distribution of users by country
     """
-    client_counts = addons_expanded.groupBy("addon_id").agg(
-        F.countDistinct("client_id").alias("total_clients")
+
+    def source_map(df, extra_filter=""):
+        m = F.create_map(
+            list(
+                chain(
+                    *(
+                        (F.lit(name), F.col(name))
+                        for name in df.columns
+                        if name != "addon_id"
+                    )
+                )
+            )
+        ).alias(extra_filter)
+        return m
+
+    client_counts = (
+        addons_expanded.groupBy("addon_id")
+        .agg(F.countDistinct("client_id").alias("total_clients"))
+        .cache()
     )
 
     os_dist = (
-        addons_expanded.groupBy("addon_id", "os")
+        addons_expanded.withColumn("os", bucket_os("os"))
+        .groupBy("addon_id", "os")
         .agg(F.countDistinct("client_id").alias("os_client_count"))
         .join(client_counts, on="addon_id", how="left")
         .withColumn("os_pct", F.col("os_client_count") / F.col("total_clients"))
-        .groupBy("addon_id")
-        .agg(F.collect_list("os").alias("os"), F.collect_list("os_pct").alias("os_pct"))
-        .withColumn(
-            "os_dist",
-            make_map(F.col("os"), F.col("os_pct").cast(ArrayType(DoubleType()))),
-        )
-        .drop("os", "os_pct")
+        .groupby("addon_id")
+        .pivot("os")
+        .agg(F.first("os_pct").alias("os_pct"))
     )
+
+    os_dist = os_dist.na.fill(0).select("addon_id", source_map(os_dist, "os_pct"))
 
     ct_dist = (
         addons_expanded.withColumn("country", bucket_country("country"))
@@ -65,13 +107,11 @@ def get_user_demo_metrics(addons_expanded):
             "country_pct", F.col("country_client_count") / F.col("total_clients")
         )
         .groupBy("addon_id")
-        .agg(
-            F.collect_list("country").alias("country"),
-            F.collect_list("country_pct").alias("country_pct"),
-        )
-        .withColumn("country_dist", make_map(F.col("country"), F.col("country_pct")))
-        .drop("country", "country_pct")
+        .pivot("country")
+        .agg(F.first("country_pct").alias("country_pct"))
     )
+
+    ct_dist = ct_dist.na.fill(0).select("addon_id", source_map(ct_dist, "country_pct"))
 
     combined_dist = os_dist.join(ct_dist, on="addon_id", how="outer")
 
@@ -401,20 +441,6 @@ def get_search_metrics(search_daily_df, addons_expanded):
     user_addon = addons_expanded.select("client_id", "addon_id")
     user_addon_search = user_addon.join(search_daily_df, "client_id")
 
-    def engine_map(df, extra_filter=""):
-        m = F.create_map(
-            list(
-                chain(
-                    *(
-                        (F.lit(name.split("_")[0]), F.col(name))
-                        for name in df.columns
-                        if name != "addon_id" and extra_filter in name
-                    )
-                )
-            )
-        ).alias(extra_filter)
-        return m
-
     df = (
         user_addon_search.groupBy("addon_id")
         .pivot("engine")
@@ -429,11 +455,11 @@ def get_search_metrics(search_daily_df, addons_expanded):
 
     df_mapped = df.na.fill(0).select(
         "addon_id",
-        engine_map(df, "search_with_ads"),
-        engine_map(df, "ad_click"),
-        engine_map(df, "organic_searches"),
-        engine_map(df, "sap_searches"),
-        engine_map(df, "tagged_sap_searches"),
+        source_map(df, "search_with_ads"),
+        source_map(df, "ad_click"),
+        source_map(df, "organic_searches"),
+        source_map(df, "sap_searches"),
+        source_map(df, "tagged_sap_searches"),
     )
 
     return df_mapped
