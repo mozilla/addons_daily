@@ -440,59 +440,23 @@ def test_is_system(addons_expanded, spark):
     """
     output = df_to_json(get_is_system(addons_expanded))
     expected_output = [
+        {"addon_id": "baidu-code-update@mozillaonline.com", "is_system": True},
         {
-            'addon_id': 'baidu-code-update@mozillaonline.com',
-            'is_system': True
+            "addon_id": "tls13-version-fallback-rollout-bug1462099@mozilla.org",
+            "is_system": True,
         },
-        {
-            'addon_id': 'tls13-version-fallback-rollout-bug1462099@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'screenshots@mozilla.org', 'is_system': True
-        }, 
-        {
-            'addon_id': 'non-system-addon1', 'is_system': False
-        },
-        {
-            'addon_id': 'firefox@getpocket.com',
-            'is_system': True
-        },
-        {
-            'addon_id': 'hotfix-update-xpi-intermediate@mozilla.com',
-            'is_system': False},
-        {
-            'addon_id': 'fxmonitor@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'aushelper@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'onboarding@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'activity-stream@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'non-system-addon2',
-            'is_system': False
-        },
-        {
-            'addon_id': 'followonsearch@mozilla.com',
-            'is_system': True
-        },
-        {
-            'addon_id': 'formautofill@mozilla.org',
-            'is_system': True
-        },
-        {
-            'addon_id': 'webcompat@mozilla.org',
-            'is_system': True
-        }
+        {"addon_id": "screenshots@mozilla.org", "is_system": True},
+        {"addon_id": "non-system-addon1", "is_system": False},
+        {"addon_id": "firefox@getpocket.com", "is_system": True},
+        {"addon_id": "hotfix-update-xpi-intermediate@mozilla.com", "is_system": False},
+        {"addon_id": "fxmonitor@mozilla.org", "is_system": True},
+        {"addon_id": "aushelper@mozilla.org", "is_system": True},
+        {"addon_id": "onboarding@mozilla.org", "is_system": True},
+        {"addon_id": "activity-stream@mozilla.org", "is_system": True},
+        {"addon_id": "non-system-addon2", "is_system": False},
+        {"addon_id": "followonsearch@mozilla.com", "is_system": True},
+        {"addon_id": "formautofill@mozilla.org", "is_system": True},
+        {"addon_id": "webcompat@mozilla.org", "is_system": True},
     ]
     assert output == expected_output
 
