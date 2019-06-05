@@ -22,17 +22,27 @@ insert_s3_path
 
 ### Example Queries
 
+
+#### Query 1
+
 Get Top ten addons by average DAU
 
-
+```
   SELECT addon_id, avg(dau) as avg_dau
   FROM addons_daily_tt
   GROUP BY addon_id
   ORDER BY avg_dau desc
   LIMIT 10
+```
 
+#### Query 2
 
-Query 2
+Get daily active users for all days in dataset
+```
+  SELECT submission_date_s3, avg(dau) as avg_dau
+  FROM addons_daily_tt
+  GROUP BY submission_date_s3
+```
 
 ### Scheduling
 
