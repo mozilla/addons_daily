@@ -128,7 +128,7 @@ def main(
             input_version=main_summary_version,
         )
         .filter(F.col("sample_id").isin(range(0, sample)))
-        .filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+        .filter("submission_date_s3 >= ({} - INTERVAL 28 DAYS)".format(base_date))
         .filter("normalized_channel = 'release'")
     )
 
