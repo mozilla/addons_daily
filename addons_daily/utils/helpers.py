@@ -113,7 +113,7 @@ def histogram_mean(values):
 def get_hist_avg(hist, just_keyed_hist):
     """
     :param hist: name of histogram of interest
-    :param just_keyed_hist: pyspark dataframe of
+    :param just_keyed_hist: pyspark dataframe of keyed histograms
     :return: returns a pyspark dataframe aggregated in the following form:
     addon_id : mean(hist)
     """
@@ -137,7 +137,6 @@ def dataframe_joiner(dfs):
     """
     Given a list of dataframes, join them all on "addon_id",
     and return the joined dataframe
-    For use in keyed_histograms.py
     :param dfs: list of pyspark aggregated dfs
     :return: one joined df of all the dataframes in dfs
     """
@@ -148,6 +147,11 @@ def dataframe_joiner(dfs):
 
 
 def take_top_ten(l):
+    """
+    Given a list of values, find the top 10
+    :param l: a list
+    :return: the top 10 items of l
+    """
     if len(l) < 10:
         return sorted(l, key=lambda i: -list(i.values())[0])
     else:
@@ -155,6 +159,11 @@ def take_top_ten(l):
 
 
 def get_spark(tz="UTC"):
+    """
+    Creates Spark session and sets the time zone
+    :param tz: The time zone
+    :return: A Spark session
+    """
     spark = SparkSession.builder.appName("usage_report").getOrCreate()
 
     spark.conf.set("spark.sql.session.timeZone", tz)
@@ -163,11 +172,20 @@ def get_spark(tz="UTC"):
 
 
 def get_sc():
+    """
+    Creates a Spark context
+    :return: A Spark context
+    """
     sc = SparkContext.getOrCreate()
     return sc
 
 
 def list_expander(lis):
+    """
+    :param lis: A list
+    :return: A list of lists. Each item is a list containing an item from the original list
+    and a list of all of the other items in the list
+    """
     list_of_lists = []
     for item in lis:
         list_of_lists.append([item, [i for i in lis if i != item]])
@@ -175,6 +193,11 @@ def list_expander(lis):
 
 
 def bucket_engine(df):
+    """
+    :param df: a dataframe with 'engine' column
+    :return: dataframe where the engine column is bucketed into 
+    'google', 'duckduckgo', 'bing', or 'other'
+    """
     eng = F.lower(F.col("engine"))
     return df.withColumn(
         "engine",
@@ -187,6 +210,10 @@ def bucket_engine(df):
 
 
 def str_to_list(word):
+    """
+    :param word: a string containing a list of words
+    :return: a list of words
+    """
     if word[0] == "[":
         word = word[1:]
     if word[-1] == "]":
@@ -195,7 +222,13 @@ def str_to_list(word):
 
 
 def is_same(df, expected_df, verbose=False):
-
+    """
+    Determines whether two dataframes are the same, regardless of
+    order of rows and columns
+    :param df: A dataframe
+    :param expected_df: A second dataframe to compare with
+    :return: True if the dataframes are the same, false otherwise
+    """
     cols = sorted(df.columns)
     intersection = df.select(*cols).intersect(expected_df.select(*cols))
     df_len, expected_len, actual_len = (

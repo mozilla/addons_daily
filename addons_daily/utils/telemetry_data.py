@@ -42,6 +42,11 @@ def source_map(df, extra_filter=""):
 
 
 def bucket_field(field, ref):
+    """
+    :param field: A string
+    :param ref: List of possible buckets
+    :return: field if field is one of the possible buckets, or else "Other"
+    """
     if field in ref:
         return field
     return "Other"
@@ -49,11 +54,19 @@ def bucket_field(field, ref):
 
 @F.udf(StringType())
 def bucket_os(os):
+    """
+    :param os: A string
+    :return: os if os is one of the TOP_OS, or else "Other"
+    """
     return bucket_field(os, TOP_OS)
 
 
 @F.udf(StringType())
 def bucket_country(country):
+    """
+    :param country: A string
+    :return: country if country is one of the TOP_COUNTRIES, or else "Other"
+    """
     return bucket_field(country, TOP_COUNTRIES)
 
 
@@ -220,6 +233,12 @@ def get_browser_metrics(addons_expanded):
 
 
 def get_top_10_coinstalls(addons_expanded_day):
+    """
+    :param addons_expanded_day: addons_expanded from the last day
+    :return: dataframe aggregated by addon_id
+        with a list of the top 10 addon ids installed by 
+        clients with addon_id installed
+    """
     def str_map_to_dict(m):
         result = {}
         for i in m:
@@ -313,6 +332,11 @@ def get_trend_metrics(addons_expanded, date):
 
 
 def get_top_addon_names(addons_expanded):
+    """
+    :param addons_expanded: the addons_expanded df
+    :return: A data frame with addon id and name in descending order by 
+    number of clients
+    """
     w = Window().partitionBy("addon_id").orderBy(F.col("n").desc())
     cnts = addons_expanded.groupby("addon_id", "name").agg(
         F.countDistinct("client_id").alias("n")
@@ -326,6 +350,11 @@ def get_top_addon_names(addons_expanded):
 
 
 def install_flow_events(events):
+    """
+    :param events: The events dataframe
+    :return: Dataframe aggregated by addon_id with
+        - 
+    """
     def source_map(df, alias, extra_filter=""):
         m = F.create_map(
             list(
@@ -466,6 +495,12 @@ def get_search_metrics(search_daily_df, addons_expanded):
 
 
 def get_is_system(addons_expanded):
+    """
+    :param addons_expanded: addons_expanded
+    :return: dataframe containing addon_id
+        and boolean variable is_system indicating
+        whether the addon is a system addon
+    """
     is_system = (
         addons_expanded
         .select(['addon_id', 'is_system'])
