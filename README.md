@@ -26,23 +26,30 @@ s3://net-mozaws-prod-us-west-2-pipeline-analysis/bmiroglio/addons_daily_test/
 
 #### Query 1
 
-Get Top ten addons by average DAU
 
 ```
-  SELECT addon_id, avg(dau) as avg_dau
-  FROM addons_daily_tt
-  GROUP BY addon_id
-  ORDER BY avg_dau desc
-  LIMIT 10
+SELECT addon_id,
+       FIRST(name) as name,
+       avg(dau) as `Average DAU`,
+       avg(wau) as `Average WAU`,
+       avg(mau) as `Average MAU`,
+       avg(dau_prop) as `Average % of Total DAU`
+FROM addons_daily
+WHERE
+  is_system = false
+  and addon_id not like '%mozilla%'
+GROUP BY 1
+ORDER BY 3 DESC
 ```
 
 #### Query 2
 
 Get daily active users for all days in dataset
 ```
-  SELECT submission_date_s3, avg(dau) as avg_dau
-  FROM addons_daily_tt
-  GROUP BY submission_date_s3
+SELECT submission_date_s3 as 'Date',
+       avg(dau) as 'Average DAU'
+FROM addons_daily_tt
+GROUP BY 1
 ```
 
 ### Scheduling
