@@ -7,11 +7,20 @@ import datetime
 import os
 
 
-make_map = F.udf(lambda x, y: dict(zip(x, y)), MapType(StringType(), DoubleType()))
+make_map = F.udf(
+    lambda x, y: dict(zip(x, y)),
+    MapType(StringType(), DoubleType())
+)
 
 
 # taken from Fx_Usage_Report
-def get_dest(output_bucket, output_prefix, output_version, date=None, sample_id=None):
+def get_dest(
+    output_bucket,
+    output_prefix,
+    output_version,
+    date=None,
+    sample_id=None
+):
     """
     Stiches together an s3 destination.
     :param output_bucket: s3 output_bucket
@@ -55,7 +64,6 @@ def load_raw_pings(sc, date):
     :param sc: a spark context
     :return a spark dataframe of raw pings
     """
-
     raw_pings = (
         Dataset.from_source("telemetry")
         .where(docType="main")
@@ -78,13 +86,15 @@ def load_keyed_hist(rp):
 #     """
 #     Function to load data from big-query
 #     :param credential_path: path to the JSON file of your credentials for BQ
-#     :param project: the string project path, only pass if different than the standard project above
+#     :param project: the string project path, only pass if different than the
+#        standard project above
 #     :return: the data from bigquery in form of list of dictionary per row
 #     """
 #     client = bigquery.Client(project=project)
 #     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
 #     query = (
-#         "SELECT * FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_20190219` "
+#         "SELECT * "
+#         "FROM `ga-mozilla-org-prod-001.67693596.ga_sessions_20190219` "
 #         "LIMIT 100"
 #     )
 #     query_job = client.query(query, location="US")
@@ -120,7 +130,8 @@ def get_hist_avg(hist, just_keyed_hist):
     hist_data = (
         just_keyed_hist.filter(lambda x: hist in x.keys())
         .map(lambda x: x[hist])
-        .flatMap(lambda x: [(i, histogram_mean(x[i]["values"])) for i in x.keys()])
+        .flatMap(lambda x: [(i, histogram_mean(x[i]["values"]))
+                 for i in x.keys()])
     )
 
     agg_schema = StructType(
@@ -183,8 +194,8 @@ def get_sc():
 def list_expander(lis):
     """
     :param lis: A list
-    :return: A list of lists. Each item is a list containing an item from the original list
-    and a list of all of the other items in the list
+    :return: A list of lists. Each item is a list containing an item
+    from the original list and a list of all of the other items in the list
     """
     list_of_lists = []
     for item in lis:
@@ -195,8 +206,8 @@ def list_expander(lis):
 def bucket_engine(df):
     """
     :param df: a dataframe with 'engine' column
-    :return: dataframe where the engine column is bucketed into 
-    'google', 'duckduckgo', 'bing', or 'other'
+    :return: dataframe where the engine column is bucketed into
+        'google', 'duckduckgo', 'bing', or 'other'
     """
     eng = F.lower(F.col("engine"))
     return df.withColumn(
