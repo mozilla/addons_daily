@@ -16,7 +16,8 @@ from .utils.raw_pings import *
 from pyspark.sql import SparkSession
 
 DEFAULT_TZ = "UTC"
-
+DATASET_VERSION = 1
+OUTPATH = "s3://telemetry-parquet/addons_daily/v{}/".format(DATASET_VERSION)
 CORE_FIELDS = [
     "submission_date_s3",
     "client_id",
@@ -112,18 +113,12 @@ def agg_addons_report(
 
 @click.command()
 @click.option("--date", required=True)
-@click.option("--use_test_data", default=False)
 @click.option("--main_summary_version", default="v4")
 @click.option("--search_clients_daily_version", default="v5")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
 def main(
-    date,
-    sample,
-    main_summary_version,
-    search_clients_daily_version,
-    events_version,
-    use_test_data,
+    date, sample, main_summary_version, search_clients_daily_version, events_version
 ):
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
@@ -142,7 +137,7 @@ def main(
             input_version=main_summary_version,
         )
         .filter(F.col("sample_id").isin(range(0, sample)))
-        .filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+        .filter("submission_date_s3 >= ({} - INTERVAL 28 DAYS)".format(base_date))
         .filter("normalized_channel = 'release'")
     )
 
@@ -177,8 +172,14 @@ def main(
     agg_data = agg_addons_report(
         spark, date, main_summary, search_daily, events, raw_pings
     )
-    print(agg_data.collect()[0:10])
-    # return agg_data
+
+    # write to s3
+    (
+        agg_data.drop("submission_date_s3")
+        .repartition(10)
+        .write.mode("overwrite")
+        .parquet(OUTPATH + "submission_date_s3={}".format(date))
+    )
 
 
 if __name__ == "__main__":

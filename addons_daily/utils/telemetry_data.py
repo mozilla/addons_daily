@@ -532,10 +532,9 @@ def get_is_system(addons_expanded):
         whether the addon is a system addon
     """
     is_system = (
-        addons_expanded
-        .select(['addon_id', 'is_system'])
-        .groupby('addon_id')
-        .agg(F.first('is_system').alias('is_system'))
+        addons_expanded.select(["addon_id", "is_system"])
+        .groupby("addon_id")
+        .agg(F.first("is_system").alias("is_system"))
     )
 
     return is_system
