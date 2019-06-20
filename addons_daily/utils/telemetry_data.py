@@ -277,28 +277,29 @@ def get_trend_metrics(addons_expanded, date):
     base_date = "to_date('{}')".format(fdate(date))
 
     # limit to last 30 days to calculate mau
-    addons_expanded = addons_expanded.withColumn(
-        "date", F.to_date("submission_date_s3", "yyyyMMdd")
-    ).filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+    addons_expanded = (
+        addons_expanded.withColumn("date", F.to_date("submission_date_s3", "yyyyMMdd"))
+        .filter("date >= ({} - INTERVAL 28 DAYS)".format(base_date))
+        .filter("date <= {}".format(base_date))
+    )
     mau = addons_expanded.groupby("addon_id").agg(
         (F.countDistinct("client_id") * F.lit(100)).alias("mau")
     )
 
     # limit to last 7 days to calculate wau
-    addons_expanded = addons_expanded.filter(
+    addons_expanded_week = addons_expanded.filter(
         "date >= ({} - INTERVAL 7 DAYS)".format(base_date)
-    )
-    wau = addons_expanded.groupby("addon_id").agg(
+    ).filter("date <= {}".format(base_date))
+
+    wau = addons_expanded_week.groupby("addon_id").agg(
         (F.countDistinct("client_id") * F.lit(100)).alias("wau")
     )
 
     # limit to last 1 day to calculate dau
-    addons_expanded = addons_expanded.filter(
-        "date >= ({} - INTERVAL 1 DAYS)".format(base_date)
-    )
-    absolute_dau = addons_expanded.select("client_id").distinct().count()
+    addons_expanded_day = addons_expanded_week.filter("date = {}".format(base_date))
+    absolute_dau = addons_expanded_day.select("client_id").distinct().count()
 
-    dau = addons_expanded.groupby("addon_id").agg(
+    dau = addons_expanded_day.groupby("addon_id").agg(
         (F.countDistinct("client_id") * F.lit(100)).alias("dau")
     )
 
