@@ -13,7 +13,7 @@ from .utils.telemetry_data import *
 # from .utils.amo_data import *
 from .utils.bq_data import *
 from .utils.raw_pings import *
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, functions as F
 
 DEFAULT_TZ = "UTC"
 DATASET_VERSION = 1
@@ -104,13 +104,26 @@ def agg_addons_report(
 
 @click.command()
 @click.option("--date", required=True)
+@click.option(
+    "--output",
+    default=OUTPATH,
+    help="Output directory for parquet dataset. Defaults to {}".format(OUTPATH),
+)
 @click.option("--main_summary_version", default="v4")
 @click.option("--search_clients_daily_version", default="v5")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
 def main(
-    date, sample, main_summary_version, search_clients_daily_version, events_version
+    date,
+    output,
+    sample,
+    main_summary_version,
+    search_clients_daily_version,
+    events_version,
 ):
+    if not output.endswith("/"):
+        output = output + "/"
+
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
@@ -170,7 +183,7 @@ def main(
         agg_data.drop("submission_date_s3")
         .repartition(10)
         .write.mode("overwrite")
-        .parquet(OUTPATH + "submission_date_s3={}".format(date))
+        .parquet(output + "submission_date_s3={}".format(date))
     )
 
 

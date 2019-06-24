@@ -116,10 +116,9 @@ def test_main(
     monkeypatch.setattr(
         addons_daily.addons_report, "load_raw_pings", mock_load_raw_pings
     )
-    monkeypatch.setattr(addons_daily.addons_report, "OUTPATH", str(tmpdir) + "/")
 
     runner = CliRunner()
-    result = runner.invoke(main, ["--date", BASE_DATE])
+    result = runner.invoke(main, ["--date", BASE_DATE, "--output", str(tmpdir)])
     assert result.exit_code == 0
     submission_path = tmpdir / "submission_date_s3={}".format(BASE_DATE)
     assert os.path.exists(submission_path)
