@@ -90,8 +90,9 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
     assert result == expected_result
 
 
-def test_main(
-    main_summary, search_clients_daily, events, raw_pings, spark, monkeypatch, tmpdir
+@pytest.fixture()
+def mock_main_dependencies(
+    main_summary, search_clients_daily, events, raw_pings, spark, monkeypatch
 ):
     def mock_get_spark(*args, **kwargs):
         return spark
@@ -117,9 +118,29 @@ def test_main(
         addons_daily.addons_report, "load_raw_pings", mock_load_raw_pings
     )
 
+
+def test_main_end_to_end(mock_main_dependencies, tmpdir):
     runner = CliRunner()
-    result = runner.invoke(main, ["--date", BASE_DATE, "--output", str(tmpdir)])
+    result = runner.invoke(
+        main, ["--date", BASE_DATE, "--output", "file://" + str(tmpdir)]
+    )
     assert result.exit_code == 0
     submission_path = tmpdir / "submission_date_s3={}".format(BASE_DATE)
     assert os.path.exists(submission_path)
     assert len([p for p in os.listdir(submission_path) if p.endswith(".parquet")]) > 0
+
+
+def test_main_invalid_prefix(mock_main_dependencies, tmpdir):
+    runner = CliRunner()
+
+    # missing "file://"
+    result = runner.invoke(main, ["--date", BASE_DATE, "--output", str(tmpdir)])
+    assert result.exit_code == 1
+    assert isinstance(result.exception, ValueError)
+
+    # not a supported path
+    result = runner.invoke(
+        main, ["--date", BASE_DATE, "--output", "gs://" + str(tmpdir)]
+    )
+    assert result.exit_code == 1
+    assert isinstance(result.exception, ValueError)

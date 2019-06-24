@@ -121,6 +121,11 @@ def main(
     search_clients_daily_version,
     events_version,
 ):
+    if not any(output.startswith(prefix) for prefix in ["file://", "s3://"]):
+        raise ValueError(
+            "Unsupported data source, "
+            "`--output` must start with either `file://` or `s3://`."
+        )
     if not output.endswith("/"):
         output = output + "/"
 
