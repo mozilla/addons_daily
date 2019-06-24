@@ -1,11 +1,13 @@
+import addons_daily
 from addons_daily.utils.telemetry_data import *
-from addons_daily.addons_report import agg_addons_report
+from addons_daily.addons_report import agg_addons_report, main
 from addons_daily.utils.helpers import is_same
 from pyspark.sql.types import *
-from pyspark.sql import Row
+from pyspark.sql import Row, functions as F
 import pytest
 import json
 import os
+from click.testing import CliRunner
 
 
 BASE_DATE = "20190515"
@@ -86,3 +88,39 @@ def test_agg(main_summary, search_clients_daily, events, raw_pings, spark):
     result = df_to_json(agg)
     expected_result = load_json("expected_results.json")
     assert result == expected_result
+
+
+def test_main(
+    main_summary, search_clients_daily, events, raw_pings, spark, monkeypatch, tmpdir
+):
+    def mock_get_spark(*args, **kwargs):
+        return spark
+
+    def mock_load_data_s3(*args, **kwargs):
+        prefix = kwargs["input_prefix"]
+        if prefix == "main_summary":
+            df = main_summary.withColumn("normalized_channel", F.lit("release"))
+        elif prefix == "search_clients_daily":
+            df = search_clients_daily
+        elif prefix == "events":
+            df = events
+        else:
+            raise NotImplementedError
+        return df.withColumn("sample_id", F.lit("0"))
+
+    def mock_load_raw_pings(*args, **kwargs):
+        return raw_pings
+
+    monkeypatch.setattr(addons_daily.addons_report, "get_spark", mock_get_spark)
+    monkeypatch.setattr(addons_daily.addons_report, "load_data_s3", mock_load_data_s3)
+    monkeypatch.setattr(
+        addons_daily.addons_report, "load_raw_pings", mock_load_raw_pings
+    )
+    monkeypatch.setattr(addons_daily.addons_report, "OUTPATH", str(tmpdir) + "/")
+
+    runner = CliRunner()
+    result = runner.invoke(main, ["--date", BASE_DATE])
+    assert result.exit_code == 0
+    submission_path = tmpdir / "submission_date_s3={}".format(BASE_DATE)
+    assert os.path.exists(submission_path)
+    assert len([p for p in os.listdir(submission_path) if p.endswith(".parquet")]) > 0
