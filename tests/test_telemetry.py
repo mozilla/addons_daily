@@ -30,12 +30,6 @@ def load_test_data(prefix, spark):
 
 
 @pytest.fixture()
-def spark():
-    spark_session = SparkSession.builder.appName("addons_daily_tests").getOrCreate()
-    return spark_session
-
-
-@pytest.fixture()
 def main_summary(spark):
     return load_test_data("main_summary", spark)
 

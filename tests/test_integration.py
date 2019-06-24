@@ -38,12 +38,6 @@ def df_to_json(df):
 
 
 @pytest.fixture()
-def spark():
-    spark_session = SparkSession.builder.appName("addons_daily_tests").getOrCreate()
-    return spark_session
-
-
-@pytest.fixture()
 def main_summary(spark):
     return load_df_from_json("main_summary", spark)
 
