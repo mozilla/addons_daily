@@ -16,9 +16,8 @@ def load_expected_data(filename, spark):
 
 
 @pytest.fixture()
-def raw_pings():
-    sc = SparkContext.getOrCreate()
-    spark = SQLContext.getOrCreate(sc)
+def raw_pings(spark):
+    sc = spark.sparkContext
     return load_keyed_hist(sc.parallelize(load_expected_data("raw_pings.json", spark)))
 
 

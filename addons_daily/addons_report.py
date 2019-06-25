@@ -13,7 +13,7 @@ from .utils.telemetry_data import *
 # from .utils.amo_data import *
 from .utils.bq_data import *
 from .utils.raw_pings import *
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, functions as F
 
 DEFAULT_TZ = "UTC"
 DATASET_VERSION = 1
@@ -104,13 +104,31 @@ def agg_addons_report(
 
 @click.command()
 @click.option("--date", required=True)
+@click.option(
+    "--output",
+    default=OUTPATH,
+    help="Output directory for parquet dataset. Defaults to {}".format(OUTPATH),
+)
 @click.option("--main_summary_version", default="v4")
 @click.option("--search_clients_daily_version", default="v5")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
 def main(
-    date, sample, main_summary_version, search_clients_daily_version, events_version
+    date,
+    output,
+    sample,
+    main_summary_version,
+    search_clients_daily_version,
+    events_version,
 ):
+    if not any(output.startswith(prefix) for prefix in ["file://", "s3://"]):
+        raise ValueError(
+            "Unsupported data source, "
+            "`--output` must start with either `file://` or `s3://`."
+        )
+    if not output.endswith("/"):
+        output = output + "/"
+
     # path = '' # need to pass in from command line i think
     # path var is a path to the user credentials.json for BQ
     spark = get_spark(DEFAULT_TZ)
@@ -120,6 +138,7 @@ def main(
     base_date = "to_date('{}')".format(fdate(date))
     # leave main_summary fitlered to last 28 days
     # to get trend metrics
+    sample_ids = list(range(0, sample))
     main_summary = (
         load_data_s3(
             spark,
@@ -127,7 +146,7 @@ def main(
             input_prefix="main_summary",
             input_version=main_summary_version,
         )
-        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter(F.col("sample_id").isin(sample_ids))
         .filter("submission_date_s3 >= ({} - INTERVAL 28 DAYS)".format(base_date))
         .filter("normalized_channel = 'release'")
     )
@@ -139,7 +158,7 @@ def main(
             input_prefix="search_clients_daily",
             input_version=search_clients_daily_version,
         )
-        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter(F.col("sample_id").isin(sample_ids))
         .filter("submission_date_s3 = '{}'".format(date))
         .filter("channel = 'release'")
     )
@@ -151,7 +170,7 @@ def main(
             input_prefix="events",
             input_version=events_version,
         )
-        .filter(F.col("sample_id").isin(range(0, sample)))
+        .filter(F.col("sample_id").isin(sample_ids))
         .filter("submission_date_s3 = '{}'".format(date))
         .filter("normalized_channel = 'release'")
     )
@@ -169,7 +188,7 @@ def main(
         agg_data.drop("submission_date_s3")
         .repartition(10)
         .write.mode("overwrite")
-        .parquet(OUTPATH + "submission_date_s3={}".format(date))
+        .parquet(output + "submission_date_s3={}".format(date))
     )
 
 
