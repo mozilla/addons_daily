@@ -110,7 +110,7 @@ def agg_addons_report(
     help="Output directory for parquet dataset. Defaults to {}".format(OUTPATH),
 )
 @click.option("--main_summary_version", default="v4")
-@click.option("--search_clients_daily_version", default="v6")
+@click.option("--search_clients_daily_version", default="v7")
 @click.option("--events_version", default="v1")
 @click.option("--sample", default=1, help="percent sample as int [1, 100]")
 def main(
