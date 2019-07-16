@@ -72,7 +72,7 @@ def load_keyed_hist(rp):
     :param rp: dataframe of raw_pings returned from load_raw_pings()
     :return: just the keyed histograms
     """
-    return rp.map(lambda x: x["payload"]["keyedHistograms"]).cache()
+    return rp.map(lambda x: x.get("payload", {}).get("keyedHistograms", {})).cache()
 
 
 # def load_bq_data(credential_path, project="ga-mozilla-org-prod-001"):
@@ -120,8 +120,10 @@ def get_hist_avg(hist, just_keyed_hist):
     """
     hist_data = (
         just_keyed_hist.filter(lambda x: hist in x.keys())
-        .map(lambda x: x[hist])
-        .flatMap(lambda x: [(i, histogram_mean(x[i]["values"])) for i in x.keys()])
+        .map(lambda x: x.get(hist, {}))
+        .flatMap(
+            lambda x: [(i, histogram_mean(x[i].get("values", {}))) for i in x.keys()]
+        )
     )
 
     agg_schema = StructType(
